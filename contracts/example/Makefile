@@ -1,5 +1,5 @@
 include config.conf
--include config.local
+-include config-local.conf
 
 build:
 	eosiocpp -o $(CPP_IN).wasm $(CPP_IN).cpp
