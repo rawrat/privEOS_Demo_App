@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 
-import FileUpload from './molecules/file-upload'
+import FileUpload from './organisms/file-upload'
 
 
 class App extends Component {

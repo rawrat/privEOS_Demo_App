@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "drag-and-drop-files": "0.0.1",
+    "filereader-stream": "^2.0.0",
     "install": "^0.12.1",
     "ipfs": "^0.32.3",
     "npm": "^6.4.1",
