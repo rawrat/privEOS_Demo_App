@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 
-import { hello } from './actions/hello'
+import { hello as helloAction } from './atoms/hello/actions'
 
 class App extends Component {
   sayHello = (event) => {
@@ -28,7 +28,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  hello: () => dispatch(hello())
+  hello: () => dispatch(helloAction())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
