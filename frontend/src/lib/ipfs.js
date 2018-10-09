@@ -7,7 +7,6 @@ let isReady = false
 node.on('ready', (test) => {
     console.log('ipfs is ready', test)
     isReady = true
-
 })
 node.on('error', error => {
     console.error(error.message)
