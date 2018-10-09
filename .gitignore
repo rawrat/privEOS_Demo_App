@@ -1,0 +1,3 @@
+.DS_Store
+/contracts/example/example.abi
+/contracts/example/example.wasm
