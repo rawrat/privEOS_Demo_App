@@ -24,8 +24,8 @@ export const upload = (file) => {
         const fileStreamObject = fileReaderStream(file)
 
         const stream = node.files.addReadableStream({
-            progress: () => {
-                console.log('upload progress')
+            progress: (data) => {
+                console.log('upload progress', data)
             }
         })
         stream.on('data', function (file) {
