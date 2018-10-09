@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 
-import { hello as helloAction } from './atoms/hello/actions'
+import FileUpload from './molecules/file-upload'
+
 
 class App extends Component {
-  sayHello = (event) => {
-    this.props.hello();
+  upload() {
+    this.props.upload()
   }
   render() {
     return (
       <div className="App">
-        Hello world
-        <br/><br/>
-        <button onClick={this.sayHello}>Say "hello"</button>
-        <br/>
-        <pre>
-          { JSON.stringify(this.props) }
-        </pre>
+        <h1>Upload File</h1>
+        <FileUpload/>
       </div>
     );
   }
@@ -28,7 +24,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  hello: () => dispatch(helloAction())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
