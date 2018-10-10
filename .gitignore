@@ -2,3 +2,4 @@
 /contracts/example/example.abi
 /contracts/example/example.wasm
 config-local.conf
+TODOS-LOCAL.md

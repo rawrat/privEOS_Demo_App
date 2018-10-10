@@ -3,7 +3,7 @@ include config.conf
 
 build:
 	eosiocpp -o $(CPP_IN).wasm $(CPP_IN).cpp
-	
+
 abi:
 	eosiocpp -g $(CPP_IN).abi $(CPP_IN).cpp
 
@@ -28,18 +28,15 @@ system:
 	$(CLEOS) transfer eosio angelo "1000.0000 EOS"
 	$(CLEOS) set contract eosio $(EOS_CONTRACTS_DIR)/eosio.system -p eosio
 
-
 setup:
 	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(CONTRACT_ACCOUNT) $(PK) $(PK)
 	$(CLEOS) set account permission $(CONTRACT_ACCOUNT) active '{"threshold": 1,"keys": [{"key": "$(PK)","weight": 1}],"accounts": [{"permission":{"actor":"$(CONTRACT_ACCOUNT)","permission":"eosio.code"},"weight":1}]}' owner -p $(CONTRACT_ACCOUNT)
-
 
 clean:
 	rm -f $(CPP_IN).wast $(CPP_IN).wasm $(CPP_IN).abi 
 
 prepare:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) prepare '["angelo"]' -p angelo
-
 
 test:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["angelo", "c01d3677b89e448eb687287cb4b533f3", "My first file changed Angelo 2", "This is great", "https://localhost/myfirstvideo/", "1.0000 EOS" ]' -p angelo
