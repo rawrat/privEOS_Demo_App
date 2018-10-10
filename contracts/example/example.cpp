@@ -79,12 +79,12 @@ class example : public eosio::contract {
       const auto& balance = balances.get(string_to_symbol(4, "EOS"));
       eosio_assert(balance.funds.amount >= file.price.amount, "User does not have enough money");
       
-      action(
-            permission_level{ _self, N(active) },
-            N(eosio),
-            N(newaccount),
-            new_account
-      ).send();
+      // action(
+      //       permission_level{ _self, N(active) },
+      //       N(eosio),
+      //       N(newaccount),
+      //       new_account
+      // ).send();
       
     }
     
