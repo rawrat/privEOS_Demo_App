@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "drag-and-drop-files": "0.0.1",
+    "eosjs": "^16.0.9",
     "filereader-stream": "^2.0.0",
     "install": "^0.12.1",
     "ipfs": "^0.32.3",
@@ -13,7 +14,11 @@
     "react-redux": "^5.0.7",
     "react-scripts": "2.0.4",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "request": "^2.88.0",
+    "secrets.js-grempe": "^1.1.0",
+    "tweetnacl": "^1.0.0",
+    "tweetnacl-util": "^0.15.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -29,5 +34,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "axios": "^0.18.0"
+  }
 }

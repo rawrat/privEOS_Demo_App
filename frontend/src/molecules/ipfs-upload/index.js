@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import SingleFileSelector from '../../atoms/single-file-selector'
+import FileDetails from '../../atoms/file-details'
+import IpfsLink from '../../atoms/ipfs-link'
 import ipfs from '../../lib/ipfs'
-import PriveosStore from '../../atoms/priveos-store'
-import IpfsUpload from '../../molecules/ipfs-upload'
 
 
-class FileUpload extends Component {
+class IpfsUpload extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,16 +35,15 @@ class FileUpload extends Component {
     })
   }
   render() {
-    let view = <PriveosStore/>
-    if (this.state.priveos) {
-      console.log('show ipfs upload')
-      view = <IpfsUpload/>
-    }
-    
-
     return (
       <div>
-        {view}
+        <SingleFileSelector onSelect={this.onSelect}/>
+        <FileDetails file={this.state && this.state.file || null}/>
+        <br/><br/>
+        <div>
+          <button onClick={this.upload} disabled={this.state.file ? false : true}>Upload</button>
+        </div>
+        <IpfsLink hash={this.state.ipfsResponse && this.state.ipfsResponse.hash || null}/>
       </div>
     );
   }
@@ -56,4 +56,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FileUpload);
+export default connect(mapStateToProps, mapDispatchToProps)(IpfsUpload);
