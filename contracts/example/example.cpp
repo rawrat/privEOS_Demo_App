@@ -45,7 +45,7 @@ class example : public eosio::contract {
       auto it = balances.find(string_to_symbol(4, "EOS"));
       if(it == balances.end()) {
         balances.emplace(user, [&](auto& bal){
-            bal.funds = asset(0);
+            bal.funds = asset(0, string_to_symbol(4, "EOS"));
         });
       }
     }
