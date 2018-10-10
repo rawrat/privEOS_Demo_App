@@ -45,7 +45,7 @@ class example : public eosio::contract {
       auto it = balances.find(string_to_symbol(4, "EOS"));
       if(it == balances.end()) {
         balances.emplace(user, [&](auto& bal){
-            bal.funds = asset(0);
+            bal.funds = asset(0, string_to_symbol(4, "EOS"));
         });
       }
     }
@@ -64,6 +64,28 @@ class example : public eosio::contract {
       balances.modify(it, transfer.from, [&](auto& bal){
           bal.funds += transfer.quantity;
       });
+    }
+    
+    //@abi action
+    void reqaccess(const account_name user, std::string uuid) {
+      require_auth(user);
+      
+      const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
+      
+      auto idx = files.template get_index<N(by_uuid)>();
+      const auto& file = idx.get(uuid_int, "File not found ");
+      
+      balances_table balances(_self, user);
+      const auto& balance = balances.get(string_to_symbol(4, "EOS"));
+      eosio_assert(balance.funds.amount >= file.price.amount, "User does not have enough money");
+      
+      action(
+            permission_level{ _self, N(active) },
+            N(eosio),
+            N(newaccount),
+            new_account
+      ).send();
+      
     }
     
       
@@ -98,6 +120,13 @@ class example : public eosio::contract {
         EOSLIB_SERIALIZE(balance, (funds))
     };
     typedef multi_index<N(balances), balance> balances_table;
+    
+    // @abi table perms i64
+    struct perm {
+      uint64_t      file_id;
+    };
+    typedef multi_index<N(perms), perm> perms_table;
+    
 
 };
 
@@ -112,6 +141,9 @@ extern "C" {
     } 
     else if(code==self && action==N(prepare)) {
       execute_action( &thiscontract, &example::prepare );
+    }
+    else if(code==self && action==N(reqaccess)) {
+      execute_action( &thiscontract, &example::reqaccess );
     }
     else if(code==N(eosio.token) && action==N(transfer)) {
       thiscontract.transfer(unpack_action_data<currency::transfer>());

@@ -39,9 +39,12 @@ prepare:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) prepare '["angelo"]' -p angelo
 
 test:
-	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["angelo", "c01d3677b89e448eb687287cb4b533f3", "My first file changed Angelo 2", "This is great", "https://localhost/myfirstvideo/", "1.0000 EOS" ]' -p angelo
+	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["angelo", "c01d3677b89e448eb687287cb4b533f3", "My first file changed Angelo 2", "This is great", "https://localhost/myfirstvideo/", "5.0000 EOS" ]' -p angelo
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) prepare '["angelo"]' -p angelo
 	$(CLEOS) transfer angelo $(CONTRACT_ACCOUNT) "1.0000 EOS" ""
+	
+reqaccess:
+	$(CLEOS) push action $(CONTRACT_ACCOUNT) reqaccess '["angelo", "c01d3677b89e448eb687287cb4b533f3"]' -p angelo
 	
 show:
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(CONTRACT_ACCOUNT) files
