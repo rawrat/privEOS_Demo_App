@@ -39,12 +39,6 @@ setup:
 clean:
 	rm -f $(CPP_IN).wast $(CPP_IN).wasm $(CPP_IN).abi 
 
-<<<<<<< HEAD
-prepare:
-	$(CLEOS) push action $(CONTRACT_ACCOUNT) prepare '["angelo"]' -p angelo
-
-=======
->>>>>>> contract is now more or less feature-complete
 test:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["$(SELLER)", "$(FILE)", "My first file changed Angelo 2", "This is great", "https://localhost/myfirstvideo/", "1.0000 EOS" ]' -p $(SELLER)
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) prepare '["$(BUYER)"]' -p $(BUYER)
