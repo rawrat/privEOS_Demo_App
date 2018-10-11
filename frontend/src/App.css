@@ -5,3 +5,13 @@ body {
 .smallFont {
   font-size: 0.7em
 }
+
+.mainNavigation {
+  list-style: none;
+  padding: 0
+}
+
+.mainNavigation li {
+  display: inline-block;
+  padding-right: 3%
+}

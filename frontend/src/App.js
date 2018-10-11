@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
+import { Switch, Route } from 'react-router-dom'
 
 import FileUpload from './organisms/file-upload'
+import Login from './organisms/login'
+import Header from './organisms/header'
 
 
 class App extends Component {
@@ -12,8 +15,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Upload File</h1>
-        <FileUpload/>
+        <Header/>
+        <Switch>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/' component={FileUpload}/>
+        </Switch>
       </div>
     );
   }
