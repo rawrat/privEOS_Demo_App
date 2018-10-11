@@ -18,15 +18,14 @@ export function upload(data, name) {
             return alert('IPFS is not ready yet')
         }
 
-        const files = [{
-            path: name,
-            content: data
-        }]
+        // const files = [{
+        //     path: name,
+        //     content: data
+        // }]
 
-        node.files.add(files).then((err, files) => {
-            console.log('added files', err, files)
-            if (err) return reject(err)
-            return resolve(files)
+        node.files.add(Buffer.from(data, 'utf-8')).then((files) => {
+            console.log('added files', files)
+            return resolve(files[0])
         })
     })
 }

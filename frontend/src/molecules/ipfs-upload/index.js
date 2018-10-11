@@ -38,13 +38,13 @@ class IpfsUpload extends Component {
     read(this.state.file).then((content) => {
       const cipher = this.encrypt(content)
       console.log('cipher', cipher)
-      ipfs.upload(cipher).then((files) => {
-        console.log('resolved', files)
+      ipfs.upload(cipher).then((file) => {
+        console.log('resolved', file)
         self.setState({
-          ipfsResponse: files[0]
+          ipfsResponse: file
         })
         if (self.props.onUpload) {
-          self.props.onUpload(files[0].name)
+          self.props.onUpload(file.name)
         }
       })
       .catch((err) => {
