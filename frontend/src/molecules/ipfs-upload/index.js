@@ -4,9 +4,8 @@ import SingleFileSelector from '../../atoms/single-file-selector'
 import FileDetails from '../../atoms/file-details'
 import IpfsLink from '../../atoms/ipfs-link'
 import ipfs from '../../lib/ipfs'
-import encryptedStream from '../../lib/encrypted-filereader-stream'
-import config from '../../config'
-import ByteBuffer from 'bytebuffer'
+import { encrypt, encodeHex } from '../../lib/crypto'
+import { read } from '../../lib/file'
 
 
 class IpfsUpload extends Component {
@@ -14,7 +13,6 @@ class IpfsUpload extends Component {
     super(props)
     this.state = {
       file: null,
-      priveos: null,
       ipfsResponse: null
     }
 
@@ -28,22 +26,31 @@ class IpfsUpload extends Component {
       file: files[0]
     })
   }
-  getFileStream() {
-    return encryptedStream(this.state.file, {
-      ...config,
-      secret: ByteBuffer.fromHex(this.props.secret).toBinary(),
-      nonce: ByteBuffer.fromHex(this.props.nonce).toBinary()
-    })
+  encrypt(message) {
+    console.log('encrypt before')
+    console.log('secret', this.props.secret)
+    console.log('nonce', this.props.nonce)
+    return encrypt(message, this.props.nonce, this.props.secret)
   }
   upload() {
     const self = this
 
-    ipfs.upload(this.getFileStream()).then((files) => {
-      console.log('resolved', files)
-      self.setState({
-        ipfsResponse: files[0]
+    read(this.state.file).then((content) => {
+      const cipher = this.encrypt(content)
+      console.log('cipher', cipher)
+      ipfs.upload(cipher).then((files) => {
+        console.log('resolved', files)
+        self.setState({
+          ipfsResponse: files[0]
+        })
+        if (self.props.onUpload) {
+          self.props.onUpload(files[0].name)
+        }
       })
-    })
+      .catch((err) => {
+        console.error(err)
+      })
+    });
   }
   render() {
     return (

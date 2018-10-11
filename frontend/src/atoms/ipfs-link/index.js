@@ -8,6 +8,8 @@ class IpfsLink extends Component {
         <div>
           <br/>
           Uploaded: <br/>
+          <br/>
+          <br/>
           <a href={href} className="smallFont">{href}</a>
         </div>
       )

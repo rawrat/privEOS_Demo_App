@@ -11,11 +11,12 @@ class FileUpload extends Component {
     this.state = {
       file: null,
       priveos: null,
-      ipfsResponse: null
+      ipfsHash: null
     }
 
     this.onSelect = this.onSelect.bind(this)
     this.onStore = this.onStore.bind(this)
+    this.onUpload = this.onUpload.bind(this)
     this.upload = this.upload.bind(this)
   }
   onSelect(evt) {
@@ -40,11 +41,18 @@ class FileUpload extends Component {
       })
     })
   }
+
+  onUpload(hash) {
+    console.log('ipfsHash', hash)
+    this.setState({
+      ipfsHash: hash
+    })
+  }
   render() {
     let view = <PriveosStore onStore={this.onStore}/>
     if (this.state.priveos) {
       console.log('show ipfs upload')
-      view = <IpfsUpload secret={this.state.priveos.secret} nonce={this.state.priveos.nonce}/>
+      view = <IpfsUpload secret={this.state.priveos.secret} nonce={this.state.priveos.nonce} onUpload={this.onUpload}/>
     }
     
 
@@ -52,6 +60,7 @@ class FileUpload extends Component {
       <div>
         <div className="smallFont">Key: {this.state.priveos && this.state.priveos.secret}</div>
         <div className="smallFont">Nonce: {this.state.priveos && this.state.priveos.nonce}</div>
+        <div className="smallFont">IPFS Hash: {this.state.ipfsHash}</div>
         <br/><br/>
         {view}
       </div>
