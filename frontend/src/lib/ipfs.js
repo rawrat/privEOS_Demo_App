@@ -1,11 +1,10 @@
 const IPFS = require('ipfs')
-var fileReaderStream = require('filereader-stream')
 const node = new IPFS()
 
 let isReady = false
 
-node.on('ready', (test) => {
-    console.log('ipfs is ready', test)
+node.on('ready', () => {
+    console.log('ipfs is ready')
     isReady = true
 })
 node.on('error', error => {
@@ -13,15 +12,13 @@ node.on('error', error => {
 })
 
 
-export const upload = (file) => {
+export const upload = (fileStreamObject) => {
 
     return new Promise((resolve, reject) => {
 
         if (!isReady) {
             alert('IPFS is not ready yet')
         }
-
-        const fileStreamObject = fileReaderStream(file)
 
         const stream = node.files.addReadableStream({
             progress: (data) => {

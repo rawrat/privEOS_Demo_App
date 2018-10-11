@@ -20,8 +20,10 @@ class PriveosStore extends Component {
     const self = this
     priveos.store(config.owner, this.state.filename).then((x) => {
       console.log('Successfully stored file', x)
-      self.secret = x[0]
-      self.nonce = x[1]
+      self.props.onStore({
+        secret: x[0],
+        nonce: x[1]
+      })
     })
   }
   onFilenameKey(evt) {

@@ -4,6 +4,9 @@ import SingleFileSelector from '../../atoms/single-file-selector'
 import FileDetails from '../../atoms/file-details'
 import IpfsLink from '../../atoms/ipfs-link'
 import ipfs from '../../lib/ipfs'
+import encryptedStream from '../../lib/encrypted-filereader-stream'
+import config from '../../config'
+import ByteBuffer from 'bytebuffer'
 
 
 class IpfsUpload extends Component {
@@ -25,9 +28,17 @@ class IpfsUpload extends Component {
       file: files[0]
     })
   }
+  getFileStream() {
+    return encryptedStream(this.state.file, {
+      ...config,
+      secret: ByteBuffer.fromHex(this.props.secret).toBinary(),
+      nonce: ByteBuffer.fromHex(this.props.nonce).toBinary()
+    })
+  }
   upload() {
     const self = this
-    ipfs.upload(this.state.file).then((files) => {
+
+    ipfs.upload(this.getFileStream()).then((files) => {
       console.log('resolved', files)
       self.setState({
         ipfsResponse: files[0]

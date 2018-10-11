@@ -15,6 +15,7 @@ class FileUpload extends Component {
     }
 
     this.onSelect = this.onSelect.bind(this)
+    this.onStore = this.onStore.bind(this)
     this.upload = this.upload.bind(this)
   }
   onSelect(evt) {
@@ -22,6 +23,12 @@ class FileUpload extends Component {
     console.log('Selected File: ', files[0])
     this.setState({
       file: files[0]
+    })
+  }
+  onStore(encryption) {
+    console.log('got key and nonce', encryption.secret, encryption.nonce)
+    this.setState({
+      priveos: encryption
     })
   }
   upload() {
@@ -34,15 +41,18 @@ class FileUpload extends Component {
     })
   }
   render() {
-    let view = <PriveosStore/>
+    let view = <PriveosStore onStore={this.onStore}/>
     if (this.state.priveos) {
       console.log('show ipfs upload')
-      view = <IpfsUpload/>
+      view = <IpfsUpload secret={this.state.priveos.secret} nonce={this.state.priveos.nonce}/>
     }
     
 
     return (
       <div>
+        <div className="smallFont">Key: {this.state.priveos && this.state.priveos.secret}</div>
+        <div className="smallFont">Nonce: {this.state.priveos && this.state.priveos.nonce}</div>
+        <br/><br/>
         {view}
       </div>
     );
