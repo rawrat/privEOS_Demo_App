@@ -43,6 +43,9 @@ class IpfsUpload extends Component {
       self.setState({
         ipfsResponse: files[0]
       })
+      if (self.props.onUpload) {
+        self.props.onUpload(files[0].name)
+      }
     })
   }
   render() {

@@ -22,15 +22,15 @@ module.exports = function (file, options) {
     if (offset >= file.size) return cb(null, null)
     fileReader.onloadend = function loaded(event) {
       var data = event.target.result
-      var arr = new Uint8Array(event.target.result)
-      var enc = encryptor.encryptChunk(arr)
-      console.log('chunk raw, encrypted', arr, enc)
-      if (data instanceof ArrayBuffer) data = toBuffer(enc)
+      data = new Uint8Array(data)
+      data = encryptor.encryptChunk(data)
+      console.log('chunk', data)
+      if (data instanceof ArrayBuffer) data = toBuffer(data)
       cb(null, data)
     }
     var end = offset + chunkSize
     var slice = file.slice(offset, end)
-    fileReader.readAsArrayBuffer(slice)
+    fileReader.readAsArrayBuffer(slice) 
     offset = end
   })
 
