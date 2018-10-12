@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import eos from '../../lib/eos'
-
+import { Button, Input, FormGroup } from 'reactstrap';
 
 class Login extends Component {
   constructor(props) {
@@ -31,11 +31,13 @@ class Login extends Component {
   render() {
     return (
       <div>
-          <input type="text" name="name" placeholder="EOS Account Name" value={this.state.name} onChange={this.updateField}/>
-          <br/><br/>
-          <textarea name="key" placeholder="Enter your Private Key here..." value={this.state.key} onChange={this.updateField}></textarea>
+        <FormGroup>
+          <Input type="text" name="name" placeholder="EOS Account Name" value={this.state.name} onChange={this.updateField}/>
           <br/>
-          <button type="submit" onClick={this.update}>Update</button>
+          <textarea name="key" placeholder="Enter your Private Key here..." value={this.state.key} onChange={this.updateField} className="form-control input"/>
+          <br/>
+          <Button type="submit" onClick={this.update}>Update</Button>
+        </FormGroup>
       </div>
     );
   }
