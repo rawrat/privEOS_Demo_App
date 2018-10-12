@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import config from '../../config'
-import { priveos } from '../../lib/priveos'
+import config from '../config'
+import { priveos } from '../lib/priveos'
 
 
 class PriveosStore extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import eos from '../../lib/eos'
+import eos from '../lib/eos'
 import { Button, Input, FormGroup } from 'reactstrap';
 
 class Login extends Component {

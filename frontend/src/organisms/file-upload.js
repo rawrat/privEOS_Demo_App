@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ipfs from '../../lib/ipfs'
-import PriveosStore from '../../atoms/priveos-store'
-import IpfsUpload from '../../molecules/ipfs-upload'
+import ipfs from '../lib/ipfs'
+import PriveosStore from '../atoms/priveos-store'
+import IpfsUpload from '../molecules/ipfs-upload'
 import { Link, withRouter } from 'react-router-dom'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 
 class FileUpload extends Component {

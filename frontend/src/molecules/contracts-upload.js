@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import SingleFileSelector from '../../atoms/single-file-selector'
-import FileDetails from '../../atoms/file-details'
-import IpfsLink from '../../atoms/ipfs-link'
-import ipfs from '../../lib/ipfs'
-import { encrypt, encodeHex } from '../../lib/crypto'
-import { read } from '../../lib/file'
+import SingleFileSelector from '../atoms/single-file-selector'
+import FileDetails from '../atoms/file-details'
+import IpfsLink from '../atoms/IpfsLink'
+import ipfs from '../lib/ipfs'
+import { encrypt, encodeHex } from '../lib/crypto'
+import { read } from '../lib/file'
 
 
 class ContractUpload extends Component {
