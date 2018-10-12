@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import FileUpload from './organisms/file-upload'
 import Login from './organisms/login'
 import Header from './organisms/header'
+import auth from './lib/auth'
 
+
+function requireAuth(nextState, replace) {
+  console.log('require Auth', nextState)
+  return (<Redirect to="login"/>)
+}
 
 class App extends Component {
   upload() {
@@ -17,8 +23,14 @@ class App extends Component {
       <div className="App">
         <Header/>
         <Switch>
-          <Route exact path='/login' component={Login}/>
-          <Route exact path='/' component={FileUpload}/>
+            <Route exact path='/login' component={Login}/>
+            <Route exact path='/' render={() => (
+              auth.loggedIn() ? (
+                <FileUpload/>
+              ) : (
+                <Redirect to="/login"/>
+              )
+            )}/>
         </Switch>
       </div>
     );

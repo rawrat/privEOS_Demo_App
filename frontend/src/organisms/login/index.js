@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ipfs from '../../lib/ipfs'
-import PriveosStore from '../../atoms/priveos-store'
-import IpfsUpload from '../../molecules/ipfs-upload'
+import eos from '../../lib/eos'
 
 
 class Login extends Component {
@@ -24,13 +22,18 @@ class Login extends Component {
   update() {
     localStorage.name = this.state.name
     localStorage.key = this.state.key
+    this.login(this.state.key)
   }
+  login(key) {
+    eos.login(key)
+  }
+
   render() {
     return (
       <div>
           <input type="text" name="name" placeholder="EOS Account Name" value={this.state.name} onChange={this.updateField}/>
           <br/><br/>
-          <textarea name="key" placeholder="Enter your Private Key here..." onChange={this.updateField}></textarea>
+          <textarea name="key" placeholder="Enter your Private Key here..." value={this.state.key} onChange={this.updateField}></textarea>
           <br/>
           <button type="submit" onClick={this.update}>Update</button>
       </div>
