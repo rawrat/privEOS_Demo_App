@@ -1,5 +1,5 @@
 export function loggedIn() {
-    return false
+    return localStorage.privateKey ? true : false
 }
 
 export default {
