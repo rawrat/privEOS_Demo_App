@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ipfs from '../lib/ipfs'
+import ipfs, { getUrl } from '../lib/ipfs'
 import IpfsUpload from '../molecules/ipfs-upload'
 import { Link, withRouter } from 'react-router-dom'
 import { priveos, generateUuid } from '../lib/priveos'
@@ -16,17 +16,24 @@ class FileUpload extends Component {
       ipfsHash: null,
       secret: null,
       nonce: null,
-      uuid: null
+      uuid: null,
+      name: null,
+      description: null,
+      url: null,
+      price: null,
+      isReadyForTransaction: false
     }
 
     this.onSelect = this.onSelect.bind(this)
     this.onStore = this.onStore.bind(this)
-    this.onUpload = this.onUpload.bind(this)
+    this.afterUpload = this.afterUpload.bind(this)
     this.upload = this.upload.bind(this)
     this.generateSecret = this.generateSecret.bind(this)
-
+    this.setReadyness = this.setReadyness.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
     this.generateSecret()
   }
+
   onSelect(evt) {
     const files = evt.target.files
     console.log('Selected File: ', files[0])
@@ -34,22 +41,34 @@ class FileUpload extends Component {
       file: files[0]
     })
   }
+
+  onKeyUp(evt) {
+    console.log("onkeyup", evt, evt.target.name, evt.target.value)
+    this.setState({
+      [evt.target.name]: evt.target.value
+    })
+    this.setReadyness()
+  }
+
   onStore(encryption) {
     console.log('got key and nonce', encryption.secret, encryption.nonce)
     this.setState({
       priveos: encryption
     })
   }
+
   upload() {
-    const self = this
-    ipfs.upload(this.state.file).then((files) => {
-      console.log('resolved', files)
-      self.setState({
-        ipfsResponse: files[0]
-      })
-    })
+    console.error('write transaction here')
   }
 
+  setReadyness() {
+    console.log(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price)
+    const isReadyForTransaction = this.state.uuid && this.state.name && this.state.description && this.state.url && this.state.price || false
+    console.log('isReadyForTransaction', isReadyForTransaction)
+    this.setState({
+      isReadyForTransaction
+    })
+  }
 
   generateSecret() {
     const self = this
@@ -66,26 +85,33 @@ class FileUpload extends Component {
     })
   }
 
-  generateUuid() {
-    return
-  }
-
-  onUpload(hash) {
+  afterUpload(hash) {
     console.log('ipfsHash', hash)
     this.setState({
-      ipfsHash: hash
+      ipfsHash: hash,
+      url: getUrl(hash)
     })
+    this.setReadyness()
   }
-  render() {
-    
 
+  render() {
     return (
       <div>
+        <div className="smallFont">UUID: {this.state.uuid}</div>
         <div className="smallFont">Key: {this.state.secret}</div>
         <div className="smallFont">Nonce: {this.state.nonce}</div>
         <div className="smallFont">IPFS Hash: {this.state.ipfsHash}</div>
+        <div className="smallFont">Upload URL: {this.state.url}</div>
         <br/><br/>
-        <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} onUpload={this.onUpload}/>
+        <input onKeyUp={this.onKeyUp} name="name" placeholder="Enter Name..." className="form-control"/>
+        <br/>
+        <textarea onKeyUp={this.onKeyUp} name="description" placeholder="Enter Description..." className="form-control"></textarea> 
+        <br/>
+        <input onKeyUp={this.onKeyUp} name="price" placeholder="Enter Price..." className="form-control"/>
+        <br/>
+        <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} afterUpload={this.afterUpload}/>
+        <br/><br/>
+        <button onClick={this.upload} disabled={!this.state.isReadyForTransaction}>Upload</button>
       </div>
     );
   }

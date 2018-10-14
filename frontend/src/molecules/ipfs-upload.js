@@ -25,6 +25,7 @@ class IpfsUpload extends Component {
     this.setState({
       file: files[0]
     })
+    this.upload(files[0])
   }
   encrypt(message) {
     console.log('encrypt before')
@@ -32,10 +33,10 @@ class IpfsUpload extends Component {
     console.log('nonce', this.props.nonce)
     return encrypt(message, this.props.nonce, this.props.secret)
   }
-  upload() {
+  upload(file) {
     const self = this
-
-    read(this.state.file).then((content) => {
+    console.log('this.state.file', file)
+    read(file).then((content) => {
       const cipher = this.encrypt(content)
       console.log('cipher', cipher)
       ipfs.upload(cipher).then((file) => {
@@ -43,8 +44,8 @@ class IpfsUpload extends Component {
         self.setState({
           ipfsResponse: file
         })
-        if (self.props.onUpload) {
-          self.props.onUpload(file.name)
+        if (self.props.afterUpload) {
+          self.props.afterUpload(file.hash)
         }
       })
       .catch((err) => {
@@ -57,11 +58,6 @@ class IpfsUpload extends Component {
       <div>
         <SingleFileSelector onSelect={this.onSelect}/>
         <FileDetails file={this.state && this.state.file || null}/>
-        <br/><br/>
-        <div>
-          <button onClick={this.upload} disabled={this.state.file ? false : true}>Upload</button>
-        </div>
-        <IpfsLink hash={this.state.ipfsResponse && this.state.ipfsResponse.hash || null}/>
       </div>
     );
   }

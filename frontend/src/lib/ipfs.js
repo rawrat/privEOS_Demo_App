@@ -30,6 +30,11 @@ export function upload(data, name) {
     })
 }
 
+export function getUrl(hash) {
+    return 'https://cloudflare-ipfs.com/ipfs/' + hash
+}
+
 export default {
-    upload
+    upload,
+    getUrl
 }
