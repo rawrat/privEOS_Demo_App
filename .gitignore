@@ -4,3 +4,4 @@
 config-local.conf
 TODOS-LOCAL.md
 stream-test
+.python-version
