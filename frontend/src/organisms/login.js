@@ -7,8 +7,8 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: localStorage.name,
-      key: localStorage.key
+      name: localStorage.name || "",
+      privateKey: localStorage.privateKey || ""
     }
 
     this.update = this.update.bind(this)
@@ -21,11 +21,11 @@ class Login extends Component {
   }
   update() {
     localStorage.name = this.state.name
-    localStorage.key = this.state.key
-    this.login(this.state.key)
+    localStorage.privateKey = this.state.privateKey
+    this.login(this.state.privateKey)
   }
-  login(key) {
-    eos.login(key)
+  login(privateKey) {
+    eos.login(privateKey)
   }
 
   render() {
@@ -34,7 +34,7 @@ class Login extends Component {
         <FormGroup>
           <Input type="text" name="name" placeholder="EOS Account Name" value={this.state.name} onChange={this.updateField}/>
           <br/>
-          <textarea name="key" placeholder="Enter your Private Key here..." value={this.state.key} onChange={this.updateField} className="form-control input"/>
+          <textarea name="privateKey" placeholder="Enter your Private Key here..." value={this.state.privateKey} onChange={this.updateField} className="form-control input"/>
           <br/>
           <Button type="submit" onClick={this.update}>Update</Button>
         </FormGroup>
