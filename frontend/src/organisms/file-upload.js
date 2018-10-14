@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ipfs, { getUrl } from '../lib/ipfs'
+import { getUrl } from '../lib/ipfs'
 import IpfsUpload from '../molecules/ipfs-upload'
-import { Link, withRouter } from 'react-router-dom'
-import { priveos, generateUuid } from '../lib/priveos'
+import { withRouter } from 'react-router-dom'
+import { priveos, generateUuid, upload, login } from '../lib/eos'
 import config from '../config'
 
 
@@ -58,7 +58,10 @@ class FileUpload extends Component {
   }
 
   upload() {
-    console.error('write transaction here')
+    login(config.key)
+    upload(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
+      console.log('upload transaction success', res)
+    })
   }
 
   setReadyness() {
@@ -107,7 +110,7 @@ class FileUpload extends Component {
         <br/>
         <textarea onKeyUp={this.onKeyUp} name="description" placeholder="Enter Description..." className="form-control"></textarea> 
         <br/>
-        <input onKeyUp={this.onKeyUp} name="price" placeholder="Enter Price..." className="form-control"/>
+        <input onKeyUp={this.onKeyUp} name="price" placeholder="Enter Price in Format '1.0000 EOS'" className="form-control"/>
         <br/>
         <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} afterUpload={this.afterUpload}/>
         <br/><br/>
