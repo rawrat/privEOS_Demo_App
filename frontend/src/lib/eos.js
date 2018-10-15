@@ -46,9 +46,7 @@ export class Eos {
     console.log("GET FILES", config)
     return this.client.getTableRows({json:true, scope: config.contract, code: config.contract,  table: 'files', limit:100})
       .then((res) => {
-        return res.rows.filter((x) => {
-          return x.is_active
-        })
+        return res.rows
       }).catch((err) => {
         console.error('Cannot retreive active nodes: ', err)
       })
