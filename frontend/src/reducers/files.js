@@ -6,10 +6,8 @@ const initialState = {
 }
 
 export default function(state = initialState, action) {
-    console.log('triggered action', action)
     switch (action.type) {
         case LOAD_FILES:
-            console.log('triggered LOAD_FILES')
             return { ...state, loading: true }
         case LOAD_FILES_SUCCESS:
             return { ...state, loading: false, ...action.data }

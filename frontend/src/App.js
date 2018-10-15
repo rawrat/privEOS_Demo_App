@@ -30,21 +30,30 @@ class App extends Component {
               this.props.auth.loggedIn ? (
                 <FileList/>
               ) : (
-                <Redirect to="/login"/>
+                <Redirect to={{
+                  pathname: "/login",
+                  state: { from: window.location.pathname }
+                }}/>
               )
             )}/>
             <Route exact path='/files/:uuid' render={() => (
               this.props.auth.loggedIn ? (
                 <File/>
               ) : (
-                <Redirect to="/login"/>
+                <Redirect to={{
+                  pathname: "/login",
+                  state: { from: window.location.pathname }
+                }}/>
               )
             )}/>
             <Route exact path='/upload' render={() => (
               this.props.auth.loggedIn ? (
                 <FileUpload/>
               ) : (
-                <Redirect to="/login"/>
+                <Redirect to={{
+                  pathname: "/login",
+                  state: { from: window.location.pathname }
+                }}/>
               )
             )}/>
         </Switch>

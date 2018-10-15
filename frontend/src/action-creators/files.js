@@ -8,7 +8,6 @@ export function loadFiles() {
         })
         return getState().auth.eos.getFiles()
             .then((res) => {
-                console.log('get files result', res)
                 dispatch({
                     type: LOAD_FILES_SUCCESS,
                     data: {
@@ -17,7 +16,7 @@ export function loadFiles() {
                 })
             })
             .catch((err) => {
-                console.log('get files error', err)
+                console.error('get files error', err)
                 dispatch({
                     type: LOAD_FILES_ERROR,
                     data: err

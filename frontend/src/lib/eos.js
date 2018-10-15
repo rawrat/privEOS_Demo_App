@@ -43,7 +43,6 @@ export class Eos {
   }
 
   getFiles() {
-    console.log("GET FILES", config)
     return this.client.getTableRows({json:true, scope: config.contract, code: config.contract,  table: 'files', limit:100})
       .then((res) => {
         return res.rows
