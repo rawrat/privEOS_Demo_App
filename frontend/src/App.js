@@ -9,6 +9,7 @@ import { loginAsUser } from './action-creators/auth'
 
 import FileUpload from './organisms/file-upload'
 import FileList from './organisms/file-list'
+import File from './organisms/file'
 import Login from './organisms/login'
 import Header from './organisms/header'
 import config from './config'
@@ -28,6 +29,13 @@ class App extends Component {
             <Route exact path='/' render={() => (
               this.props.auth.loggedIn ? (
                 <FileList/>
+              ) : (
+                <Redirect to="/login"/>
+              )
+            )}/>
+            <Route exact path='/files/:uuid' render={() => (
+              this.props.auth.loggedIn ? (
+                <File/>
               ) : (
                 <Redirect to="/login"/>
               )

@@ -33,6 +33,19 @@ class FileList extends Component {
     super(props)
     this.state = {}
     this.props.loadFiles()
+    this.selectFile = this.selectFile.bind(this)
+    this.getTrProps = this.getTrProps.bind(this)
+  }
+
+  selectFile(row) {
+    console.log('selectFile', row)
+    this.props.history.push('/files/' + row.original.uuid)
+  }
+
+  getTrProps(state, rowInfo, column, instance) {
+    return {
+      onClick: () => this.selectFile(rowInfo)
+    }
   }
 
   render() {
@@ -41,7 +54,7 @@ class FileList extends Component {
         <LoadingBar loading={this.props.files.loading}/>
         Loaded Files: {this.props.files.items.length}
         <br/><br/>
-        <ReactTable data={this.props.files.items} columns={columns}/>
+        <ReactTable data={this.props.files.items} columns={columns} getTrProps={this.getTrProps}/>
       </div>
     );
   }
