@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { getUrl } from '../lib/ipfs'
 import IpfsUpload from '../molecules/ipfs-upload'
 import { withRouter } from 'react-router-dom'
-import { priveos, generateUuid, upload, login } from '../lib/eos'
+import { priveos, generateUuid } from '../lib/eos'
+//import { upload, login } from '../lib/eos'
 import config from '../config'
 
 
@@ -58,8 +59,8 @@ class FileUpload extends Component {
   }
 
   upload() {
-    login(config.key)
-    upload(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
+    this.props.auth.eos.login(config.key)
+    this.props.eos.upload(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
       console.log('upload transaction success', res)
     })
   }

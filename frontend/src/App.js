@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { loginAsUser } from './action-creators/auth'
 
 import FileUpload from './organisms/file-upload'
 import FileList from './organisms/file-list'
 import Login from './organisms/login'
 import Header from './organisms/header'
 import auth from './lib/auth'
+import config from './config'
 
 
 function requireAuth(nextState, replace) {
@@ -16,8 +18,10 @@ function requireAuth(nextState, replace) {
 }
 
 class App extends Component {
-  upload() {
-    this.props.upload()
+  constructor(props) {
+    super(props)
+    this.state = {}
+    this.props.loginAsBuyer()
   }
   render() {
     return (
@@ -50,6 +54,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  loginAsBuyer: () => dispatch(loginAsUser(config.eosAccounts.buyer.name, config.eosAccounts.buyer.key)),
+  loginAsSeller: () => dispatch(loginAsUser(config.eosAccounts.seller.name, config.eosAccounts.seller.key))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -7,10 +7,10 @@ const initialState = {
 export default function(state = initialState, action) {
     switch (action.type) {
         case LOGIN_SUCCESS:
-            return { ...state, loggedIn: true }
+            return { ...state, loggedIn: true, ...action.data }
         case LOGOUT_SUCCESS:
             return { ...state, loggedIn: false }
         default:
             return state;
     }
-  };
+}

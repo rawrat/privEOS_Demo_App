@@ -1,5 +1,3 @@
-import { LOGIN_SUCESS } from '../constants/action-types'
-
 const initialState = {
 }
 

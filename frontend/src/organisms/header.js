@@ -4,9 +4,6 @@ import { Link } from 'react-router-dom'
 
 
 class Header extends Component {
-  save() {
-
-  }
   render() {
     return (
       <div>
@@ -14,6 +11,7 @@ class Header extends Component {
           <li><Link to="/">Files</Link></li>
           <li><Link to="/upload">Upload</Link></li>
           <li><Link to="/login">Login</Link></li>
+          <li className="smallFont">Logged in as <strong>{this.props.auth.user}</strong></li>
         </ul>
       </div>
     );

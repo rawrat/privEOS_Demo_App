@@ -1,2 +1,10 @@
-export const LOGIN_SUCCESS = "login_success"
-export const LOGOUT_SUCCESS = "logout_success"
+// AUTH
+export const LOGIN_LOADING = "LOGIN_LOADING"
+export const LOGIN_AS_USER = "LOGIN_AS_USER"
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
+
+// FILES
+export const LOAD_FILES = "LOAD_FILES"
+export const LOAD_FILES_SUCCESS = "LOAD_FILES_SUCCESS"
+export const LOAD_FILES_ERROR = "LOAD_FILES_ERROR"

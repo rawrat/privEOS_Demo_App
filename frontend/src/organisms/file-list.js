@@ -1,23 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUrl } from '../lib/ipfs'
-import IpfsUpload from '../molecules/ipfs-upload'
+import LoadingBar from '../atoms/loading-bar'
 import { withRouter } from 'react-router-dom'
-import { priveos, generateUuid, upload, login } from '../lib/eos'
-import config from '../config'
+import { loadFiles, loadFilesSuccess, loadFilesError } from '../action-creators/files'
 
 
 class FileList extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
+    this.props.loadFiles()
   }
 
   render() {
     return (
       <div>
-        Filelist
+        <LoadingBar loading={this.props.files.loading}/>
       </div>
     );
   }
@@ -28,6 +26,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  loadFiles: () => dispatch(loadFiles())
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FileList))
