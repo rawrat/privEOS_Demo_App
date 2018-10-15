@@ -16,6 +16,7 @@ class FileList extends Component {
     return (
       <div>
         <LoadingBar loading={this.props.files.loading}/>
+        Loaded Files: {this.props.files.items.length}
       </div>
     );
   }

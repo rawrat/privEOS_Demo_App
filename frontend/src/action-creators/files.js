@@ -9,9 +9,19 @@ export function loadFiles() {
         return getState().auth.eos.getFiles()
             .then((res) => {
                 console.log('get files result', res)
+                dispatch({
+                    type: LOAD_FILES_SUCCESS,
+                    data: {
+                        items: res
+                    }
+                })
             })
             .catch((err) => {
                 console.log('get files error', err)
+                dispatch({
+                    type: LOAD_FILES_ERROR,
+                    data: err
+                })
             })
     }
 }
