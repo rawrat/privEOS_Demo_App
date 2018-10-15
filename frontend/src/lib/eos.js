@@ -44,11 +44,21 @@ export class Eos {
 
   getFiles() {
     return this.client.getTableRows({json:true, scope: config.contract, code: config.contract,  table: 'files', limit:100})
-      .then((res) => {
-        return res.rows
-      }).catch((err) => {
-        console.error('Cannot retreive active nodes: ', err)
-      })
+    .then((res) => {
+      return res.rows
+    }).catch((err) => {
+      console.error('Cannot retreive active nodes: ', err)
+    })
+  }
+
+  getFile(uuid) {
+    return this.client.getTableRows({json:true, scope: config.contract, code: config.contract,  table: 'files', limit:100, table_key: 'uuid', lower_bound: uuid })
+    .then((res) => {
+      console.log('get single file', res)
+      return res.rows
+    }).catch((err) => {
+      console.error('Cannot retreive active nodes: ', err)
+    })
   }
 }
 

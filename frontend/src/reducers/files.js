@@ -2,7 +2,8 @@ import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR } from '../constants/a
 
 const initialState = {
     loading: true,
-    items: []
+    items: [],
+    item: null
 }
 
 export default function(state = initialState, action) {

@@ -24,6 +24,29 @@ export function loadFiles() {
             })
     }
 }
+export function loadFile() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: LOAD_FILES
+        })
+        return getState().auth.eos.getFile()
+            .then((res) => {
+                dispatch({
+                    type: LOAD_FILES_SUCCESS,
+                    data: {
+                        item: res
+                    }
+                })
+            })
+            .catch((err) => {
+                console.error('get files error', err)
+                dispatch({
+                    type: LOAD_FILES_ERROR,
+                    data: err
+                })
+            })
+    }
+}
 export function loadFilesSuccess() {
     return {
         type: LOAD_FILES_SUCCESS
