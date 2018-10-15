@@ -46,7 +46,11 @@ void example::prepare(const account_name user) {
 }
     
 void example::transfer(const currency::transfer &transfer) {
-  eosio_assert(transfer.quantity.symbol == string_to_symbol(4, "EOS"), 
+  if(transfer.from == self || transfer.to != self) {
+    /* only handle incoming transfers to this contract */
+    return;
+  }
+  eosio_assert(transfer.quantity.symbol == purchase_symbol, 
     "Only EOS allowed");
   eosio_assert(transfer.quantity.is_valid(), "Are you trying to corrupt me?");
   eosio_assert(transfer.quantity.amount > 0, "When pigs fly");
