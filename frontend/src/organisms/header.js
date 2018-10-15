@@ -11,7 +11,8 @@ class Header extends Component {
     return (
       <div>
         <ul className="mainNavigation">
-          <li><Link to="/">Upload File</Link></li>
+          <li><Link to="/">Files</Link></li>
+          <li><Link to="/upload">Upload</Link></li>
           <li><Link to="/login">Login</Link></li>
         </ul>
       </div>

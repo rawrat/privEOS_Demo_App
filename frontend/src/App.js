@@ -4,6 +4,7 @@ import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom'
 
 import FileUpload from './organisms/file-upload'
+import FileList from './organisms/file-list'
 import Login from './organisms/login'
 import Header from './organisms/header'
 import auth from './lib/auth'
@@ -25,6 +26,13 @@ class App extends Component {
         <Switch>
             <Route exact path='/login' component={Login}/>
             <Route exact path='/' render={() => (
+              auth.loggedIn() ? (
+                <FileList/>
+              ) : (
+                <Redirect to="/login"/>
+              )
+            )}/>
+            <Route exact path='/upload' render={() => (
               auth.loggedIn() ? (
                 <FileUpload/>
               ) : (
