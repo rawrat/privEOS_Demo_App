@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import './App.css';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import './App.css'
+import 'react-table/react-table.css'
+
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { loginAsUser } from './action-creators/auth'
 
