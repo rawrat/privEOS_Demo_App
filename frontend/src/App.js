@@ -8,14 +8,7 @@ import FileUpload from './organisms/file-upload'
 import FileList from './organisms/file-list'
 import Login from './organisms/login'
 import Header from './organisms/header'
-import auth from './lib/auth'
 import config from './config'
-
-
-function requireAuth(nextState, replace) {
-  console.log('require Auth', nextState)
-  return (<Redirect to="login"/>)
-}
 
 class App extends Component {
   constructor(props) {
@@ -30,14 +23,14 @@ class App extends Component {
         <Switch>
             <Route exact path='/login' component={Login}/>
             <Route exact path='/' render={() => (
-              auth.loggedIn() ? (
+              this.props.auth.loggedIn ? (
                 <FileList/>
               ) : (
                 <Redirect to="/login"/>
               )
             )}/>
             <Route exact path='/upload' render={() => (
-              auth.loggedIn() ? (
+              this.props.auth.loggedIn ? (
                 <FileUpload/>
               ) : (
                 <Redirect to="/login"/>
