@@ -19,7 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.props.loginAsBuyer()
+    // this.props.loginAsBuyer()
   }
   render() {
     return (
