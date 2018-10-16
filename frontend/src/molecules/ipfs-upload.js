@@ -19,13 +19,12 @@ class IpfsUpload extends Component {
     this.onSelect = this.onSelect.bind(this)
     this.upload = this.upload.bind(this)
   }
-  onSelect(evt) {
-    const files = evt.target.files
-    console.log('Selected File: ', files[0])
+  onSelect(file) {
+    console.log('Selected File: ', file)
     this.setState({
-      file: files[0]
+      file
     })
-    this.upload(files[0])
+    this.upload(file)
   }
   encrypt(message) {
     console.log('encrypt before')

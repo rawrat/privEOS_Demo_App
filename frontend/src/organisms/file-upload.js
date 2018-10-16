@@ -38,11 +38,10 @@ class FileUpload extends Component {
     this.generateSecret()
   }
 
-  onSelect(evt) {
-    const files = evt.target.files
-    console.log('Selected File: ', files[0])
+  onSelect(file) {
+    console.log('Selected File: ', file)
     this.setState({
-      file: files[0]
+      file
     })
   }
 
@@ -112,21 +111,22 @@ class FileUpload extends Component {
     }
     return (
       <div>
-        <div className="smallFont">UUID: {this.state.uuid}</div>
-        <div className="smallFont">Key: {this.state.secret}</div>
-        <div className="smallFont">Nonce: {this.state.nonce}</div>
-        <div className="smallFont">IPFS Hash: {this.state.ipfsHash}</div>
-        <div className="smallFont">Upload URL: {this.state.url}</div>
-        <br/><br/>
-        <input onKeyUp={this.onKeyUp} name="name" placeholder="Enter Name..." className="form-control"/>
-        <br/>
-        <textarea onKeyUp={this.onKeyUp} name="description" placeholder="Enter Description..." className="form-control"></textarea> 
-        <br/>
-        <input onKeyUp={this.onKeyUp} name="price" placeholder="Enter Price in Format '1.0000 EOS'" className="form-control"/>
+        <div className="form-group">
+          <label for="name">Filename:</label>
+          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control"/>
+        </div>
+        <div className="form-group">
+          <label for="description">Description:</label>
+          <textarea onKeyUp={this.onKeyUp} id="description" name="description" placeholder="Enter Description..." className="form-control"></textarea> 
+        </div>
+        <div className="form-group">
+          <label for="price">Price:</label>
+          <input onKeyUp={this.onKeyUp} name="price" id="price" placeholder="Enter Price in Format '1.0000 EOS'" className="form-control"/>
+        </div>
         <br/>
         <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} afterUpload={this.afterUpload}/>
         <br/><br/>
-        <button onClick={this.upload} disabled={!this.state.isReadyForTransaction}>Upload</button>
+        <button onClick={this.upload} disabled={!this.state.isReadyForTransaction} className="form-control btn btn-primary">Upload</button>
       </div>
     );
   }
