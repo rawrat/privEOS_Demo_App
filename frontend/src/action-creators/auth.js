@@ -8,7 +8,7 @@ export function loginAsUser(user, key) {
             type: LOGIN_SUCCESS,
             data: {
                 user: user,
-                eos: new Eos(user, key)
+                eos: new Eos(key)
             }
         })
     }

@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { priveos, generateUuid } from '../lib/eos'
 //import { upload, login } from '../lib/eos'
 import config from '../config'
+import { Redirect } from 'react-router-dom'
 
 
 class FileUpload extends Component {
@@ -22,7 +23,9 @@ class FileUpload extends Component {
       description: null,
       url: null,
       price: null,
-      isReadyForTransaction: false
+      isReadyForTransaction: false,
+      finished: false,
+      fileDetailPath: null
     }
 
     this.onSelect = this.onSelect.bind(this)
@@ -44,7 +47,6 @@ class FileUpload extends Component {
   }
 
   onKeyUp(evt) {
-    console.log("onkeyup", evt, evt.target.name, evt.target.value)
     this.setState({
       [evt.target.name]: evt.target.value
     })
@@ -59,16 +61,20 @@ class FileUpload extends Component {
   }
 
   upload() {
-    this.props.auth.eos.login(config.key)
-    this.props.eos.upload(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
+    const self = this
+    // this.props.auth.eos.login(config.key)
+    // console.log(JSON.stringify(this.state, null, 2))
+    this.props.auth.eos.upload(this.props.auth.user, this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
       console.log('upload transaction success', res)
+        self.setState({
+          finished: true,
+          fileDetailPath: '/files/' + self.state.uuid
+        })
     })
   }
 
   setReadyness() {
-    console.log(this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price)
     const isReadyForTransaction = this.state.uuid && this.state.name && this.state.description && this.state.url && this.state.price || false
-    console.log('isReadyForTransaction', isReadyForTransaction)
     this.setState({
       isReadyForTransaction
     })
@@ -99,6 +105,11 @@ class FileUpload extends Component {
   }
 
   render() {
+    if (this.state.finished) {
+      return (
+        <Redirect to={this.state.fileDetailPath}/>
+      )
+    }
     return (
       <div>
         <div className="smallFont">UUID: {this.state.uuid}</div>

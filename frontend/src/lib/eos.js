@@ -11,13 +11,12 @@ export function generateUuid() {
 
 export class Eos {
   constructor(key) {
+    console.log('key', key)
     this.client = EosJS({httpEndpoint: config.httpEndpoint, chainId: config.chainId, keyProvider: [key]})
   }
  
-  upload(uuid, name, description, url, price) {
-    if (!/\d\.\d\d\d\d\sEOS/.test(price)) {
-      return alert('Price does not have correct format')
-    }
+  upload(owner, uuid, name, description, url, price) {
+    console.log(owner)
     return this.client.transaction(
         {
           actions: [
