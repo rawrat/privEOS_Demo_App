@@ -28,7 +28,6 @@ class FileUpload extends Component {
       fileDetailPath: null
     }
 
-    this.onSelect = this.onSelect.bind(this)
     this.onStore = this.onStore.bind(this)
     this.afterUpload = this.afterUpload.bind(this)
     this.upload = this.upload.bind(this)
@@ -36,13 +35,6 @@ class FileUpload extends Component {
     this.setReadyness = this.setReadyness.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
     this.generateSecret()
-  }
-
-  onSelect(file) {
-    console.log('Selected File: ', file)
-    this.setState({
-      file
-    })
   }
 
   onKeyUp(evt) {
