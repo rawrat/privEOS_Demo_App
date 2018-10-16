@@ -1,23 +1,56 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { loadFile } from '../action-creators/files'
+import { loadFiles } from '../action-creators/files'
+import ReadableDate from '../atoms/readable-date'
 
 
 class File extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    console.log('Load uuid', this.props.match)
-    this.props.loadFile(this.props.match.params.uuid)
+    console.log('Load uuid', this.props.match.params.uuid)
+    this.props.loadFiles()
   }
 
 
   render() {
+    const item = this.props.files && this.props.files.items && this.props.files.items.find((x) => x.uuid == this.props.match.params.uuid)
+    if (!item) {
+      return (
+        <div>This file does not exist {this.props.match.params.uuid}</div>
+      )
+    }
     return (
       <div>
-        File Detail Page here...
-        {this.props.files && this.props.files.item && this.props.files.item.uuid}
+        <div className="row">
+          <div className="col-md-2">UUID</div>
+          <div className="col-md-10">{item.uuid}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">Name</div>
+          <div className="col-md-10">{item.name}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">Description</div>
+          <div className="col-md-10">{item.description}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">URL</div>
+          <div className="col-md-10">{item.url}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">Price</div>
+          <div className="col-md-10">{item.price}</div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">Created at</div>
+          <div className="col-md-10"><ReadableDate timestamp={item.created_at}/></div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">Owner</div>
+          <div className="col-md-10">{item.owner}</div>
+        </div>
       </div>
     );
   }
@@ -28,7 +61,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadFile: (uuid) => dispatch(loadFile(uuid))
+  loadFiles: () => dispatch(loadFiles())
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(File))
