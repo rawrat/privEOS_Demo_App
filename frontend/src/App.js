@@ -5,7 +5,6 @@ import './App.css'
 import 'react-table/react-table.css'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { loginAsUser } from './action-creators/auth'
 
 import FileUpload from './organisms/file-upload'
 import FileList from './organisms/file-list'
@@ -13,7 +12,6 @@ import File from './organisms/file'
 import Login from './organisms/login'
 import Logout from './organisms/logout'
 import Header from './organisms/header'
-import config from './config'
 
 class App extends Component {
   constructor(props) {
@@ -69,8 +67,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginAsBuyer: () => dispatch(loginAsUser(config.eosAccounts.buyer.name, config.eosAccounts.buyer.key)),
-  loginAsSeller: () => dispatch(loginAsUser(config.eosAccounts.seller.name, config.eosAccounts.seller.key))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
