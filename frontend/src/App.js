@@ -11,6 +11,7 @@ import FileUpload from './organisms/file-upload'
 import FileList from './organisms/file-list'
 import File from './organisms/file'
 import Login from './organisms/login'
+import Logout from './organisms/logout'
 import Header from './organisms/header'
 import config from './config'
 
@@ -26,6 +27,7 @@ class App extends Component {
         <Header/>
         <Switch>
             <Route exact path='/login' component={Login}/>
+            <Route exact path='/logout' component={Logout}/>
             <Route exact path='/' render={() => (
               this.props.auth.loggedIn ? (
                 <FileList/>

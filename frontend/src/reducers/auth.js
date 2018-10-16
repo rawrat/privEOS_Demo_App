@@ -9,7 +9,7 @@ export default function(state = initialState, action) {
         case LOGIN_SUCCESS:
             return { ...state, loggedIn: true, ...action.data }
         case LOGOUT_SUCCESS:
-            return { ...state, loggedIn: false }
+            return { ...state, loggedIn: false, ...action.data }
         default:
             return state;
     }

@@ -10,7 +10,7 @@ class Header extends Component {
         <ul className="mainNavigation">
           <li><Link to="/">Files</Link></li>
           <li><Link to="/upload">Upload</Link></li>
-          <li><Link to="/login">Login</Link></li>
+          {this.props.auth.user ? ( <li><Link to="/logout">Logout</Link></li> ) : ( <li><Link to="/login">Login</Link></li> )}
           <li className="smallFont">Logged in as <strong>{this.props.auth.user}</strong></li>
         </ul>
       </div>
