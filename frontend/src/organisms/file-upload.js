@@ -123,9 +123,8 @@ class FileUpload extends Component {
           <label for="price">Price:</label>
           <input onKeyUp={this.onKeyUp} name="price" id="price" placeholder="Enter Price in Format '1.0000 EOS'" className="form-control"/>
         </div>
-        <br/>
         <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} afterUpload={this.afterUpload}/>
-        <br/><br/>
+        <br/>
         <button onClick={this.upload} disabled={!this.state.isReadyForTransaction} className="form-control btn btn-primary">Upload</button>
       </div>
     );
