@@ -16,7 +16,6 @@ export class Eos {
   }
  
   upload(owner, uuid, name, description, url, price) {
-    console.log(owner)
     return this.client.transaction(
         {
           actions: [
@@ -24,11 +23,11 @@ export class Eos {
               account: config.contract,
               name: 'upload',
               authorization: [{
-                actor: config.owner,
+                actor: owner,
                 permission: 'active',
               }],
               data: {
-                owner: config.owner,
+                owner: owner,
                 uuid,
                 name,
                 description,
