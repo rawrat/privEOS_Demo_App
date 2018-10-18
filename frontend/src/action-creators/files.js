@@ -1,6 +1,5 @@
 import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR } from '../constants/action-types'
-import { getFiles } from '../lib/eos'
-// FILES
+
 export function loadFiles() {
     return (dispatch, getState) => {
         dispatch({
@@ -24,11 +23,13 @@ export function loadFiles() {
             })
     }
 }
+
 export function loadFilesSuccess() {
     return {
         type: LOAD_FILES_SUCCESS
     }
 }
+
 export function loadFilesError() {
     return {
         type: LOAD_FILES_ERROR

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { loadFiles } from '../action-creators/files'
 import ReadableDate from '../atoms/readable-date'
+import DownloadArea from './download-area'
 
 
 class File extends Component {
@@ -11,13 +12,7 @@ class File extends Component {
     this.state = {}
     console.log('Load uuid', this.props.match.params.uuid)
     this.props.loadFiles()
-    this.purchase = this.purchase.bind(this)
     this.getItem = this.getItem.bind(this)
-  }
-
-  purchase() {
-    const item = this.getItem()
-    this.props.auth.eos.buy(this.props.auth.user, item.price, item.uuid)
   }
 
   getItem() {
@@ -62,9 +57,7 @@ class File extends Component {
           <div className="col-md-10">{item.owner}</div>
         </div>
         <br/><br/>
-        <div className="row">
-          <div className="col-md-12"><button className="btn btn-success" onClick={this.purchase}>Download for {item.price}</button></div>
-        </div>
+        <DownloadArea file={item}/>
       </div>
     );
   }
