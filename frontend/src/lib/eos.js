@@ -51,27 +51,62 @@ export class Eos {
     })
   }
 
-  getPurchasedFiles() {
-    return this.client.getTableRows({json:true, scope: config.contract, code: config.contract,  table: 'files', limit:100})
+  getPurchasedFiles(user) {
+    console.log(user)
+    return this.client.getTableRows({json:true, scope: user, code: config.contract,  table: 'perms', limit:100})
     .then((res) => {
-      console.log('eos.getFiles', res)
+      console.log('eos.getPurchasedFiles', res)
       return res.rows
     }).catch((err) => {
       console.error('Cannot retreive active nodes: ', err)
     })
   }
 
-  buy(sender, quantity, uuid) {
+  buy(user, quantity, uuid) {
     const self = this
-    return self.prepare(sender)
-    .then(() => self.transfer(sender, config.contract, quantity))
-    .then(() => self.purchase(sender, uuid))
-    .then(() => {
-      console.log('successfully purchased file')
-    })
-    .catch((err) => {
-      console.error('error while purchasing file', err)
-    })
+    return this.client.transaction(
+      {
+        actions: [
+          {
+            account: config.contract,
+            name: 'prepare',
+            authorization: [{
+              actor: user,
+              permission: 'active',
+            }],
+            data: {
+              user: user
+            }
+          },
+          {
+            account: 'eosio.token',
+            name: 'transfer',
+            authorization: [{
+              actor: user,
+              permission: 'active',
+            }],
+            data: {
+              from: user,
+              to: config.contract,
+              quantity: quantity,
+              memo: ''
+            }
+          },
+          {
+            account: config.contract,
+            name: 'purchase',
+            authorization: [{
+              actor: user,
+              permission: 'active',
+            }],
+            data: {
+              buyer: user,
+              uuid: uuid
+            }
+          }
+        ]
+      }
+    )
   }
 
   prepare(user) {
@@ -97,23 +132,11 @@ export class Eos {
 
 
   transfer(sender, receiver, quantity) {
+    console.log('transfer from to', sender, receiver, quantity)
     return this.client.transaction(
       {
         actions: [
-          {
-            account: 'eosio.token',
-            name: 'transfer',
-            authorization: [{
-              actor: sender,
-              permission: 'active',
-            }],
-            data: {
-              from: sender,
-              to: receiver,
-              quantity: quantity,
-              memo: ''
-            }
-          }
+          
         ]
       }
     )
@@ -121,6 +144,7 @@ export class Eos {
 
 
   purchase(user, uuid) {
+    console.log('purchase', user, uuid)
     return this.client.transaction(
       {
         actions: [
