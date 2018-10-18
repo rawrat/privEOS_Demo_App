@@ -5,7 +5,7 @@
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/asset.hpp>
 #include <eosiolib/currency.hpp>
-
+#include <eosiolib/public_key.hpp>
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
