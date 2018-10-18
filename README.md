@@ -8,11 +8,12 @@ For Docker usage, see: [DOCKER.md](DOCKER.md)
 
 ## Priveos Client Library
 
-The frontend requires the priveos client library. To get the latest version, I added this to my `~/.bash_profile`:
+The frontend requires the priveos client library. To link it, run:
 
 ```
-function pushPriveosNodeModuleDemoApp() {
-  sudo rm -r <PATH_TO>/privEOS_Demo_App/frontend/node_modules/priveos
-  cp -r <PATH_TO>/privEOS/client/ <PATH_TO>/privEOS_Demo_App/frontend/node_modules/priveos
-}   
+# in privEOS/client folder:
+npm link
+
+# in privEOS_Demo_App/frontend folder:
+npm link priveos
 ```
