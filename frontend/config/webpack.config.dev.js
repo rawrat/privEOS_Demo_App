@@ -327,6 +327,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new CaseSensitivePathsPlugin(),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
