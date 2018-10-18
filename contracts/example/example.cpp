@@ -46,7 +46,7 @@ void example::prepare(const account_name user) {
 }
     
 void example::transfer(const currency::transfer &transfer) {
-  if(transfer.from == self || transfer.to != self) {
+  if(transfer.from == _self || transfer.to != _self) {
     /* only handle incoming transfers to this contract */
     return;
   }
