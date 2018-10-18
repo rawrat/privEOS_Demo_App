@@ -37,10 +37,10 @@ void example::upload(const account_name owner, const std::string uuid, const std
 void example::prepare(const account_name user) {
   require_auth(user);
   balances_table balances(_self, user);      
-  auto it = balances.find(string_to_symbol(4, "EOS"));
+  auto it = balances.find(purchase_symbol);
   if(it == balances.end()) {
     balances.emplace(user, [&](auto& bal){
-        bal.funds = asset(0, string_to_symbol(4, "EOS"));
+        bal.funds = asset(0, purchase_symbol);
     });
   }
 }
@@ -93,7 +93,7 @@ void example::purchase(const account_name buyer, const std::string uuid) {
 }
     
 //@abi action
-void example::accessgrant(const account_name user, const account_name contract, const std::string uuid) {
+void example::accessgrant(const account_name user, const account_name contract, const std::string uuid, const eosio::public_key public_key) {
   require_auth(user);
   
   const auto& file = get_file_by_uuid(uuid);

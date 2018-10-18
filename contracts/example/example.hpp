@@ -58,7 +58,7 @@ class example : public eosio::contract {
     //@abi action
     void purchase(const account_name buyer, const std::string uuid);
     //@abi action
-    void accessgrant(const account_name user, const account_name contract, const std::string uuid);
+    void accessgrant(const account_name user, const account_name contract, const std::string uuid, const eosio::public_key public_key);
     
     
   private:
