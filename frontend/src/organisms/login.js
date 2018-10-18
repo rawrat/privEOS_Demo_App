@@ -23,11 +23,14 @@ class Login extends Component {
       
         <div>
           <div className="row">
-            <div className="col-md-2">
-              <Button className="btn btn-default" onClick={this.props.loginAsBuyer}>Login as Buyer</Button>
+            <div className="col-md-1">
+              Login as:
+            </div>
+            <div className="col-md-1">
+              <Button className="btn btn-default" onClick={this.props.loginAsAlice}>Alice</Button>
             </div>
             <div className="col-md-10">
-              <Button className="btn btn-default" onClick={this.props.loginAsSeller}>Login as Seller</Button>
+              <Button className="btn btn-default" onClick={this.props.loginAsBob}>Bob</Button>
             </div>
           </div>
         </div>
@@ -41,8 +44,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginAsBuyer: () => dispatch(loginAsUser(config.eosAccounts.buyer.name, config.eosAccounts.buyer.key)),
-  loginAsSeller: () => dispatch(loginAsUser(config.eosAccounts.seller.name, config.eosAccounts.seller.key))
+  loginAsAlice: () => dispatch(loginAsUser(config.eosAccounts.alice.name, config.eosAccounts.alice.key)),
+  loginAsBob: () => dispatch(loginAsUser(config.eosAccounts.bob.name, config.eosAccounts.bob.key))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
