@@ -25,8 +25,8 @@ class SingleFileSelector extends Component {
   }
   render() {
     return (
-      <div class="form-group">
-        <label for="file">
+      <div className="form-group">
+        <label htmlFor="file">
           File
         </label>
         <label className="form-control" htmlFor="file" onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDrop={this.onDrop}>

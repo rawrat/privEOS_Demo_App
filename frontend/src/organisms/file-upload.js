@@ -104,15 +104,15 @@ class FileUpload extends Component {
     return (
       <div>
         <div className="form-group">
-          <label for="name">Filename:</label>
+          <label htmlFor="name">Filename:</label>
           <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control"/>
         </div>
         <div className="form-group">
-          <label for="description">Description:</label>
+          <label htmlFor="description">Description:</label>
           <textarea onKeyUp={this.onKeyUp} id="description" name="description" placeholder="Enter Description..." className="form-control"></textarea> 
         </div>
         <div className="form-group">
-          <label for="price">Price:</label>
+          <label htmlFor="price">Price:</label>
           <input onKeyUp={this.onKeyUp} name="price" id="price" placeholder="Enter Price in Format '1.0000 EOS'" className="form-control"/>
         </div>
         <IpfsUpload secret={this.state.secret} nonce={this.state.nonce} afterUpload={this.afterUpload}/>
