@@ -93,7 +93,7 @@ void example::purchase(const account_name buyer, const std::string uuid) {
 }
     
 //@abi action
-void example::accessgrant(const account_name user, const account_name contract, const std::string uuid) {
+void example::accessgrant(const account_name user, const account_name contract, const std::string uuid, const eosio::public_key public_key) {
   require_auth(user);
   
   const auto& file = get_file_by_uuid(uuid);
