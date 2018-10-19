@@ -26,6 +26,14 @@ class File extends Component {
         <div>This file does not exist {this.props.match.params.uuid}</div>
       )
     }
+    let downloadArea = (
+      <div></div>
+    )
+    if (item.owner !== this.props.auth.user) {
+      downloadArea = (
+        <DownloadArea file={item}/>
+      )
+    }
     return (
       <div>
         <div className="row">
@@ -57,7 +65,7 @@ class File extends Component {
           <div className="col-md-10">{item.owner}</div>
         </div>
         <br/><br/>
-        <DownloadArea file={item}/>
+        {downloadArea}
       </div>
     );
   }
