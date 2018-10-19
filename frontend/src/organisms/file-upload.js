@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getUrl } from '../lib/ipfs'
 import IpfsUpload from '../molecules/ipfs-upload'
 import { withRouter } from 'react-router-dom'
-import { priveos, generateUuid } from '../lib/eos'
+import { getPriveos, generateUuid } from '../lib/eos'
 //import { upload, login } from '../lib/eos'
 import config from '../config'
 import { Redirect } from 'react-router-dom'
@@ -75,7 +75,7 @@ class FileUpload extends Component {
     const self = this
     const uuid = generateUuid()
     console.log('uuid', uuid)
-    priveos.store(config.owner, uuid).then((x) => {
+    getPriveos().store(this.props.auth.user, uuid).then((x) => {
       console.log(x)
       console.log('Successfully create upload transaction', x)
       self.setState({

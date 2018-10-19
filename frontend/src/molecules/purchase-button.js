@@ -17,7 +17,7 @@ class PurchaseButton extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12"><button className="btn btn-danger" onClick={this.purchase}>Download for {this.props.file.price}</button></div>
+          <div className="col-md-12"><button className="btn btn-danger" onClick={this.purchase}>Purchase for {this.props.file.price}</button></div>
         </div>  
       </div>
     );

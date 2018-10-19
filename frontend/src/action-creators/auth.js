@@ -3,12 +3,13 @@ import { Eos } from '../lib/eos'
 
 
 export function loginAsUser(user, key) {
+    console.log('loginAsUser', user, key)
     return (dispatch) => {
         dispatch({
             type: LOGIN_SUCCESS,
             data: {
                 user: user,
-                eos: new Eos(key)
+                eos: new Eos([key])
             }
         })
     }

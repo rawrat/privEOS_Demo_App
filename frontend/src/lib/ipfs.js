@@ -12,7 +12,7 @@ node.on('error', error => {
 })
 
 
-export function upload(data, name) {
+export function upload(data) {
     return new Promise((resolve, reject) => {
         if (!isReady) {
             return alert('IPFS is not ready yet')
@@ -30,11 +30,39 @@ export function upload(data, name) {
     })
 }
 
+export function extractHashFromUrl(url) {
+    let hash = url.split('/')
+    console.log('hash', hash)
+    return url.split('/').pop()
+}
+
+
+export function download(hash) {
+    return new Promise((resolve, reject) => {
+        console.log('ipfs download hash', hash)
+        node.files.get(hash, (err, files) => {
+            if (err) throw new Error(err)
+            files = files.map((file) => {
+                console.log('downloaded ipfs', file)
+                console.log(file.path)
+                console.log(file.content.toString('utf8'))
+                return {
+                    ...file,
+                    content: file.content
+                }
+            })
+            return resolve(files)
+        })
+    })
+}
+
 export function getUrl(hash) {
     return 'https://cloudflare-ipfs.com/ipfs/' + hash
 }
 
 export default {
     upload,
-    getUrl
+    download,
+    getUrl,
+    extractHashFromUrl
 }
