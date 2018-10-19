@@ -14,7 +14,11 @@ deploy: build
 clean:
 	rm -f $(CPP_IN).wast $(CPP_IN).wasm $(CPP_IN).abi
 
-setup: fundusers
+setup:
+	fundusers
+	setpermissions
+
+setpermissions:
 	$(CLEOS) set account permission $(CONTRACT_ACCOUNT) active '{"threshold": 1,"keys": [{"key": "$(PK)","weight": 1}],"accounts": [{"permission":{"actor":"$(CONTRACT_ACCOUNT)","permission":"eosio.code"},"weight":1}]}' owner -p $(CONTRACT_ACCOUNT)
 	
 test:
