@@ -10,7 +10,8 @@ eosjs_ecc.randomKey().then(ephemeral_key_private => {
   priveos = new Priveos({
     ...config.priveos,
     // TODO: set the private key here in the EosJS function in the constructor (async issues)
-    privateKey: config.eosAccounts.alice.key,
+    privateKey: config.eosAccounts.alice.privateKey,
+    publicKey: config.eosAccounts.alice.publicKey,
     ...{
       ephemeralKeyPrivate: ephemeral_key_private,
       ephemeralKeyPublic: ephemeral_key_public,
@@ -126,7 +127,7 @@ export class Eos {
     )
   }
 
-  accessgrant(user, uuid) {
+  accessgrant(user, uuid, publicKey) {
     return this.client.transaction(
       {
         actions: [
@@ -141,6 +142,7 @@ export class Eos {
               user,
               contract: config.priveos.dappContract,
               file: uuid,
+              public_key: publicKey
             }
           }
         ]

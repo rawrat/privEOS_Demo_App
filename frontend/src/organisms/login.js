@@ -44,8 +44,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginAsAlice: () => dispatch(loginAsUser(config.eosAccounts.alice.name, config.eosAccounts.alice.key)),
-  loginAsBob: () => dispatch(loginAsUser(config.eosAccounts.bob.name, config.eosAccounts.bob.key))
+  loginAsAlice: () => dispatch(loginAsUser(config.eosAccounts.alice.name, config.eosAccounts.alice.privateKey)),
+  loginAsBob: () => dispatch(loginAsUser(config.eosAccounts.bob.name, config.eosAccounts.bob.privateKey))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

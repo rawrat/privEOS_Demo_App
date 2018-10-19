@@ -18,9 +18,11 @@ class DownloadButton extends Component {
     }
     ipfs.download(hash).then((res) => {
       const files = res
-      self.props.auth.eos.accessgrant(self.props.auth.user, self.props.file.uuid).then(() => {
-        console.log('access granted')
-        getPriveos().read(self.props.auth.user, self.props.file.uuid).then((res) => {
+      const priveos = getPriveos()
+      console.log('access grant', priveos.config.ephemeralKeyPublic)
+      self.props.auth.eos.accessgrant(self.props.auth.user, self.props.file.uuid, priveos.config.ephemeralKeyPublic).then((accessGrantRes) => {
+        console.log('accessGrantRes', accessGrantRes)
+        priveos.read(self.props.auth.user, self.props.file.uuid).then((res) => {
           console.log('received read response from broker', res)
         })
         // console.log('got ipfs download', res)

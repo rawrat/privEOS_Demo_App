@@ -14,12 +14,17 @@ deploy: build
 clean:
 	rm -f $(CPP_IN).wast $(CPP_IN).wasm $(CPP_IN).abi
 
-setup:
-	fundusers
-	setpermissions
+init:
+	make setup
+	make abi
+	make deploy
 
-setpermissions:
-	$(CLEOS) set account permission $(CONTRACT_ACCOUNT) active '{"threshold": 1,"keys": [{"key": "$(PK)","weight": 1}],"accounts": [{"permission":{"actor":"$(CONTRACT_ACCOUNT)","permission":"eosio.code"},"weight":1}]}' owner -p $(CONTRACT_ACCOUNT)
+setup:
+	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(CONTRACT_ACCOUNT) $(PUBLIC_KEY) $(PUBLIC_KEY)
+	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(ALICE) $(ALICE_PUBLIC_KEY) $(ALICE_PUBLIC_KEY)
+	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(BOB) $(BOB_PUBLIC_KEY) $(BOB_PUBLIC_KEY)
+	$(CLEOS) set account permission $(CONTRACT_ACCOUNT) active '{"threshold": 1,"keys": [{"key": "$(PUBLIC_KEY)","weight": 1}],"accounts": [{"permission":{"actor":"$(CONTRACT_ACCOUNT)","permission":"eosio.code"},"weight":1}]}' owner -p $(CONTRACT_ACCOUNT)
+	make fundusers
 	
 test:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["$(ALICE)", "$(FILE)", "Alice dancing on the trees", "This is great", "https://cloudflare-ipfs.com/ipfs/QmUZAvNuB6njV3dfBERreGRk7kTqLhTGUG9v5Bo3yNLC4R", "1.0000 EOS" ]' -p $(ALICE)
@@ -33,13 +38,14 @@ show:
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(CONTRACT_ACCOUNT) files
 	
 showbalances:
-	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(BOB) balances
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(ALICE) balances
+	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(BOB) balances
 
 fundusers:
 	$(CLEOS) transfer eosio $(ALICE) "10.0000 EOS" ""
 	$(CLEOS) transfer eosio $(BOB) "10.0000 EOS" ""
 	
 showpurchases:
+	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(ALICE) perms
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(BOB) perms
 	
