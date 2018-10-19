@@ -17,3 +17,9 @@ export function encodeHex(value) {
     ret = new Uint8Array(ret)
     return ret
 }
+
+export default {
+    encrypt,
+    decrypt,
+    encodeHex
+}

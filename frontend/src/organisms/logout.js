@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import eos from '../lib/eos'
-import { Button, Input, FormGroup } from 'reactstrap'
 import { logout } from '../action-creators/auth'
 import { Redirect } from 'react-router-dom'
 
