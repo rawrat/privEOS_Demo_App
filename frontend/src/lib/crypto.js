@@ -4,6 +4,8 @@ import ByteBuffer from 'bytebuffer'
 nacl.util = require('tweetnacl-util')
 
 export function encrypt(message, nonce, secret) {
+    console.log('nonce1', nonce)
+    console.log('secret1', secret)
     return nacl.secretbox(nacl.util.decodeUTF8(message), nonce, secret);
 }
 
