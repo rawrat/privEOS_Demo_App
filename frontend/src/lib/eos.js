@@ -97,12 +97,22 @@ export class Eos {
     )
   }
 
-  getFiles() {
+  getFiles(user) {
+    const self = this
     console.log('get files config', config)
     return this.client.getTableRows({json:true, scope: config.priveos.dappContract, code: config.priveos.dappContract,  table: 'files', limit:100})
-    .then((res) => {
-      console.log('eos.getFiles', res)
-      return res.rows
+    .then((files) => {
+      console.log('eos.getFiles', files)
+      return self.getPurchasedFiles(user).then((purchases) => {
+        files.rows = files.rows.map((x) => {
+          return {
+            ...x,
+            purchased: purchases.find((p) => x.id == p.id) && true || false
+          }
+        })
+        console.log('files', files.rows)
+        return files.rows
+      })
     }).catch((err) => {
       console.error('Cannot retreive active nodes: ', err)
     })
