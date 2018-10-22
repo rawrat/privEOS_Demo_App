@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import LoadingBar from '../atoms/loading-bar'
 import { withRouter } from 'react-router-dom'
-import { loadFiles, purchase } from '../action-creators/files'
+import { loadFiles, purchase, download } from '../action-creators/files'
 import ReactTable from "react-table";
 
 
@@ -61,7 +61,10 @@ class FileList extends Component {
   download(e, item) {
     if (!item.purchased) {
       this.props.purchase(item.price, item.uuid)
+    } else {
+      this.props.download(item)
     }
+
     e.preventDefault()
     e.stopPropagation()
   }
@@ -95,7 +98,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadFiles: () => dispatch(loadFiles()),
-  purchase: (price, uuid) => dispatch(purchase(price, uuid))
+  purchase: (price, uuid) => dispatch(purchase(price, uuid)),
+  download: (file) => dispatch(download(file))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FileList))
