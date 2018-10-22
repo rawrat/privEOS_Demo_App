@@ -1,5 +1,5 @@
 import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/action-types'
-import { Eos } from '../lib/eos'
+import { Eos, connectScatter } from '../lib/eos'
 
 
 export function loginAsUser(user, key) {
@@ -14,6 +14,21 @@ export function loginAsUser(user, key) {
         })
     }
 }
+
+export function loginWithScatter() {
+    return (dispatch) => {
+        connectScatter().then((response) => {
+            dispatch({
+                type: LOGIN_SUCCESS,
+                data: {
+                    user: response.account.name,
+                    eos: new Eos(response.scatter)
+                }
+            })
+        })
+    }
+}
+
 
 export function logout() {
     return {

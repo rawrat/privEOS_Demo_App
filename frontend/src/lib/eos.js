@@ -3,13 +3,41 @@ import eosjs_ecc from 'eosjs-ecc'
 import config from '../config'
 import Priveos from 'priveos'
 import uuidv5 from 'uuid/v4'
+import ScatterJS from 'scatterjs-core'; 
+import ScatterEOS from 'scatterjs-plugin-eosjs'
+
+
+
+const networkConfig = {
+  blockchain: 'eos',
+  protocol: 'http',
+  host: 'localhost',
+  port: 8888,
+  chainId: config.chainId
+}
+
+ScatterJS.plugins(new ScatterEOS())
+
+
+export function connectScatter() {
+    return new Promise((resolve) => {
+        ScatterJS.scatter.connect(config.priveos.dappContract).then(connected => {
+            if(!connected) throw new Error('Could not connect scatter')
+            const scatter = ScatterJS.scatter
+            window.ScatterJS = null
+            scatter.getIdentity({ accounts: [networkConfig] }).then(() => {
+              const account = scatter.identity.accounts.find(x => x.blockchain === 'eos')
+              return resolve({ scatter, account })
+            })
+        })
+    })
+}
 
 let priveos = null
 eosjs_ecc.randomKey().then(ephemeral_key_private => {
   const ephemeral_key_public = eosjs_ecc.privateToPublic(ephemeral_key_private)
   priveos = new Priveos({
     ...config.priveos,
-    // TODO: set the private key here in the EosJS function in the constructor (async issues)
     privateKey: config.eosAccounts.alice.privateKey,
     publicKey: config.eosAccounts.alice.publicKey,
     ...{
@@ -18,6 +46,7 @@ eosjs_ecc.randomKey().then(ephemeral_key_private => {
     }
   })
 })
+
 
 export function getPriveos() {
   return priveos
@@ -31,7 +60,16 @@ export function generateUuid() {
 export class Eos {
   constructor(keys) {
     console.log('key', keys)
-    this.client = EosJS({httpEndpoint: config.httpEndpoint, chainId: config.chainId, keyProvider: keys})
+    // if keys is an object we expect it to be a scatter instance returned by connectScatter() above
+    if (!Array.isArray(keys)) {
+      this.client = keys.eos(networkConfig, EosJS);
+    } else {
+      this.client = EosJS({
+        httpEndpoint: config.httpEndpoint,
+        chainId: config.chainId,
+        keyProvider: keys
+      })
+    }
   }
  
   upload(owner, uuid, name, description, url, price) {
