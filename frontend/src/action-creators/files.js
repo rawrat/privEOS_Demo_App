@@ -1,4 +1,4 @@
-import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR, PURCHASE, PURCHASE_SUCCESS, DOWNLOAD } from '../constants/action-types'
+import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR, PURCHASE, PURCHASE_SUCCESS, DOWNLOAD, DOWNLOAD_SUCCESS } from '../constants/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
 import { decrypt } from '../lib/crypto'
@@ -65,7 +65,8 @@ export function download(file) {
     return (dispatch, getState) => {
         let state = getState()
         dispatch({
-            type: DOWNLOAD
+            type: DOWNLOAD,
+            id: file.id
         })
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
@@ -83,6 +84,10 @@ export function download(file) {
                         const cleartext = decrypt(x.content, res[1], res[0])
                         console.log('decrypted cleartext', cleartext)
                         createFile(cleartext, file.name)
+                    })
+                    dispatch({
+                        type: DOWNLOAD_SUCCESS,
+                        id: file.id
                     })
                 })
             })
