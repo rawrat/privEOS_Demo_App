@@ -5,7 +5,6 @@ import { download } from '../action-creators/files'
 
 class DownloadButton extends Component {
   render() {
-    console.log('downloading', this.props.files)
     return (
       <div>
         <div className="row">
