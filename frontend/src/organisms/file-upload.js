@@ -55,7 +55,7 @@ class FileUpload extends Component {
     const self = this
     // this.props.auth.eos.login(config.key)
     // console.log(JSON.stringify(this.state, null, 2))
-    this.props.auth.eos.upload(this.props.auth.user, this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
+    this.props.auth.eos.upload(this.props.auth.account.name, this.state.uuid, this.state.name, this.state.description, this.state.url, this.state.price).then((res) => {
       console.log('upload transaction success', res)
         self.setState({
           finished: true,
@@ -75,7 +75,7 @@ class FileUpload extends Component {
     const self = this
     const uuid = generateUuid()
     console.log('uuid', uuid)
-    getPriveos().store(this.props.auth.user, uuid).then((x) => {
+    getPriveos().store(this.props.auth.account.name, uuid).then((x) => {
       console.log(x)
       console.log('Successfully create upload transaction', x)
       self.setState({
