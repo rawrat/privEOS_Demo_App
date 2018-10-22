@@ -11,7 +11,7 @@ class Logout extends Component {
 
   render() {
     console.log(this.props.auth)
-    if (this.props.auth && !this.props.auth.loggedIn && !this.props.auth.user && !this.props.auth.eos) {
+    if (this.props.auth && !this.props.auth.loggedIn && !this.props.auth.account && !this.props.auth.eos) {
       return (
         <Redirect to="/login"/>
       )      

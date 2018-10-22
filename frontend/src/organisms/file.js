@@ -29,7 +29,7 @@ class File extends Component {
     let downloadArea = (
       <div></div>
     )
-    if (item.owner !== this.props.auth.user) {
+    if (item.owner !== this.props.auth.account.name) {
       downloadArea = (
         <DownloadArea file={item}/>
       )

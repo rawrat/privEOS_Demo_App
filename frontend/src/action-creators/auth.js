@@ -8,7 +8,9 @@ export function loginAsUser(user, key) {
         dispatch({
             type: LOGIN_SUCCESS,
             data: {
-                user: user,
+                account: {
+                    name: user
+                },
                 eos: new Eos([key])
             }
         })
@@ -34,7 +36,7 @@ export function logout() {
     return {
         type: LOGOUT_SUCCESS,
         data: {
-            user: null,
+            account: null,
             eos: null
         }
     }

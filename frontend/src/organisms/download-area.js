@@ -15,7 +15,7 @@ class DownloadFile extends Component {
   }
   
   getPurchasedFiles() {
-    this.props.auth.eos.getPurchasedFiles(this.props.auth.user).then((res) => {
+    this.props.auth.eos.getPurchasedFiles(this.props.auth.account.name).then((res) => {
       console.log('get purchased files', res)
       this.setState({
         purchased: res.find((x) => x.id == this.props.file.id)

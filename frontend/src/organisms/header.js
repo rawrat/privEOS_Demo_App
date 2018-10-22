@@ -12,7 +12,7 @@ class Header extends Component {
             <li><Link to="/">Files</Link></li>
             <li><Link to="/upload">Upload</Link></li>
             <li><Link to="/logout">Logout</Link></li>
-            <li className="smallFont">Logged in as <strong>{this.props.auth.user}</strong></li>
+            <li className="smallFont">Logged in as <strong>{this.props.auth.account.name}</strong></li>
           </ul>
         ) : ( <ul className="mainNavigation"><li></li></ul> )}
       </div>
