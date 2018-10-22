@@ -1,9 +1,10 @@
-import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR } from '../constants/action-types'
+import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR, PURCHASE, PURCHASE_SUCCESS } from '../constants/action-types'
 
 const initialState = {
     loading: true,
     items: [],
-    item: null
+    item: null,
+    purchasedItems: []
 }
 
 export default function(state = initialState, action) {
@@ -14,6 +15,11 @@ export default function(state = initialState, action) {
             return { ...state, loading: false, ...action.data }
         case LOAD_FILES_ERROR:
             return { ...state, loading: false, error: "Could not load files" }
+        case PURCHASE:
+            return { ...state, purchaseLoading: true }
+        case PURCHASE_SUCCESS:
+            state.purchasedItems = state.purchasedItems.push(action.file)
+            return { ...state, purchaseLoading: false }
         default:
             return state;
     }
