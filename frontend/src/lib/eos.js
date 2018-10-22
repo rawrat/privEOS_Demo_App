@@ -107,7 +107,8 @@ export class Eos {
         files.rows = files.rows.map((x) => {
           return {
             ...x,
-            purchased: purchases.find((p) => x.id == p.id) && true || false
+            purchased: purchases.find((p) => x.id == p.id) && true || false,
+            owning: x.owner == user
           }
         })
         console.log('files', files.rows)
