@@ -42,19 +42,18 @@ export function loadFilesError() {
     }
 }
 
-export function purchase(price, uuid) {
+export function purchase(file) {
     return (dispatch, getState) => {
         dispatch({
-            type: PURCHASE
+            type: PURCHASE,
+            id: file.id
         })
-        return getState().auth.eos.purchase(getState().auth.account.name, price, uuid)
+        return getState().auth.eos.purchase(getState().auth.account.name, file.price, file.uuid)
         .then((res) => {
             dispatch(loadFiles())
             dispatch({
                 type: PURCHASE_SUCCESS,
-                data: {
-                    items: res
-                }
+                id: file.id
             })
         })
     }

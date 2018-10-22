@@ -1,26 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { purchase } from '../action-creators/files'
 
 
 class PurchaseButton extends Component {
-  constructor(props) {
-    super(props)
-
-    this.purchase = this.purchase.bind(this)
-  }
-
-  purchase() {
-    const self = this
-    this.props.auth.eos.purchase(this.props.auth.account.name, this.props.file.price, this.props.file.uuid).then(() => {
-      alert('purchased')
-    })
-  }
-  
   render() {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12"><button className="btn btn-danger" onClick={this.purchase}>Purchase for {this.props.file.price}</button></div>
+          <div className="col-md-12"><button className={`btn btn-danger ${this.props.className}`} onClick={(e) => { e.stopPropagation(); this.props.purchase(this.props.file)}} disabled={this.props.files.purchasing.find((x) => x == this.props.file.id)}>Purchase</button></div>
         </div>
       </div>
     );
@@ -32,6 +20,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  purchase: (file) => dispatch(purchase(file)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PurchaseButton);

@@ -9,7 +9,7 @@ class DownloadButton extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12"><button className="btn btn-success" onClick={() => this.props.download(this.props.file)} disabled={this.props.files.downloading && this.props.files.downloading.find((x) => this.props.file.id)}>Download</button></div>
+          <div className="col-md-12"><button className={`btn btn-success ${this.props.className}`} onClick={(e) => { e.stopPropagation(); this.props.download(this.props.file)}} disabled={this.props.files.downloading && this.props.files.downloading.find((x) => x == this.props.file.id)}>Download</button></div>
         </div>
       </div>
     );

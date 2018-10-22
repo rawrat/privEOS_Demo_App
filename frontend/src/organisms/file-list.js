@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import LoadingBar from '../atoms/loading-bar'
 import { withRouter } from 'react-router-dom'
 import { loadFiles, purchase, download } from '../action-creators/files'
-import ReactTable from "react-table";
+import ReactTable from "react-table"
+import DownloadButton from '../molecules/download-button'
+import PurchaseButton from '../molecules/purchase-button'
 
 
 class FileList extends Component {
@@ -14,7 +16,6 @@ class FileList extends Component {
     this.props.loadFiles()
     this.selectFile = this.selectFile.bind(this)
     this.getTrProps = this.getTrProps.bind(this)
-    this.download = this.download.bind(this)
     this.getColumns = this.getColumns.bind(this)
   }
 
@@ -49,24 +50,13 @@ class FileList extends Component {
           if (row.original.owning) {
             return (<span></span>)
           } else if (row.original.purchased) {
-            return (<button className="btn btn-sm btn-success" onClick={(e) => this.download(e, row.original)}>Download</button>)
+            return (<DownloadButton file={row.original} className='btn-sm'/>)
           } else {
-            return (<button className="btn btn-sm btn-danger" onClick={(e) => this.download(e, row.original)}>Purchase</button>)
+            return (<PurchaseButton file={row.original} className='btn-sm'/>)
           }
         }
       }
     ]
-  }
-
-  download(e, item) {
-    if (!item.purchased) {
-      this.props.purchase(item.price, item.uuid)
-    } else {
-      this.props.download(item)
-    }
-
-    e.preventDefault()
-    e.stopPropagation()
   }
 
   selectFile(row) {
@@ -97,9 +87,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadFiles: () => dispatch(loadFiles()),
-  purchase: (price, uuid) => dispatch(purchase(price, uuid)),
-  download: (file) => dispatch(download(file))
+  loadFiles: () => dispatch(loadFiles())
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FileList))

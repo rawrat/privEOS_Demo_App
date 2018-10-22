@@ -4,7 +4,8 @@ const initialState = {
     loading: true,
     items: [],
     item: null,
-    downloading: []
+    downloading: [],
+    purchasing: []
 }
 
 export default function(state = initialState, action) {
@@ -16,11 +17,14 @@ export default function(state = initialState, action) {
             return { ...state, loading: false, ...action.data }
         case LOAD_FILES_ERROR:
             return { ...state, loading: false, error: "Could not load files" }
+
         case PURCHASE:
-            return { ...state, purchaseLoading: true }
+            state.purchasing.push(action.id)
+            return { ...state }
         case PURCHASE_SUCCESS:
-            state.purchasedItems = state.purchasedItems.push(action.file)
-            return { ...state, purchaseLoading: false }
+            state.purchasing = state.purchasing.filter((x) => x != action.id)
+            return { ...state }
+                
         case DOWNLOAD:
             state.downloading.push(action.id)
             return { ...state }
