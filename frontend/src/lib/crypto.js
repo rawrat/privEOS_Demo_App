@@ -1,5 +1,5 @@
 import nacl from 'tweetnacl'
-import { encode } from 'querystring';
+import eosjs_ecc from 'eosjs-ecc'
 import ByteBuffer from 'bytebuffer'
 nacl.util = require('tweetnacl-util')
 
@@ -18,6 +18,19 @@ export function encodeHex(value) {
     let ret = ByteBuffer.fromHex(value).toArrayBuffer()
     ret = new Uint8Array(ret)
     return ret
+}
+
+export function getEphemeralKeys() {
+    return new Promise((resolve) => {
+        return eosjs_ecc.randomKey().then(ephemeral_key_private => {
+            const ephemeral_key_public = eosjs_ecc.privateToPublic(ephemeral_key_private)
+            console.log('built eph keys')
+            return resolve({
+                private: ephemeral_key_private,
+                public: ephemeral_key_public
+            })
+        })
+    })
 }
 
 export default {

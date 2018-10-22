@@ -1,5 +1,4 @@
 import EosJS from 'eosjs'
-import eosjs_ecc from 'eosjs-ecc'
 import config from '../config'
 import Priveos from 'priveos'
 import uuidv5 from 'uuid/v4'
@@ -18,34 +17,30 @@ const networkConfig = {
 
 ScatterJS.plugins(new ScatterEOS())
 
+let priveos = null
+let scatter = null
 
 export function connectScatter() {
     return new Promise((resolve) => {
         ScatterJS.scatter.connect(config.priveos.dappContract).then(connected => {
             if(!connected) throw new Error('Could not connect scatter')
-            const scatter = ScatterJS.scatter
+            scatter = ScatterJS.scatter
             window.ScatterJS = null
             scatter.getIdentity({ accounts: [networkConfig] }).then(() => {
               const account = scatter.identity.accounts.find(x => x.blockchain === 'eos')
-              return resolve({ scatter, account })
+              return resolve({
+                scatter,
+                identity: scatter.identity,
+                account
+              })
             })
         })
     })
 }
 
-let priveos = null
-eosjs_ecc.randomKey().then(ephemeral_key_private => {
-  const ephemeral_key_public = eosjs_ecc.privateToPublic(ephemeral_key_private)
-  priveos = new Priveos({
-    ...config.priveos,
-    privateKey: config.eosAccounts.alice.privateKey,
-    publicKey: config.eosAccounts.alice.publicKey,
-    ...{
-      ephemeralKeyPrivate: ephemeral_key_private,
-      ephemeralKeyPublic: ephemeral_key_public,
-    }
-  })
-})
+export function logoutScatter() {
+  scatter.forgetIdentity()
+}
 
 
 export function getPriveos() {
@@ -58,18 +53,26 @@ export function generateUuid() {
 
 
 export class Eos {
-  constructor(keys) {
-    console.log('key', keys)
+  constructor(options) {
+    console.log('options', options)
     // if keys is an object we expect it to be a scatter instance returned by connectScatter() above
-    if (!Array.isArray(keys)) {
-      this.client = keys.eos(networkConfig, EosJS);
+    if (options.scatter) {
+      this.client = options.scatter.eos(networkConfig, EosJS);
     } else {
       this.client = EosJS({
         httpEndpoint: config.httpEndpoint,
         chainId: config.chainId,
-        keyProvider: keys
+        keyProvider: options.privateKeys
       })
     }
+    
+    priveos = new Priveos({
+        ...config.priveos,
+        eos: this.client,
+        publicKey: options.publicKey,
+        ephemeralKeyPrivate: options.ephemeralKeyPrivate,
+        ephemeralKeyPublic: options.ephemeralKeyPublic,
+    })
   }
  
   upload(owner, uuid, name, description, url, price) {

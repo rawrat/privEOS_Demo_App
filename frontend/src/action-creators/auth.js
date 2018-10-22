@@ -1,18 +1,27 @@
 import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/action-types'
-import { Eos, connectScatter } from '../lib/eos'
+import { Eos, connectScatter, logoutScatter } from '../lib/eos'
+import { getEphemeralKeys } from '../lib/crypto'
 
 
-export function loginAsUser(user, key) {
-    console.log('loginAsUser', user, key)
+
+export function loginAsUser(user, privateKey, publicKey) {
+    console.log('loginAsUser', user, privateKey, publicKey)
     return (dispatch) => {
-        dispatch({
-            type: LOGIN_SUCCESS,
-            data: {
-                account: {
-                    name: user
-                },
-                eos: new Eos([key])
-            }
+        return getEphemeralKeys().then((ephemeral) => {
+            dispatch({
+                type: LOGIN_SUCCESS,
+                data: {
+                    account: {
+                        name: user
+                    },
+                    eos: new Eos({
+                        keys: [privateKey],
+                        ephemeralKeyPrivate: ephemeral.private,
+                        ephemeralKeyPublic: ephemeral.public,
+                        publicKey
+                    })
+                }
+            })
         })
     }
 }
@@ -20,12 +29,20 @@ export function loginAsUser(user, key) {
 export function loginWithScatter() {
     return (dispatch) => {
         connectScatter().then((response) => {
-            dispatch({
-                type: LOGIN_SUCCESS,
-                data: {
-                    user: response.account.name,
-                    eos: new Eos(response.scatter)
-                }
+            return getEphemeralKeys().then((ephemeral) => {
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    data: {
+                        account: response.account,
+                        eos: new Eos({
+                            scatter: response.scatter,
+                            ephemeralKeyPrivate: ephemeral.private,
+                            ephemeralKeyPublic: ephemeral.public,
+                            publicKey: response.identity.publicKey
+                        }),
+                        scatter: true
+                    }
+                })
             })
         })
     }
@@ -33,11 +50,16 @@ export function loginWithScatter() {
 
 
 export function logout() {
-    return {
-        type: LOGOUT_SUCCESS,
-        data: {
-            account: null,
-            eos: null
+    return (dispatch, getState) => {
+        if (getState().auth.scatter) {
+            logoutScatter()
         }
+        dispatch({
+            type: LOGOUT_SUCCESS,
+            data: {
+                account: null,
+                eos: null
+            }
+        })
     }
 }

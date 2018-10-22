@@ -22,20 +22,17 @@ class Login extends Component {
       return (
       
         <div>
-          <div className="row">
-            <div className="col-md-1">
-              Login as:
+          <h1>Welcome to the privEOS Demo App</h1>
+          <p>This demo demonstrates the capabilities of privEOS as a market place for files.</p>
+          <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
+          <br/><br/>
+          {config.dev ? (
+            <div>
+              {config.eosAccounts.map((x) => (
+                <span key={x.name}><Button className="btn btn-lg btn-default" onClick={() => this.props.loginAsUser(x.name, x.privateKey, x.publicKey)}>{x.name}</Button>&nbsp;</span>
+              ))}
             </div>
-            <div className="col-md-1">
-              <Button className="btn btn-default" onClick={this.props.loginAsAlice}>Alice</Button>
-            </div>
-            <div className="col-md-1">
-              <Button className="btn btn-default" onClick={this.props.loginAsBob}>Bob</Button>
-            </div>
-            <div className="col-md-9">
-              <Button className="btn btn-default" onClick={this.props.loginWithScatter}>Scatter</Button>
-            </div>
-          </div>
+          ) : (<div></div>)}
         </div>
       )
     }
@@ -47,8 +44,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginAsAlice: () => dispatch(loginAsUser(config.eosAccounts.alice.name, config.eosAccounts.alice.privateKey)),
-  loginAsBob: () => dispatch(loginAsUser(config.eosAccounts.bob.name, config.eosAccounts.bob.privateKey)),
+  loginAsUser: (user, privateKey, publicKey) => dispatch(loginAsUser(user, privateKey, publicKey)),
   loginWithScatter: () => dispatch(loginWithScatter())
 })
 
