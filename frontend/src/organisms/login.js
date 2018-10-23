@@ -20,10 +20,9 @@ class Login extends Component {
     }
     else {
       return (
-      
         <div>
-          <h1>Welcome to the privEOS Demo App</h1>
-          <p>This demo demonstrates the capabilities of privEOS as a market place for files.</p>
+          <a href="https://slant.li/priveos"><img src="/img/dark_logo_transparent.png" width="50%" /></a>
+          <br/><br/><br/>
           <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
           <br/><br/>
           {config.dev ? (

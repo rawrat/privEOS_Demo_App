@@ -17,8 +17,7 @@ export function loginAsUser(user, privateKey, publicKey) {
                     eos: new Eos({
                         keys: [privateKey],
                         ephemeralKeyPrivate: ephemeral.private,
-                        ephemeralKeyPublic: ephemeral.public,
-                        publicKey
+                        ephemeralKeyPublic: ephemeral.public
                     })
                 }
             })
@@ -37,8 +36,7 @@ export function loginWithScatter() {
                         eos: new Eos({
                             scatter: response.scatter,
                             ephemeralKeyPrivate: ephemeral.private,
-                            ephemeralKeyPublic: ephemeral.public,
-                            publicKey: response.identity.publicKey
+                            ephemeralKeyPublic: ephemeral.public
                         }),
                         scatter: true
                     }

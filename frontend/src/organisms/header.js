@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 
 class Header extends Component {
@@ -9,9 +9,10 @@ class Header extends Component {
       <div>
         {this.props.auth.loggedIn ? (
           <ul className="mainNavigation">
-            <li><Link to="/">Files</Link></li>
-            <li><Link to="/upload">Upload</Link></li>
-            <li><Link to="/logout">Logout</Link></li>
+            <li className="width10"><a href="https://slant.li/priveos" target="_blank"><img src="/img/dark_logo_transparent.png" width="100%" /></a></li>
+            <li><NavLink to="/" exact="true" activeClassName="active">Files</NavLink></li>
+            <li><NavLink to="/upload" exact="true" activeClassName="active">Upload</NavLink></li>
+            <li><NavLink to="/logout" exact="true" activeClassName="active">Logout</NavLink></li>
             <li className="smallFont">Logged in as <strong>{this.props.auth.account.name}</strong></li>
           </ul>
         ) : ( <ul className="mainNavigation"><li></li></ul> )}

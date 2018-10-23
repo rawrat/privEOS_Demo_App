@@ -1,5 +1,5 @@
 body {
-  padding: 5%
+  padding: 3%
 }
 
 .smallFont {
@@ -8,10 +8,19 @@ body {
 
 .mainNavigation {
   list-style: none;
-  padding: 0
+  padding: 0;
+  margin-bottom: 2rem;
 }
 
 .mainNavigation li {
   display: inline-block;
   padding-right: 3%
+}
+
+.mainNavigation .active {
+  font-weight: bold
+}
+
+.width10 {
+  width: 10%
 }
