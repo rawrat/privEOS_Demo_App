@@ -3,8 +3,12 @@ import { connectRouter, routerMiddleware } from 'connected-react-router'
 import thunk from 'redux-thunk'
 import createHistory from 'history/createBrowserHistory'
 import rootReducer from './reducers'
+import config from './config'
 
-export const history = createHistory()
+console.log('BASENAME: ', config.basename)
+export const history = createHistory({
+  basename: config.basename
+})
 
 const initialState = {}
 const enhancers = []

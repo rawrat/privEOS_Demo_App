@@ -1,4 +1,5 @@
 import devtools from './lib/devtools'
+import additionalConfig from './config-APP_TARGET.json'
 
 let localConfig = {}
 if (localStorage && localStorage.config) {
@@ -29,5 +30,6 @@ export default {
         dappContract: 'demoapp',
         // privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
     },
+    ...additionalConfig,
     ...localConfig
 }

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+cd frontend
+
+printf "\n\n### Getting IPFS PeerID\n"
+peerId=$(ipfs id | jq '.ID' | sed -e 's/^"//' -e 's/"$//')
+echo "PeerID: $peerId"
+
+printf "\n\n### Updating Config\n"
+echo $(cat src/config-prod.json | jq '.basename = "'/ipns/$peerId'"') > src/config-prod.json
+
+echo "Config: $(cat src/config-prod.json)"
+
+printf "\n\n### Creating Production Build\n"
+yarn build
+
+printf "\n\n### Adding files to IPFS\n"
+buildFolderHash=$(ipfs add -r build/ | awk '/./{line=$0} END{print line}' | awk '{ print $2}')
+
+echo "Build folder hash: $buildFolderHash"
+
+printf "\n\n### IPFS name publish\n"
+peerBasename=$(ipfs name publish $buildFolderHash | awk '{ print $3}')
+
+echo "IPFS Hash: $buildFolderHash"
+echo "PeerBasename: $peerBasename"
+
+cd -

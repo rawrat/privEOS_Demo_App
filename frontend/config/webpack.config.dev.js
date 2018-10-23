@@ -15,6 +15,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -24,6 +25,8 @@ const publicPath = '/';
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+
+var appTarget = env.APP_TARGET || 'dev';
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -164,6 +167,14 @@ module.exports = {
   module: {
     strictExportPresence: true,
     rules: [
+      // {
+      //   test: /.*\.js$/,
+      //   loader: 'string-replace-loader',
+      //   options: {
+      //     search: '%BASENAME%',
+      //     replace: env.raw.config.basename,
+      //   }
+      // },
       // Disable require.ensure as it's not a standard language feature.
       { parser: { requireEnsure: false } },
 
@@ -327,6 +338,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(/(.*)-APP_TARGET(\.*)/, function(resource) {
+      resource.request = resource.request.replace(/-APP_TARGET/, `-${appTarget}`);
+    }),
     new CaseSensitivePathsPlugin(),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
@@ -367,7 +381,7 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
       publicPath: publicPath,
-    }),
+    })
   ],
 
   // Some libraries import Node modules but don't use them in the browser.

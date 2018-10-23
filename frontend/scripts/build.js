@@ -127,6 +127,7 @@ function build(previousFileSizes) {
   let compiler = webpack(config);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
+      console.log('Start compilation')
       let messages;
       if (err) {
         if (!err.message) {
