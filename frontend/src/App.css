@@ -6,6 +6,18 @@ body {
   font-size: 0.7em
 }
 
+.logout {
+  font-weight: normal
+}
+
+.danger {
+  color: red
+}
+
+.danger:hover {
+  color: red
+}
+
 .mainNavigation {
   list-style: none;
   padding: 0;
