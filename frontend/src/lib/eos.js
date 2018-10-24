@@ -69,34 +69,30 @@ export class Eos {
     priveos = new Priveos({
         ...config.priveos,
         eos: this.client,
-        publicKey: options.publicKey,
         ephemeralKeyPrivate: options.ephemeralKeyPrivate,
         ephemeralKeyPublic: options.ephemeralKeyPublic,
     })
   }
  
-  upload(owner, uuid, name, description, url, price) {
-    return this.client.transaction(
+  upload(owner, uuid, name, description, url, price, secret_bytes, nonce_bytes) {
+    return priveos.store(owner, uuid, secret_bytes, nonce_bytes, [
         {
-          actions: [
-            {
-              account: config.priveos.dappContract,
-              name: 'upload',
-              authorization: [{
-                actor: owner,
-                permission: 'active',
-              }],
-              data: {
-                owner: owner,
-                uuid,
-                name,
-                description,
-                url,
-                price
-              }
-            }
-          ]
+          account: config.priveos.dappContract,
+          name: 'upload',
+          authorization: [{
+            actor: owner,
+            permission: 'active',
+          }],
+          data: {
+            owner: owner,
+            uuid,
+            name,
+            description,
+            url,
+            price
+          }
         }
+      ]
     )
   }
 

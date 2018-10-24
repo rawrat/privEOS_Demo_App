@@ -30,10 +30,13 @@ const composedEnhancers = compose(
   ...enhancers
 )
 
-const store = createStore(
+export const store = createStore(
   connectRouter(history)(rootReducer),
   initialState,
   composedEnhancers
 )
 
-export default store
+export default {
+  store,
+  history
+}

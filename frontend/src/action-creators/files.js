@@ -1,8 +1,10 @@
 import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR, PURCHASE, PURCHASE_SUCCESS, DOWNLOAD, DOWNLOAD_SUCCESS } from '../constants/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
-import { decrypt } from '../lib/crypto'
-import { createFile } from '../lib/file'
+import { encrypt, decrypt } from '../lib/crypto'
+import { createFile, read } from '../lib/file'
+import { history } from '../store';
+
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -90,6 +92,36 @@ export function download(file) {
                     })
                 })
             })
+        })
+    }
+}
+
+export function upload(uuid, name, description, price, file, secret_bytes, nonce_bytes) {
+    console.log('upload action', {
+        uuid,
+        name,
+        description,
+        price,
+        file,
+        secret_bytes,
+        nonce_bytes
+    })
+    return (dispatch, getState) => {
+        const state = getState()
+        console.log('file', file)
+        return read(file).then((content) => {
+            const cipher = encrypt(content, nonce_bytes, secret_bytes)
+            console.log('cipher', cipher)
+            ipfs.upload(cipher).then((ipfsFile) => {
+                console.log('resolved', ipfsFile)
+                state.auth.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, secret_bytes, nonce_bytes).then(() => {
+                    console.log('Successfully create upload transaction')
+                    history.push('/files/' + uuid);
+                })
+            })
+        })
+        .catch((err) => {
+        console.error(err)
         })
     }
 }
