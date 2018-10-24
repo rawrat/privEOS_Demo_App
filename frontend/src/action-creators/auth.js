@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../constants/action-types'
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS } from '../constants/action-types'
 import { Eos, connectScatter, logoutScatter } from '../lib/eos'
 import { getEphemeralKeys } from '../lib/crypto'
 
@@ -21,6 +21,7 @@ export function loginAsUser(user, privateKey, publicKey) {
                     })
                 }
             })
+            dispatch(getBalance())
         })
     }
 }
@@ -41,11 +42,29 @@ export function loginWithScatter() {
                         scatter: true
                     }
                 })
+                dispatch(getBalance())
             })
         })
     }
 }
 
+
+export function getBalance() {
+    return (dispatch, getState) => {
+        const state = getState()
+        dispatch({
+            type: GET_BALANCE
+        })
+        console.log('getBalance', state.auth)
+        state.auth.eos.getBalance(state.auth.account.name).then((balance) => {
+            console.log('balance', balance)
+            dispatch({
+                type: GET_BALANCE_SUCCESS,
+                balance
+            })
+        })
+    }
+}
 
 export function logout() {
     return (dispatch, getState) => {
