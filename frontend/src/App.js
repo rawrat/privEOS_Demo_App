@@ -12,11 +12,13 @@ import File from './organisms/file'
 import Login from './organisms/login'
 import Logout from './organisms/logout'
 import Header from './organisms/header'
+import { connectScatter } from './action-creators/auth'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.props.connectScatter()
   }
   render() {
     return (
@@ -66,6 +68,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  connectScatter: () => dispatch(connectScatter())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,53 +1,66 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS } from '../constants/action-types'
-import { Eos, connectScatter, logoutScatter } from '../lib/eos'
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS, CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, GET_SCATTER_IDENTITY, GET_SCATTER_IDENTITY_SUCCESS } from '../constants/action-types'
+import { Eos, loginWithScatter as _loginWithScatter_, getScatterAccount, addScatter, logoutScatter } from '../lib/eos'
 import { getEphemeralKeys } from '../lib/crypto'
+import { history } from '../store'
 
-
-
-export function loginAsUser(user, privateKey, publicKey) {
-    console.log('loginAsUser', user, privateKey, publicKey)
-    return (dispatch) => {
+export function loginSuccess(account) {
+    return (dispatch, getState) => {
         return getEphemeralKeys().then((ephemeral) => {
             dispatch({
                 type: LOGIN_SUCCESS,
                 data: {
-                    account: {
-                        name: user
-                    },
+                    account: account,
                     eos: new Eos({
-                        keys: [privateKey],
+                        scatter: getState().auth.scatter,
                         ephemeralKeyPrivate: ephemeral.private,
                         ephemeralKeyPublic: ephemeral.public
                     })
                 }
             })
-            dispatch(getBalance())
+            dispatch(getBalance())   
         })
     }
 }
+
+
+
+
+export function connectScatter() {
+    return (dispatch) => {
+        dispatch({
+            type: CONNECT_SCATTER
+        })
+        addScatter().then((scatter) => {
+            console.log('scatter', scatter)
+            dispatch({
+                type: CONNECT_SCATTER_SUCCESS,
+                data: {
+                    scatter
+                }
+            })
+            if (scatter.identity) {
+                const account = getScatterAccount(scatter.identity)
+                dispatch(loginSuccess(account))
+            }
+        })
+    }
+}
+
 
 export function loginWithScatter() {
-    return (dispatch) => {
-        connectScatter().then((response) => {
-            return getEphemeralKeys().then((ephemeral) => {
-                dispatch({
-                    type: LOGIN_SUCCESS,
-                    data: {
-                        account: response.account,
-                        eos: new Eos({
-                            scatter: response.scatter,
-                            ephemeralKeyPrivate: ephemeral.private,
-                            ephemeralKeyPublic: ephemeral.public
-                        }),
-                        scatter: true
-                    }
-                })
-                dispatch(getBalance())
+    return (dispatch, getState) => {
+        const state = getState()
+        return _loginWithScatter_(state.auth.scatter).then((response) => {
+            dispatch({
+                type: GET_SCATTER_IDENTITY_SUCCESS,
             })
+            if (response.account) {
+                dispatch(loginSuccess(response.account))
+                window.setTimeout(() => history.push('/'), 3000)
+            }
         })
     }
 }
-
 
 export function getBalance() {
     return (dispatch, getState) => {
@@ -55,9 +68,7 @@ export function getBalance() {
         dispatch({
             type: GET_BALANCE
         })
-        console.log('getBalance', state.auth)
         state.auth.eos.getBalance(state.auth.account.name).then((balance) => {
-            console.log('balance', balance)
             dispatch({
                 type: GET_BALANCE_SUCCESS,
                 balance

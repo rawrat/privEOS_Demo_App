@@ -5,8 +5,6 @@ import uuidv5 from 'uuid/v4'
 import ScatterJS from 'scatterjs-core'; 
 import ScatterEOS from 'scatterjs-plugin-eosjs'
 
-
-
 const networkConfig = {
   blockchain: 'eos',
   protocol: 'http',
@@ -20,22 +18,29 @@ ScatterJS.plugins(new ScatterEOS())
 let priveos = null
 let scatter = null
 
-export function connectScatter() {
-    return new Promise((resolve) => {
-        ScatterJS.scatter.connect(config.priveos.dappContract).then(connected => {
-            if(!connected) throw new Error('Could not connect scatter')
-            scatter = ScatterJS.scatter
-            window.ScatterJS = null
-            scatter.getIdentity({ accounts: [networkConfig] }).then(() => {
-              const account = scatter.identity.accounts.find(x => x.blockchain === 'eos')
-              return resolve({
-                scatter,
-                identity: scatter.identity,
-                account
-              })
-            })
-        })
-    })
+export function getScatterAccount(identity) {
+  const account = identity.accounts.find(x => x.blockchain === 'eos')
+  return account
+}
+
+export function loginWithScatter(scatter) {
+  return scatter.getIdentity({ accounts: [networkConfig] }).then(() => {
+    const account = scatter.identity.accounts.find(x => x.blockchain === 'eos')
+    return {
+      scatter,
+      identity: scatter.identity,
+      account
+    }
+  })
+}
+
+export function addScatter() {
+  return ScatterJS.scatter.connect(config.priveos.dappContract).then(connected => {
+      if(!connected) throw new Error('Could not connect scatter')
+      scatter = ScatterJS.scatter
+      window.ScatterJS = null
+      return scatter
+  })
 }
 
 export function logoutScatter() {

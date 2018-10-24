@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
-import { loginAsUser, loginWithScatter } from '../action-creators/auth'
+import { loginWithScatter } from '../action-creators/auth'
 import config from '../config'
 
 class Login extends Component {
@@ -24,14 +24,6 @@ class Login extends Component {
           <a href="https://slant.li/priveos"><img src="/img/dark_logo_transparent.png" width="50%" /></a>
           <br/><br/><br/>
           <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
-          <br/><br/>
-          {config.dev ? (
-            <div>
-              {config.eosAccounts.map((x) => (
-                <span key={x.name}><Button className="btn btn-lg btn-default" onClick={() => this.props.loginAsUser(x.name, x.privateKey, x.publicKey)}>{x.name}</Button>&nbsp;</span>
-              ))}
-            </div>
-          ) : (<div></div>)}
         </div>
       )
     }
@@ -43,7 +35,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginAsUser: (user, privateKey, publicKey) => dispatch(loginAsUser(user, privateKey, publicKey)),
   loginWithScatter: () => dispatch(loginWithScatter())
 })
 
