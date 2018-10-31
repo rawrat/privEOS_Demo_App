@@ -18,7 +18,6 @@ function get_endpoint() {
 }
 
 export default {
-    key: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
     httpEndpoint: get_endpoint(),
     host: host,
     protocol: protocol,
@@ -28,7 +27,6 @@ export default {
     priveos: {
         dappContract: 'demoapp',
         brokerUrl: 'http://localhost:4000'
-        // privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
     },
     ...additionalConfig,
     ...localConfig
