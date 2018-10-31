@@ -4,13 +4,7 @@ const node = ipfsAPI('localhost', '5001', {protocol: 'http'})
 
 export function upload(data) {
     return new Promise((resolve, reject) => {
-
-        // const files = [{
-        //     path: name,
-        //     content: data
-        // }]
-
-        node.files.add(Buffer.from(data, 'utf-8')).then((files) => {
+        node.files.add(Buffer.from(data)).then((files) => {
             console.log('added files', files)
             return resolve(files[0])
         })

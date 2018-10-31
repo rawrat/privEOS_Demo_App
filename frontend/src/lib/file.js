@@ -4,7 +4,7 @@ export function read(file) {
         reader.addEventListener('load', () => {
             return resolve(reader.result)
         })
-        reader.readAsText(file)
+        reader.readAsArrayBuffer(file)
     })
 }
 
