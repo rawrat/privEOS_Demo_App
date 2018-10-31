@@ -9,9 +9,20 @@ if (localStorage && localStorage.config) {
 
 console.log('localconfig', localConfig)
 
+const host = '127.0.0.1'
+const protocol = 'http'
+const port = 8888
+
+function get_endpoint() {
+  return `${protocol}://${host}:${port}`
+}
+
 export default {
     key: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
-    httpEndpoint: 'http://localhost:8888',
+    httpEndpoint: get_endpoint(),
+    host: host,
+    protocol: protocol,
+    port: port,
     chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
     maxChunkLength: '1024',
     eosAccounts: [

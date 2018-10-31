@@ -7,9 +7,9 @@ import ScatterEOS from 'scatterjs-plugin-eosjs'
 
 const networkConfig = {
   blockchain: 'eos',
-  protocol: 'http',
-  host: 'localhost',
-  port: 8888,
+  protocol: config.protocol,
+  host: config.host,
+  port: config.port,
   chainId: config.chainId
 }
 
