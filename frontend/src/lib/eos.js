@@ -77,6 +77,8 @@ export class Eos {
         ephemeralKeyPrivate: options.ephemeralKeyPrivate,
         ephemeralKeyPublic: options.ephemeralKeyPublic,
     })
+    
+    this.seen_keys = []
   }
  
   upload(owner, uuid, name, description, url, price, secret_bytes, nonce_bytes) {
@@ -146,6 +148,7 @@ export class Eos {
   }
 
   purchase(user, file) {
+    this.seen_keys.push(priveos.config.ephemeralKeyPublic)
     return this.client.transaction(
       {
         actions: [
@@ -185,13 +188,32 @@ export class Eos {
               buyer: user,
               uuid: file.uuid
             }
-          }
+          },
+          {
+            account: 'priveosrules',
+            name: 'accessgrant',
+            authorization: [{
+              actor: user,
+              permission: 'active',
+            }],
+            data: {
+              user,
+              contract: config.priveos.dappContract,
+              file: file.uuid,
+              public_key: priveos.config.ephemeralKeyPublic,
+            }
+          },
         ]
       }
     )
   }
 
-  accessgrant(user, uuid, publicKey) {
+  accessgrant(user, uuid) {
+    if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic)) {
+      return new Promise(function (resolve, reject) {
+        return resolve()
+      })
+    }
     return this.client.transaction(
       {
         actions: [
@@ -206,7 +228,7 @@ export class Eos {
               user,
               contract: config.priveos.dappContract,
               file: uuid,
-              public_key: publicKey
+              public_key: priveos.config.ephemeralKeyPublic,
             }
           }
         ]
