@@ -185,16 +185,7 @@ export class Eos {
               buyer: user,
               uuid: file.uuid
             }
-          }
-        ]
-      }
-    )
-  }
-
-  accessgrant(user, uuid, publicKey) {
-    return this.client.transaction(
-      {
-        actions: [
+          },
           {
             account: 'priveosrules',
             name: 'accessgrant',
@@ -205,15 +196,14 @@ export class Eos {
             data: {
               user,
               contract: config.priveos.dappContract,
-              file: uuid,
-              public_key: publicKey
+              file: file.uuid,
+              public_key: priveos.config.ephemeralKeyPublic
             }
-          }
+          },
         ]
       }
-    ) 
+    )
   }
-
 }
 
 
