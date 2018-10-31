@@ -113,7 +113,7 @@ export class Eos {
         files.rows = files.rows.map((x) => {
           return {
             ...x,
-            purchased: Boolean(purchases.find((p) => x.id == p.id)),
+            purchased: purchases.some((p) => x.id == p.id),
             owning: x.owner == user,
           }
         })
