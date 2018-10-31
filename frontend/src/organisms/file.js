@@ -50,7 +50,7 @@ class File extends Component {
         </div>
         <div className="row">
           <div className="col-md-2">URL</div>
-          <div className="col-md-10">{item.url}</div>
+          <div className="col-md-10"><a href={item.url}>{item.url}</a></div>
         </div>
         <div className="row">
           <div className="col-md-2">Price</div>
