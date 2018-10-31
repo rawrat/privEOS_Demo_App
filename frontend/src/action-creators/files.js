@@ -50,7 +50,7 @@ export function purchase(file) {
             type: PURCHASE,
             id: file.id
         })
-        return getState().auth.eos.purchase(getState().auth.account.name, file.price, file.uuid)
+        return getState().auth.eos.purchase(getState().auth.account.name, file)
         .then((res) => {
             dispatch(loadFiles())
             dispatch({

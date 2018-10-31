@@ -145,7 +145,7 @@ export class Eos {
     })
   }
 
-  purchase(user, quantity, uuid) {
+  purchase(user, file) {
     return this.client.transaction(
       {
         actions: [
@@ -170,8 +170,8 @@ export class Eos {
             data: {
               from: user,
               to: config.priveos.dappContract,
-              quantity: quantity,
-              memo: ''
+              quantity: file.price,
+              memo: `Buying read access to file ${file.name}`
             }
           },
           {
@@ -183,7 +183,7 @@ export class Eos {
             }],
             data: {
               buyer: user,
-              uuid: uuid
+              uuid: file.uuid
             }
           }
         ]
