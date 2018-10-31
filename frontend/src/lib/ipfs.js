@@ -1,22 +1,9 @@
-const IPFS = require('ipfs')
-const node = new IPFS()
-
-let isReady = false
-
-node.on('ready', () => {
-    console.log('ipfs is ready')
-    isReady = true
-})
-node.on('error', error => {
-    console.error(error.message)
-})
+const ipfsAPI = require('ipfs-api')
+const node = ipfsAPI('localhost', '5001', {protocol: 'http'})
 
 
 export function upload(data) {
     return new Promise((resolve, reject) => {
-        if (!isReady) {
-            return alert('IPFS is not ready yet')
-        }
 
         // const files = [{
         //     path: name,
