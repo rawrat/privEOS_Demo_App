@@ -76,17 +76,20 @@ export function download(file) {
         ipfs.download(hash).then((files) => {
             const priveos = getPriveos()
             console.log('access grant', priveos.config.ephemeralKeyPublic)
-            state = getState()
-            priveos.read(state.auth.account.name, file.uuid).then((res) => {
-                console.log('received read response from broker', res)
-                files.map((x) => {
-                    const cleartext = decrypt(x.content, res[1], res[0])
-                    console.log('decrypted cleartext', cleartext)
-                    createFile(cleartext, file.name)
-                })
-                dispatch({
-                    type: DOWNLOAD_SUCCESS,
-                    id: file.id
+            state.auth.eos.accessgrant(state.auth.account.name, file.uuid, priveos.config.ephemeralKeyPublic).then((accessGrantRes) => {
+                state = getState()
+                console.log('accessGrantRes', accessGrantRes)
+                priveos.read(state.auth.account.name, file.uuid).then((res) => {
+                    console.log('received read response from broker', res)
+                    files.map((x) => {
+                        const cleartext = decrypt(x.content, res[1], res[0])
+                        console.log('decrypted cleartext', cleartext)
+                        createFile(cleartext, file.name)
+                    })
+                    dispatch({
+                        type: DOWNLOAD_SUCCESS,
+                        id: file.id
+                    })
                 })
             })
         })
