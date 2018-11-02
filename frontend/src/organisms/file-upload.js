@@ -71,7 +71,7 @@ class FileUpload extends Component {
       <div>
         <div className="form-group">
           <label htmlFor="name">Filename:</label>
-          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control"/>
+          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control" autocomplete="off"/>
         </div>
         <div className="form-group">
           <label htmlFor="description">Description:</label>
