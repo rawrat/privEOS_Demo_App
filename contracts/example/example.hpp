@@ -4,7 +4,7 @@
  */
 #include <eosiolib/eosio.hpp>
 #include <eosiolib/asset.hpp>
-#include <eosiolib/currency.hpp>
+#include <eosiolib/symbol.hpp>
 #include <eosiolib/public_key.hpp>
 #include <stdio.h>
 #include <string.h>
@@ -41,76 +41,72 @@ uint128_t hex_strtoulll(const char *nptr, int len)
     return r;
 }
 
-constexpr auto purchase_symbol = string_to_symbol(4, "EOS");
+constexpr auto purchase_symbol = symbol("EOS", 4);
 
 
-class example : public eosio::contract {
+CONTRACT example : public eosio::contract {
   using contract::contract;
   public:
 
-  example(account_name self): eosio::contract(self), files(self, self){}
-  
-    //@abi action
-    void upload(const account_name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price);
-    //@abi action
-    void prepare(const account_name user);
-    void transfer(const currency::transfer &transfer);
-    //@abi action
-    void purchase(const account_name buyer, const std::string uuid);
-    //@abi action
-    void accessgrant(const account_name user, const account_name contract, const std::string uuid, const eosio::public_key public_key);
-    
-    
-  private:
-    // @abi table files i64
-    struct fileinfo {
+    example(name self, name code,  datastream<const char*> ds): eosio::contract(self, code, ds), files(_self, _self.value){}
+      
+    TABLE fileinfo {
       uint64_t            id;
       std::string         uuid;
-      account_name        owner;
+      name                owner;
       std::string         name;
       std::string         description;
       std::string         url;
       asset               price;
-      time                created_at;
+      uint32_t                created_at;
       bool                deleted = false;
       
       uint64_t primary_key()const { return id; }
-      uint128_t by_uuid() const { return hex_strtoulll(uuid.c_str(), uuid.length()); }
-      
-      EOSLIB_SERIALIZE(fileinfo, (id)(uuid)(owner)(name)(description)(url)(price)(created_at)(deleted))
+      uint128_t byuuid() const { return hex_strtoulll(uuid.c_str(), uuid.length()); }
     };
-    typedef multi_index<N(files), fileinfo,
-      indexed_by< N(by_uuid), const_mem_fun<fileinfo, uint128_t,  &fileinfo::by_uuid> >
+    typedef multi_index<"files"_n, fileinfo,
+      indexed_by< "byuuid"_n, const_mem_fun<fileinfo, uint128_t,  &fileinfo::byuuid> >
     > files_table;
     files_table files;
 
     // @abi table balances i64
-    struct balance {
+    TABLE balance {
         asset funds;
-        uint64_t primary_key() const { return funds.symbol; }
         
-        EOSLIB_SERIALIZE(balance, (funds))
+        uint64_t primary_key() const { return funds.symbol.code().raw(); }
     };
-    typedef multi_index<N(balances), balance> balances_table;
+    typedef multi_index<"balances"_n, balance> balances_table;
     
     // @abi table perms i64
-    struct perm {
+    TABLE perm {
       uint64_t id;
       
       uint64_t primary_key()const { return id; }
     };
-    typedef multi_index<N(perms), perm> perms_table;
+    typedef multi_index<"perms"_n, perm> perms_table;
+  
+    //@abi action
+    ACTION upload(const name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price);
+    //@abi action
+    ACTION prepare(const name user);
+    ACTION transfer(const name from, const name to, const asset quantity, const std::string memo);
+    //@abi action
+    ACTION purchase(const name buyer, const std::string uuid);
+    //@abi action
+    ACTION accessgrant(const name user, const name contract, const std::string uuid, const eosio::public_key public_key);
     
-    const fileinfo get_file_by_uuid(const std::string uuid) {
+  private:
+
+    const fileinfo get_file_byuuid(const std::string uuid) {
       const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
-      auto idx = files.template get_index<N(by_uuid)>();
+      auto idx = files.template get_index<"byuuid"_n>();
       return idx.get(uuid_int, "File not found ");
     }
     
     
-    void add_balance(account_name user, asset value) {
-      balances_table balances(_self, user);
-      auto user_it = balances.find(purchase_symbol);
+    void add_balance(const name user, const asset value) {
+      balances_table balances(_self, user.value);
+      auto user_it = balances.find(purchase_symbol.code().raw());
       if(user_it != balances.end()) {
         balances.modify(user_it, user, [&](auto& bal){
             bal.funds += value;
@@ -122,9 +118,9 @@ class example : public eosio::contract {
       }
     }
     
-    void sub_balance(account_name user, asset value) {
-      balances_table balances(_self, user);
-      const auto& user_balance = balances.get(value.symbol, "User has no balance");
+    void sub_balance(const name user, const asset value) {
+      balances_table balances(_self, user.value);
+      const auto& user_balance = balances.get(value.symbol.code().raw(), "User has no balance");
       eosio_assert(user_balance.funds >= value, "Overdrawn balance");
       
       if(user_balance.funds == value) {

@@ -3,10 +3,7 @@ include config.conf
 
 FILE := alice-$(shell openssl rand 16 -hex)
 build:
-	eosiocpp -o $(CPP_IN).wasm $(CPP_IN).cpp
-
-abi:
-	eosiocpp -g $(CPP_IN).abi $(CPP_IN).cpp
+	eosio-cpp -abigen $(CPP_IN).cpp -o $(CPP_IN).wasm 
 
 deploy: build
 	$(CLEOS) set contract $(CONTRACT_ACCOUNT) ../$(CPP_IN)
@@ -16,7 +13,6 @@ clean:
 
 init:
 	make setup
-	make abi
 	make deploy
 
 setup:

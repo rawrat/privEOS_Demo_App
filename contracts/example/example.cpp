@@ -1,23 +1,23 @@
 #include "example.hpp"
 
 
-void example::upload(const account_name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price) {
+void example::upload(const name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price) {
   require_auth(owner);
   
   const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
 
-  auto idx = files.template get_index<N(by_uuid)>();
+  auto idx = files.template get_index<"byuuid"_n>();
   const auto itr = idx.find(uuid_int);
   if(itr != idx.end()) {
     eosio_assert(itr->owner == owner, "Different owner");
-    idx.modify(itr, owner, [&](fileinfo& file) {
+    idx.modify(itr, owner, [&](auto& file) {
       file.name = name;
       file.description = description;
       file.price = price;
       file.url = url;
     });
   } else {
-    files.emplace(owner, [&](fileinfo& file) {
+    files.emplace(owner, [&](auto& file) {
       file.id = files.available_primary_key();
       file.uuid = uuid;
       file.owner = owner;
@@ -34,46 +34,46 @@ void example::upload(const account_name owner, const std::string uuid, const std
 }
     
 //@abi action
-void example::prepare(const account_name user) {
+void example::prepare(const name user) {
   require_auth(user);
-  balances_table balances(_self, user);      
-  auto it = balances.find(purchase_symbol);
+  balances_table balances(_self, user.value);      
+  auto it = balances.find(purchase_symbol.code().raw());
   if(it == balances.end()) {
     balances.emplace(user, [&](auto& bal){
-        bal.funds = asset(0, purchase_symbol);
+        bal.funds = asset{0, purchase_symbol};
     });
   }
 }
     
-void example::transfer(const currency::transfer &transfer) {
-  if(transfer.from == _self || transfer.to != _self) {
+void example::transfer(const name from, const name to, const asset quantity, const std::string memo) {
+  if(from == _self || to != _self) {
     /* only handle incoming transfers to this contract */
     return;
   }
-  eosio_assert(transfer.quantity.symbol == purchase_symbol, 
+  eosio_assert(quantity.symbol == purchase_symbol, 
     "Only EOS allowed");
-  eosio_assert(transfer.quantity.is_valid(), "Are you trying to corrupt me?");
-  eosio_assert(transfer.quantity.amount > 0, "When pigs fly");
+  eosio_assert(quantity.is_valid(), "Are you trying to corrupt me?");
+  eosio_assert(quantity.amount > 0, "When pigs fly");
   
-  balances_table balances(_self, transfer.from);
-  auto it = balances.find(transfer.quantity.symbol);
+  balances_table balances(_self, from.value);
+  auto it = balances.find(quantity.symbol.code().raw());
   
   eosio_assert(it != balances.end(), "Balance table entry does not exist, call prepare first");
   
-  balances.modify(it, transfer.from, [&](auto& bal){
-      bal.funds += transfer.quantity;
+  balances.modify(it, from, [&](auto& bal){
+      bal.funds += quantity;
   });
 }
     
 //@abi action
-void example::purchase(const account_name buyer, const std::string uuid) {
+void example::purchase(const name buyer, const std::string uuid) {
   require_auth(buyer);
   
   
-  const auto& file = get_file_by_uuid(uuid);
+  const auto& file = get_file_byuuid(uuid);
   
-  balances_table buyer_balances(_self, buyer);
-  const auto& buyer_balance = buyer_balances.get(purchase_symbol, "Buyer does not have a balance");
+  balances_table buyer_balances(_self, buyer.value);
+  const auto& buyer_balance = buyer_balances.get(purchase_symbol.code().raw(), "Buyer does not have a balance");
   
   eosio_assert(buyer_balance.funds >= file.price, "Buyer does not have enough money");
   
@@ -85,7 +85,7 @@ void example::purchase(const account_name buyer, const std::string uuid) {
   add_balance(file.owner, file.price);
   
   // 3. add entry to perm table for buyer
-  perms_table perms(_self, buyer);
+  perms_table perms(_self, buyer.value);
   perms.emplace(buyer, [&](auto& perm) {
     perm.id = file.id;
   });
@@ -93,34 +93,30 @@ void example::purchase(const account_name buyer, const std::string uuid) {
 }
     
 //@abi action
-void example::accessgrant(const account_name user, const account_name contract, const std::string uuid, const eosio::public_key public_key) {
+void example::accessgrant(const name user, const name contract, const std::string uuid, const eosio::public_key public_key) {
   require_auth(user);
   
-  const auto& file = get_file_by_uuid(uuid);
-  perms_table perms(_self, user);
+  const auto& file = get_file_byuuid(uuid);
+  perms_table perms(_self, user.value);
   perms.get(file.id, "Access denied");
-}  
-
-
-// EOSIO_ABI( example, (upload) )
+} 
 
 extern "C" {
-  void apply(uint64_t self, uint64_t code, uint64_t action) {
-    example thiscontract(self);
-    if(code==self && action==N(upload)) {
-      execute_action( &thiscontract, &example::upload );
-    } 
-    else if(code==self && action==N(prepare)) {
-      execute_action( &thiscontract, &example::prepare );
+  [[noreturn]] void apply(uint64_t receiver, uint64_t code, uint64_t action) {
+    if (action == "transfer"_n.value && code == "eosio.token"_n.value) {
+      execute_action(eosio::name(receiver), eosio::name(code), &example::transfer);
     }
-    else if(code==self && action==N(purchase)) {
-      execute_action( &thiscontract, &example::purchase );
+    
+    if (action == "accessgrant"_n.value && code == "priveosrules"_n.value) {
+      execute_action(eosio::name(receiver), eosio::name(code), &example::accessgrant);
     }
-    else if(code==N(priveosrules) && action==N(accessgrant)) {
-      execute_action( &thiscontract, &example::accessgrant );
+
+    if (code == receiver) {
+      switch (action) { 
+        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase) ) 
+      }    
     }
-    else if(code==N(eosio.token) && action==N(transfer)) {
-      thiscontract.transfer(unpack_action_data<currency::transfer>());
-    }
+
+    eosio_exit(0);
   }
-};
+}
