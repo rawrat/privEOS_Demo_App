@@ -75,7 +75,7 @@ export function download(file) {
         }
         ipfs.download(hash).then((files) => {
             const priveos = getPriveos()
-            state.auth.eos.accessgrant(state.auth.account.name, file.uuid).then((accessGrantRes) => {
+            state.auth.eos.accessgrant(state.auth.account.name, file).then((accessGrantRes) => {
                 state = getState()
                 console.log('accessGrantRes', accessGrantRes)
                 priveos.read(state.auth.account.name, file.uuid).then((res) => {
