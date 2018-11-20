@@ -26,6 +26,14 @@ npm link
 # in privEOS_Demo_App/frontend folder:
 npm link priveos
 ```
+## Install IPFS
+
+```
+brew install ipfs
+ipfs init
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+brew services start ipfs
+```
 
 ## Deploy to IPFS
 

@@ -13,6 +13,8 @@ clean:
 
 init:
 	make setup
+	make fundusers
+	make abi
 	make deploy
 
 setup:
@@ -20,7 +22,7 @@ setup:
 	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(ALICE) $(ALICE_PUBLIC_KEY) $(ALICE_PUBLIC_KEY)
 	$(CLEOS) system newaccount --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8000 eosio $(BOB) $(BOB_PUBLIC_KEY) $(BOB_PUBLIC_KEY)
 	$(CLEOS) set account permission $(CONTRACT_ACCOUNT) active '{"threshold": 1,"keys": [{"key": "$(PUBLIC_KEY)","weight": 1}],"accounts": [{"permission":{"actor":"$(CONTRACT_ACCOUNT)","permission":"eosio.code"},"weight":1}]}' owner -p $(CONTRACT_ACCOUNT)
-	make fundusers
+	
 	
 test:
 	$(CLEOS) push action $(CONTRACT_ACCOUNT) upload '["$(ALICE)", "$(FILE)", "Alice dancing on the trees", "This is great", "https://cloudflare-ipfs.com/ipfs/QmUZAvNuB6njV3dfBERreGRk7kTqLhTGUG9v5Bo3yNLC4R", "1.0000 EOS" ]' -p $(ALICE)
