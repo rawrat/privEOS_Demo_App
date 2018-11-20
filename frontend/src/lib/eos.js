@@ -121,7 +121,7 @@ export class Eos {
         return files.rows
       })
     }).catch((err) => {
-      console.error('Cannot retreive active nodes: ', err)
+      console.error('Cannot retrieve active nodes: ', err)
     })
   }
 
@@ -146,8 +146,16 @@ export class Eos {
       console.error('Cannot retreive active nodes: ', err)
     })
   }
+  
+  get_priveos_fee() {
+    return this.client.getTableRows({json:true, scope: 'priveosrules', code: 'priveosrules',  table: 'price', limit:1, lower_bound: "EOS"})
+    .then((res) => {
+      console.log('get_priveos_fee: ', res.rows[0].money)
+      return res.rows[0].money
+    })
+  }
 
-  purchase(user, file) {
+  async purchase(user, file) {
     this.seen_keys.push(priveos.config.ephemeralKeyPublic)
     return this.client.transaction(
       {
@@ -190,6 +198,32 @@ export class Eos {
             }
           },
           {
+              account: 'priveosrules',
+              name: 'prepare',
+              authorization: [{
+                actor: user,
+                permission: 'active',
+              }],
+              data: {
+                user,
+                currency: "4,EOS",
+              }
+            },
+            {
+              account: "eosio.token",
+              name: 'transfer',
+              authorization: [{
+                actor: user,
+                permission: 'active',
+              }],
+              data: {
+                from: user,
+                to: 'priveosrules',
+                quantity: await this.get_priveos_fee(),
+                memo: `PrivEOS fee for file ${file.name}`,
+              }
+            },
+          {
             account: 'priveosrules',
             name: 'accessgrant',
             authorization: [{
@@ -201,6 +235,7 @@ export class Eos {
               contract: config.priveos.dappContract,
               file: file.uuid,
               public_key: priveos.config.ephemeralKeyPublic,
+              token: "4,EOS",
             }
           },
         ]
@@ -229,6 +264,7 @@ export class Eos {
               contract: config.priveos.dappContract,
               file: uuid,
               public_key: priveos.config.ephemeralKeyPublic,
+              token: "4,EOS",
             }
           }
         ]
