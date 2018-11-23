@@ -14,7 +14,6 @@ clean:
 init:
 	make setup
 	make fundusers
-	make abi
 	make deploy
 
 setup:
