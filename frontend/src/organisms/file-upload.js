@@ -71,7 +71,7 @@ class FileUpload extends Component {
       <div>
         <div className="form-group">
           <label htmlFor="name">Filename:</label>
-          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control" autocomplete="off"/>
+          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control" autoComplete="off"/>
         </div>
         <div className="form-group">
           <label htmlFor="description">Description:</label>
@@ -79,7 +79,7 @@ class FileUpload extends Component {
         </div>
         <div className="form-group">
           <label htmlFor="price">Price:</label>
-          <input onKeyUp={this.onKeyUp} name="price" id="price" className="form-control" value={this.state.price} />
+          <input onKeyDown={this.onKeyUp} name="price" id="price" className="form-control" defaultValue={this.state.price} />
         </div>
         <SingleFileSelector onSelect={this.onSelect}/>
         <FileDetails file={this.state && this.state.file || null}/>
