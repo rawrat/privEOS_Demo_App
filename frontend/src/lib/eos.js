@@ -197,47 +197,48 @@ export class Eos {
               uuid: file.uuid
             }
           },
-          {
-              account: 'priveosrules',
-              name: 'prepare',
-              authorization: [{
-                actor: user,
-                permission: 'active',
-              }],
-              data: {
-                user,
-                currency: "4,EOS",
-              }
-            },
-            {
-              account: "eosio.token",
-              name: 'transfer',
-              authorization: [{
-                actor: user,
-                permission: 'active',
-              }],
-              data: {
-                from: user,
-                to: 'priveosrules',
-                quantity: await this.get_priveos_fee(),
-                memo: `PrivEOS fee for file ${file.name}`,
-              }
-            },
-          {
-            account: 'priveosrules',
-            name: 'accessgrant',
-            authorization: [{
-              actor: user,
-              permission: 'active',
-            }],
-            data: {
-              user,
-              contract: config.priveos.dappContract,
-              file: file.uuid,
-              public_key: priveos.config.ephemeralKeyPublic,
-              token: "4,EOS",
-            }
-          },
+          // > the following is the action which is not working
+          // {
+          //   account: 'priveosrules',
+          //   name: 'prepare',
+          //   authorization: [{
+          //     actor: user,
+          //     permission: 'active',
+          //   }],
+          //   data: {
+          //     user,
+          //     currency: "4,EOS",
+          //   }
+          // },
+          // {
+          //   account: "eosio.token",
+          //   name: 'transfer',
+          //   authorization: [{
+          //     actor: user,
+          //     permission: 'active',
+          //   }],
+          //   data: {
+          //     from: user,
+          //     to: 'priveosrules',
+          //     quantity: await this.get_priveos_fee(),
+          //     memo: `PrivEOS fee for file ${file.name}`,
+          //   }
+          // },
+          // {
+          //   account: 'priveosrules',
+          //   name: 'accessgrant',
+          //   authorization: [{
+          //     actor: user,
+          //     permission: 'active',
+          //   }],
+          //   data: {
+          //     user,
+          //     contract: config.priveos.dappContract,
+          //     file: file.uuid,
+          //     public_key: priveos.config.ephemeralKeyPublic,
+          //     token: "4,EOS",
+          //   }
+          // },
         ]
       }
     )
@@ -245,10 +246,9 @@ export class Eos {
 
   async accessgrant(user, file) {
     if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic)) {
-      return new Promise(function (resolve, reject) {
-        return resolve()
-      })
+      return Promise.resolve()
     }
+    this.seen_keys.push(priveos.config.ephemeralKeyPublic)
     return this.client.transaction(
       {
         actions: [

@@ -46,7 +46,7 @@ class FileList extends Component {
         Header: "Download",
         id: 'download',
         Cell: row => {
-          console.log('cell render', JSON.stringify(row.original, null, 2))
+          // console.log('cell render', JSON.stringify(row.original, null, 2))
           if (row.original.owning) {
             return (<span></span>)
           } else if (row.original.purchased) {
@@ -70,7 +70,7 @@ class FileList extends Component {
   }
 
   render() {
-    console.log('files in filelist', this.props.files)
+    // console.log('files in filelist', this.props.files)
     return (
       <div>
         <LoadingBar loading={this.props.files.loading}/>
