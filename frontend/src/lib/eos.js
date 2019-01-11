@@ -82,7 +82,7 @@ export class Eos {
   }
  
   upload(owner, uuid, name, description, url, price, secret_bytes, nonce_bytes) {
-    return priveos.store(owner, uuid, secret_bytes, nonce_bytes, [
+    return priveos.store(owner, uuid, secret_bytes, nonce_bytes, "4,EOS", [
         {
           account: config.priveos.dappContract,
           name: 'upload',
@@ -246,56 +246,10 @@ export class Eos {
 
   async accessgrant(user, file) {
     if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic)) {
-      return Promise.resolve()
+      return
     }
     this.seen_keys.push(priveos.config.ephemeralKeyPublic)
-    return this.client.transaction(
-      {
-        actions: [
-          {
-              account: 'priveosrules',
-              name: 'prepare',
-              authorization: [{
-                actor: user,
-                permission: 'active',
-              }],
-              data: {
-                user,
-                currency: "4,EOS",
-              }
-            },
-            {
-              account: "eosio.token",
-              name: 'transfer',
-              authorization: [{
-                actor: user,
-                permission: 'active',
-              }],
-              data: {
-                from: user,
-                to: 'priveosrules',
-                quantity: await this.get_priveos_fee(),
-                memo: `PrivEOS fee for file ${file.name}`,
-              }
-            },
-          {
-            account: 'priveosrules',
-            name: 'accessgrant',
-            authorization: [{
-              actor: user,
-              permission: 'active',
-            }],
-            data: {
-              user,
-              contract: config.priveos.dappContract,
-              file: file.uuid,
-              public_key: priveos.config.ephemeralKeyPublic,
-              token: "4,EOS",
-            }
-          }
-        ]
-      }
-    ) 
+    return priveos.accessgrant(user, file.uuid, "4,EOS")
   }
 
 }
