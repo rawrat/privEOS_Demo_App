@@ -84,7 +84,7 @@ export function download(file) {
                     console.log('received read response from broker', res)
                     files.map((x) => {
                         const cleartext = decrypt(x.content, res[1], res[0])
-                        console.log('decrypted cleartext', cleartext)
+                        // console.log('decrypted cleartext', cleartext)
                         createFile(cleartext, file.name)
                     })
                     dispatch({
