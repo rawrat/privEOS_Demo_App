@@ -4,7 +4,6 @@ import Priveos from 'priveos'
 import uuidv5 from 'uuid/v4'
 import ScatterJS from 'scatterjs-core'; 
 import ScatterEOS from 'scatterjs-plugin-eosjs'
-global.Promise = require('bluebird')
 
 const networkConfig = {
   blockchain: 'eos',
@@ -32,10 +31,11 @@ export function loginWithScatter(scatter) {
       identity: scatter.identity,
       account
     }
-  }).tapCatch(x => {
+  }).catch(x => {
     if(x.type== "no_network") {
       alert(`Scatter Error: ${x.message}\nPlease add the network with chainID "${networkConfig.chainId}" \nto your scatter configuration`)
     }
+    throw x
   })
 }
 
