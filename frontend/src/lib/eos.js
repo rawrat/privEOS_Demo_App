@@ -146,20 +146,11 @@ export class Eos {
       console.error('Cannot retreive active nodes: ', err)
     })
   }
-  
-  get_priveos_fee() {
-    return this.client.getTableRows({json:true, scope: 'priveosrules', code: 'priveosrules',  table: 'price', limit:1, lower_bound: "EOS"})
-    .then((res) => {
-      console.log('get_priveos_fee: ', res.rows[0].money)
-      return res.rows[0].money
-    })
-  }
 
   async purchase(user, file) {
     this.seen_keys.push(priveos.config.ephemeralKeyPublic)
-    return this.client.transaction(
-      {
-        actions: [
+    
+        let actions = [
           {
             account: config.priveos.dappContract,
             name: 'prepare',
@@ -197,51 +188,10 @@ export class Eos {
               uuid: file.uuid
             }
           },
-          // > the following is the action which is not working
-          // {
-          //   account: 'priveosrules',
-          //   name: 'prepare',
-          //   authorization: [{
-          //     actor: user,
-          //     permission: 'active',
-          //   }],
-          //   data: {
-          //     user,
-          //     currency: "4,EOS",
-          //   }
-          // },
-          // {
-          //   account: "eosio.token",
-          //   name: 'transfer',
-          //   authorization: [{
-          //     actor: user,
-          //     permission: 'active',
-          //   }],
-          //   data: {
-          //     from: user,
-          //     to: 'priveosrules',
-          //     quantity: await this.get_priveos_fee(),
-          //     memo: `PrivEOS fee for file ${file.name}`,
-          //   }
-          // },
-          // {
-          //   account: 'priveosrules',
-          //   name: 'accessgrant',
-          //   authorization: [{
-          //     actor: user,
-          //     permission: 'active',
-          //   }],
-          //   data: {
-          //     user,
-          //     contract: config.priveos.dappContract,
-          //     file: file.uuid,
-          //     public_key: priveos.config.ephemeralKeyPublic,
-          //     token: "4,EOS",
-          //   }
-          // },
-        ]
-      }
-    )
+          ]
+        return priveos.accessgrant(user, file.uuid, "4,EOS", actions)
+        
+    
   }
 
   async accessgrant(user, file) {

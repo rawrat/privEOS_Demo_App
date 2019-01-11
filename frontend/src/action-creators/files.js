@@ -4,7 +4,7 @@ import { getPriveos } from '../lib/eos'
 import { encrypt, decrypt } from '../lib/crypto'
 import { createFile, read } from '../lib/file'
 import { history } from '../store';
-
+import Promise from 'bluebird'
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -75,7 +75,9 @@ export function download(file) {
         }
         ipfs.download(hash).then((files) => {
             const priveos = getPriveos()
-            state.auth.eos.accessgrant(state.auth.account.name, file).then((accessGrantRes) => {
+            state.auth.eos.accessgrant(state.auth.account.name, file).then(async (accessGrantRes) => {
+                // give the transaction some time to propagate
+                await Promise.delay(1000)
                 state = getState()
                 console.log('accessGrantRes', accessGrantRes)
                 priveos.read(state.auth.account.name, file.uuid).then((res) => {

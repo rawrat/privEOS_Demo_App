@@ -20,16 +20,13 @@ export function encodeHex(value) {
     return ret
 }
 
-export function getEphemeralKeys() {
-    return new Promise((resolve) => {
-        return eosjs_ecc.randomKey().then(ephemeral_key_private => {
-            const ephemeral_key_public = eosjs_ecc.privateToPublic(ephemeral_key_private)
-            return resolve({
-                private: ephemeral_key_private,
-                public: ephemeral_key_public
-            })
-        })
-    })
+export async function getEphemeralKeys() {
+  const ephemeral_key_private = await eosjs_ecc.randomKey()
+  const ephemeral_key_public = eosjs_ecc.privateToPublic(ephemeral_key_private)
+  return {
+      private: ephemeral_key_private,
+      public: ephemeral_key_public,
+  }
 }
 
 export default {
