@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Button } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
 import { loginWithScatter } from '../action-creators/auth'
-import config from '../config'
 
 class Login extends Component {
   constructor(props) {
@@ -21,7 +20,7 @@ class Login extends Component {
     else {
       return (
         <div>
-          <a href="https://slant.li/priveos"><img src="/img/dark_logo_transparent.png" width="50%" /></a>
+          <a href="https://slant.li"><img src="/img/priveos_logo_black_transparent_big.png" width="40%" /></a>
           <br/><br/><br/>
           <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
         </div>
