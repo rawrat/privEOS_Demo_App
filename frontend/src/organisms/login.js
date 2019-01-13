@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'reactstrap'
+import LoadingBar from '../atoms/loading-bar'
 import { Redirect } from 'react-router-dom'
 import { loginWithScatter } from '../action-creators/auth'
+import { CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR } from '../constants/action-types'
 
 class Login extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     console.log('update state', this.props.auth)
     if (this.props.auth && this.props.auth.loggedIn) {
@@ -18,11 +16,17 @@ class Login extends Component {
       )      
     }
     else {
+      let content = <span><LoadingBar/> Looking for scatter...</span>
+      if (this.props.auth.status == CONNECT_SCATTER_ERROR) {
+        content = <div class="alert alert-danger"><strong>No Scatter found</strong><br/>Is scatter running?</div>
+      } else if (this.props.auth.status == CONNECT_SCATTER_SUCCESS) {
+        content = <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
+      }
       return (
         <div>
           <a href="https://slant.li"><img src="/img/priveos_logo_black_transparent_big.png" width="40%" /></a>
           <br/><br/><br/>
-          <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
+          {content}
         </div>
       )
     }

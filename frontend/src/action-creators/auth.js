@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS, CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, GET_SCATTER_IDENTITY, GET_SCATTER_IDENTITY_SUCCESS } from '../constants/action-types'
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS, CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR, GET_SCATTER_IDENTITY_SUCCESS } from '../constants/action-types'
 import { Eos, loginWithScatter as _loginWithScatter_, getScatterAccount, addScatter, logoutScatter } from '../lib/eos'
 import { getEphemeralKeys } from '../lib/crypto'
 import { history } from '../store'
@@ -31,7 +31,13 @@ export function connectScatter() {
             type: CONNECT_SCATTER
         })
         addScatter().then((scatter) => {
-            console.log('scatter', scatter)
+            if (!scatter) {
+                console.error('No scatter available...')
+                return dispatch({
+                    type: CONNECT_SCATTER_ERROR
+                })
+            }
+            console.log('Connected to scatter...')
             dispatch({
                 type: CONNECT_SCATTER_SUCCESS,
                 data: {

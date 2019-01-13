@@ -40,8 +40,9 @@ export function loginWithScatter(scatter) {
 }
 
 export function addScatter() {
+  console.log('connect scatter')
   return ScatterJS.scatter.connect(config.priveos.dappContract).then(connected => {
-      if(!connected) throw new Error('Could not connect scatter')
+      if(!connected) return null
       scatter = ScatterJS.scatter
       window.ScatterJS = null
       return scatter
