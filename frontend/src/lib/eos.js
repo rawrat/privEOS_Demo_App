@@ -24,6 +24,7 @@ export function getScatterAccount(identity) {
 }
 
 export function loginWithScatter(scatter) {
+  console.log(`NetworkConfig: ${JSON.stringify(networkConfig, null, 2)}`)
   return scatter.getIdentity({ accounts: [networkConfig] }).then(() => {
     const account = scatter.identity.accounts.find(x => x.blockchain === 'eos')
     return {

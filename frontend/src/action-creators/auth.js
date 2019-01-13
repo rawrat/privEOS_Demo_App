@@ -32,12 +32,10 @@ export function connectScatter() {
         })
         addScatter().then((scatter) => {
             if (!scatter) {
-                console.error('No scatter available...')
                 return dispatch({
                     type: CONNECT_SCATTER_ERROR
                 })
             }
-            console.log('Connected to scatter...')
             dispatch({
                 type: CONNECT_SCATTER_SUCCESS,
                 data: {

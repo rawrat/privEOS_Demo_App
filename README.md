@@ -2,6 +2,10 @@
 
 Demonstrating a frontend connected to the priveos smart contract and node services to upload, list and download files based on transactions.
 
+## Url Params
+
+You can switch between localhost and jungle2 (defaul). To connect to localhost, append url param: `?network=localhost`
+
 ## Docker
 
 For Docker usage, see: [DOCKER.md](DOCKER.md)
