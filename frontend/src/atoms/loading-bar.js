@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 
 class LoadingBar extends Component {
   render() {
-    // console.log('render loading bar', this.props.loading)
-    if (this.props.loading) {
+    if (typeof(this.props.loading) == "undefined" || this.props.loading == true) {
       return (
-        <span className="smallFont">Loading...</span>
+        <span className="smallFont"><img src="/img/loading.gif"/></span>
       )
     } else {
       return (
