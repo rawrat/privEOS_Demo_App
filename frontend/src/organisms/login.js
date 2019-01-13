@@ -4,7 +4,7 @@ import { Button } from 'reactstrap'
 import LoadingBar from '../atoms/loading-bar'
 import { Redirect } from 'react-router-dom'
 import { loginWithScatter } from '../action-creators/auth'
-import { CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR } from '../constants/action-types'
+import { CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR } from '../constants/action-types'
 
 class Login extends Component {
   render() {
