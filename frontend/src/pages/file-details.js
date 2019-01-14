@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { loadFiles } from '../action-creators/files'
 import ReadableDate from '../atoms/readable-date'
-import DownloadArea from './download-area'
+import DownloadArea from '../organisms/download-area'
 
 
 class File extends Component {

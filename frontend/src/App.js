@@ -6,11 +6,11 @@ import 'react-table/react-table.css'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import FileUpload from './organisms/file-upload'
-import FileList from './organisms/file-list'
-import File from './organisms/file'
-import Login from './organisms/login'
-import Logout from './organisms/logout'
+import FileUpload from './pages/file-upload'
+import FileList from './pages/file-list'
+import FileDetails from './pages/file-details'
+import Login from './pages/login'
+import Logout from './pages/logout'
 import Header from './organisms/header'
 import { connectScatter } from './action-creators/auth'
 
@@ -39,7 +39,7 @@ class App extends Component {
             )}/>
             <Route exact path='/files/:uuid' render={() => (
               this.props.auth.loggedIn ? (
-                <File/>
+                <FileDetails/>
               ) : (
                 <Redirect to={{
                   pathname: "/login",
