@@ -42,6 +42,18 @@ void example::admdelete(const std::string uuid) {
   const auto itr = idx.find(uuid_int);
   idx.erase(itr);
 }
+
+void example::admdelperm(const name user) {
+  std::vector<perm> l;
+  
+  perms_table perms(_self, user.value);
+  for(const auto& x: perms) {
+    l.push_back(x);
+  }
+  for(const auto x: l) {
+    perms.erase(perms.find(x.primary_key()));
+  }
+}
     
 //@abi action
 void example::prepare(const name user) {
@@ -123,7 +135,7 @@ extern "C" {
 
     if (code == receiver) {
       switch (action) { 
-        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase)(admdelete) ) 
+        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase)(admdelete)(admdelperm) ) 
       }    
     }
 
