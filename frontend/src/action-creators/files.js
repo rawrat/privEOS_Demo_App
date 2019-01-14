@@ -80,10 +80,9 @@ export function download(file) {
           state.auth.eos.accessgrant(state.auth.account.name, file)
         ])
         state = getState()
-        
-        // give the transaction some time to propagate
-        await Promise.delay(2500)
-
+        console.log("Giving the transaction some time to propagate…")
+        await Promise.delay(5000)
+        console.log("…done waiting.")
         const res = await priveos.read(state.auth.account.name, file.uuid)
         console.log('received read response from broker', res)
         files.map((x) => {
