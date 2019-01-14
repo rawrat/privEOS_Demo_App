@@ -3,7 +3,8 @@
 
 void example::upload(const name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price) {
   require_auth(owner);
-  
+  eosio_assert(price.symbol == purchase_symbol, "Symbol mismatch. Only 4,EOS assets allowed");
+
   const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
 
   auto idx = files.template get_index<"byuuid"_n>();
