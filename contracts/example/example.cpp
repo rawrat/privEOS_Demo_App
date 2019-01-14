@@ -71,25 +71,25 @@ void example::purchase(const name buyer, const std::string uuid) {
   
   
   const auto& file = get_file_byuuid(uuid);
-  
-  balances_table buyer_balances(_self, buyer.value);
-  const auto& buyer_balance = buyer_balances.get(purchase_symbol.code().raw(), "Buyer does not have a balance");
-  
-  eosio_assert(buyer_balance.funds >= file.price, "Buyer does not have enough money");
-  
-  
-  // 1. reduce buyer balance by price
-  sub_balance(buyer, file.price);
-  
-  // 2. increase seller balance by price
-  add_balance(file.owner, file.price);
+
+  if(file.price.amount > 0) {  
+    balances_table buyer_balances(_self, buyer.value);
+    const auto& buyer_balance = buyer_balances.get(purchase_symbol.code().raw(), "Buyer does not have a balance");
+    
+    eosio_assert(buyer_balance.funds >= file.price, "Buyer does not have enough money");
+    
+    // 1. reduce buyer balance by price
+    sub_balance(buyer, file.price);
+    
+    // 2. increase seller balance by price
+    add_balance(file.owner, file.price);
+  }
   
   // 3. add entry to perm table for buyer
   perms_table perms(_self, buyer.value);
   perms.emplace(buyer, [&](auto& perm) {
     perm.id = file.id;
   });
-  
 }
     
 //@abi action
