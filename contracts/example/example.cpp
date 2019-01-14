@@ -44,6 +44,7 @@ void example::admdelete(const std::string uuid) {
 }
 
 void example::admdelperm(const name user) {
+  require_auth(_self);
   std::vector<perm> l;
   
   perms_table perms(_self, user.value);
