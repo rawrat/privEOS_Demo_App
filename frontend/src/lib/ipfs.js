@@ -26,7 +26,7 @@ export function download(hash) {
             files = files.map((file) => {
                 console.log('downloaded ipfs', file)
                 console.log(file.path)
-                console.log(file.content.toString('utf8'))
+                // console.log(file.content.toString('utf8'))
                 return {
                     ...file,
                     content: file.content
