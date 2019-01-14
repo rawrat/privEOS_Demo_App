@@ -5,6 +5,7 @@ import { encrypt, decrypt } from '../lib/crypto'
 import { createFile, read } from '../lib/file'
 import { history } from '../store';
 import Promise from 'bluebird'
+import Priveos from 'priveos'
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -80,13 +81,14 @@ export function download(file) {
           state.auth.eos.accessgrant(state.auth.account.name, file)
         ])
         state = getState()
+        console.log("Transaction completed: ", accessGrantRes)
         console.log("Giving the transaction some time to propagate…")
         await Promise.delay(5000)
         console.log("…done waiting.")
-        const res = await priveos.read(state.auth.account.name, file.uuid)
-        console.log('received read response from broker', res)
+        const [key, nonce] = await priveos.read(state.auth.account.name, file.uuid)
+        console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
         files.map((x) => {
-            const cleartext = decrypt(x.content, res[1], res[0])
+            const cleartext = decrypt(x.content, nonce, key)
             // console.log('decrypted cleartext', cleartext)
             createFile(cleartext, file.name)
         }) 
