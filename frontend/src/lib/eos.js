@@ -156,8 +156,22 @@ export class Eos {
 
   async purchase(user, file) {
     this.seen_keys.push(priveos.config.ephemeralKeyPublic)
-    
-        let actions = [
+    let actions = [
+      {
+        account: config.priveos.dappContract,
+        name: 'purchase',
+        authorization: [{
+          actor: user,
+          permission: 'active',
+        }],
+        data: {
+          buyer: user,
+          uuid: file.uuid
+        }
+      },
+    ]
+    if(parseFloat(file.price) > 0) {
+        actions = actions.concat([
           {
             account: config.priveos.dappContract,
             name: 'prepare',
@@ -183,20 +197,10 @@ export class Eos {
               memo: `Buying read access to file ${file.name}`
             }
           },
-          {
-            account: config.priveos.dappContract,
-            name: 'purchase',
-            authorization: [{
-              actor: user,
-              permission: 'active',
-            }],
-            data: {
-              buyer: user,
-              uuid: file.uuid
-            }
-          },
           ]
-        return priveos.accessgrant(user, file.uuid, "4,EOS", actions)
+        )
+      }
+      return priveos.accessgrant(user, file.uuid, "4,EOS", actions)
         
     
   }
