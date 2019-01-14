@@ -181,7 +181,7 @@ export class Eos {
             data: {
               from: user,
               to: config.priveos.dappContract,
-              quantity: file.price,
+              quantity: ensure_asset_format(file.price),
               memo: `Buying read access to file ${file.name}`
             }
           },
@@ -217,6 +217,10 @@ export class Eos {
 
 }
 
+function ensure_asset_format(s) {
+  const [a, b] = s.split(' ')
+  return parseFloat(a).toFixed(4) + ' ' + b
+}
 
 export default {
   priveos,
