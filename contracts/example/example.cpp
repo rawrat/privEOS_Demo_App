@@ -4,6 +4,8 @@
 void example::upload(const name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price) {
   require_auth(owner);
   eosio_assert(price.symbol == purchase_symbol, "Symbol mismatch. Only 4,EOS assets allowed");
+  eosio_assert(price.is_valid(), "Are you trying to corrupt me?");
+  eosio_assert(price.amount > 0, "When pigs fly");
 
   const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
 
