@@ -4,6 +4,7 @@ import { getPriveos } from '../lib/eos'
 import { encrypt, decrypt } from '../lib/crypto'
 import { createFile, read } from '../lib/file'
 import { history } from '../store';
+import Promise from 'bluebird'
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -62,7 +63,7 @@ export function purchase(file) {
 
 
 export function download(file) {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         let state = getState()
         dispatch({
             type: DOWNLOAD,
@@ -72,28 +73,30 @@ export function download(file) {
         if (!hash) {
             return alert('The url is not a valid ipfs url: ' + file.url)
         }
-        ipfs.download(hash).then((files) => {
-            const priveos = getPriveos()
-            state.auth.eos.accessgrant(state.auth.account.name, file).then(async (accessGrantRes) => {
-                // give the transaction some time to propagate
-                setTimeout(() => {
-                    state = getState()
-                    console.log('accessGrantRes', accessGrantRes)
-                    priveos.read(state.auth.account.name, file.uuid).then((res) => {
-                        console.log('received read response from broker', res)
-                        files.map((x) => {
-                            const cleartext = decrypt(x.content, res[1], res[0])
-                            // console.log('decrypted cleartext', cleartext)
-                            createFile(cleartext, file.name)
-                        })
-                        dispatch({
-                            type: DOWNLOAD_SUCCESS,
-                            id: file.id
-                        })
-                    })
-                }, 2500)
-            })
+        const priveos = getPriveos()
+
+        const [files, accessGrantRes] = await Promise.all([
+          ipfs.download(hash),
+          state.auth.eos.accessgrant(state.auth.account.name, file)
+        ])
+        state = getState()
+        
+        // give the transaction some time to propagate
+        await Promise.delay(2500)
+
+        const res = await priveos.read(state.auth.account.name, file.uuid)
+        console.log('received read response from broker', res)
+        files.map((x) => {
+            const cleartext = decrypt(x.content, res[1], res[0])
+            // console.log('decrypted cleartext', cleartext)
+            createFile(cleartext, file.name)
+        }) 
+        console.log("DOWNLOAD_SUCCESS")
+        dispatch({
+            type: DOWNLOAD_SUCCESS,
+            id: file.id
         })
+        
     }
 }
 
