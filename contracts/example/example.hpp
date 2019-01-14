@@ -87,6 +87,8 @@ CONTRACT example : public eosio::contract {
   
     //@abi action
     ACTION upload(const name owner, const std::string uuid, const std::string name, const std::string description, const std::string url, const asset price);
+    
+    ACTION admdelete(const std::string uuid);
     //@abi action
     ACTION prepare(const name user);
     ACTION transfer(const name from, const name to, const asset quantity, const std::string memo);
