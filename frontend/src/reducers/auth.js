@@ -8,7 +8,7 @@ import {
     CONNECT_SCATTER_ERROR,
     GET_SCATTER_IDENTITY, 
     GET_SCATTER_IDENTITY_SUCCESS
-} from '../constants/action-types'
+} from '../lib/action-types'
 
 const initialState = {
     loggedIn: false
