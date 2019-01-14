@@ -32,6 +32,15 @@ void example::upload(const name owner, const std::string uuid, const std::string
   /* Make sure owner of the file has an entry in the currency balance table */
   example::prepare(owner);
 }
+
+void example::admdelete(const std::string uuid) {
+  require_auth(_self);
+  const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
+
+  auto idx = files.template get_index<"byuuid"_n>();
+  const auto itr = idx.find(uuid_int);
+  idx.erase(itr);
+}
     
 //@abi action
 void example::prepare(const name user) {
@@ -113,7 +122,7 @@ extern "C" {
 
     if (code == receiver) {
       switch (action) { 
-        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase) ) 
+        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase)(admdelete) ) 
       }    
     }
 
