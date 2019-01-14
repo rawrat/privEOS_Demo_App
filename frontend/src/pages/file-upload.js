@@ -34,8 +34,13 @@ class FileUpload extends Component {
   }
 
   onKeyUp(evt) {
+    let value = evt.target.value
+    if (evt.target.name == 'price') {
+      const parts = value.split(' ')
+      value = `${parseFloat(parts[0]).toFixed(4)} ${parts[1]}`
+    }
     this.setState({
-      [evt.target.name]: evt.target.value
+      [evt.target.name]: value
     })
     this.setReadyness()
   }
