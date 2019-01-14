@@ -83,7 +83,10 @@ export function download(file) {
         state = getState()
         console.log("Transaction completed: ", accessGrantRes)
         console.log("Giving the transaction some time to propagate…")
+        
+        // the following line can be removed once all nodes have upgraded
         await Promise.delay(5000)
+        
         console.log("…done waiting.")
         const [key, nonce] = await priveos.read(state.auth.account.name, file.uuid)
         console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
