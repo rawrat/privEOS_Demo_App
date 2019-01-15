@@ -1,6 +1,6 @@
 import config from '../config'
 import ipfsAPI from 'ipfs-api'
-const node = ipfsAPI(config.ipfs.domain, config.ipfs.port, { protocol: 'http' })
+const node = ipfsAPI(config.ipfs)
 
 export function upload(data) {
     return new Promise((resolve, reject) => {

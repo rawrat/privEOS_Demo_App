@@ -20,8 +20,8 @@ export const DOWNLOAD = "DOWNLOAD"
 export const DOWNLOAD_SUCCESS = "DOWNLOAD_SUCCESS"
 
 // SCATTER
-export const CONNECT_SCATTER = "CONNECT_SCATTER"
-export const CONNECT_SCATTER_SUCCESS = "CONNECT_SCATTER_SUCCESS"
-export const CONNECT_SCATTER_ERROR = "CONNECT_SCATTER_ERROR"
-export const GET_SCATTER_IDENTITY = "GET_SCATTER_IDENTITY"
-export const GET_SCATTER_IDENTITY_SUCCESS = "GET_SCATTER_IDENTITY_SUCCESS"
+export const CONNECT_SCATTER_START = "Connecting to scatter..."
+export const CONNECT_SCATTER_SUCCESS = "Successfully connected to scatter..."
+export const CONNECT_SCATTER_ERROR = "Error while connecting to scatter..."
+export const GET_SCATTER_IDENTITY_START = "Getting scatter identity..."
+export const GET_SCATTER_IDENTITY_SUCCESS = "Successfully got identity..."

@@ -16,10 +16,10 @@ class Login extends Component {
       )      
     }
     else {
-      let content = <span><LoadingBar/>Looking for scatter...</span>
+      let content = <span><LoadingBar/>{ this.props.auth.status ? this.props.auth.status : 'Looking for scatter...' }</span>
       if (this.props.auth.status == CONNECT_SCATTER_ERROR) {
         content = <div className="alert alert-danger"><strong>No Scatter found</strong><br/>Is scatter running?</div>
-      } else if (this.props.auth.status == CONNECT_SCATTER_SUCCESS) {
+      } else if ([CONNECT_SCATTER_SUCCESS, null].some(x => x == this.props.auth.status)) {
         content = <Button className="btn btn-lg btn-success" onClick={this.props.loginWithScatter}>Login with Scatter</Button>
       }
       return (

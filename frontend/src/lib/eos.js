@@ -127,8 +127,6 @@ export class Eos {
         console.log('files', files.rows)
         return files.rows
       })
-    }).catch((err) => {
-      console.error('Cannot retrieve active nodes: ', err)
     })
   }
 
@@ -138,19 +136,15 @@ export class Eos {
     .then((res) => {
       console.log('eos.getPurchasedFiles', res)
       return res.rows
-    }).catch((err) => {
-      console.error('Cannot retreive active nodes: ', err)
     })
   }
 
 
   getBalance(user) {
-    return this.client.getTableRows({json:true, scope: user, code: config.priveos.dappContract,  table: 'balances', limit:100})
+    return this.client.getTableRows({json:true, scope: user, code: config.priveos.dappContract, table: 'balances', limit:100})
     .then((res) => {
       console.log('eos.getBalance', res)
       return res && res.rows && res.rows[0] || { funds: '0 EOS' }
-    }).catch((err) => {
-      console.error('Cannot retreive active nodes: ', err)
     })
   }
 

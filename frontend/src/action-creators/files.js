@@ -1,6 +1,4 @@
 import {
-    SHOW_GENERIC_ERROR,
-    HIDE_GENERIC_ERROR,
     LOAD_FILES, 
     LOAD_FILES_SUCCESS, 
     LOAD_FILES_ERROR, 
@@ -16,31 +14,8 @@ import { createFile, read } from '../lib/file'
 import { history } from '../store';
 import Promise from 'bluebird'
 import Priveos from 'priveos'
-import config from '../config'
+import { showGenericError } from './common'
 
-// GENERIC ERRORS
-
-export function showGenericError(err) {
-    return (dispatch) => {
-        dispatch({
-            type: SHOW_GENERIC_ERROR,
-            error: {
-                name: err.name || null,
-                message: err.message || null
-            }
-        })
-
-        window.setTimeout(() => {
-            dispatch({
-                type: HIDE_GENERIC_ERROR,
-                error: {
-                    name: err.name || null,
-                    message: err.message || null
-                }
-            })
-        }, config.errorVisibility)
-    }
-}
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -58,11 +33,10 @@ export function loadFiles() {
             })
         })
         .catch((err) => {
-            console.error('get files error', err)
-            dispatch({
-                type: LOAD_FILES_ERROR,
-                data: err
-            })
+            dispatch(showGenericError({
+                name: 'Loading files failed',
+                message: `It seems that the eos node is not available (${err.message})`
+            }))
         })
     }
 }

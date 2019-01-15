@@ -1,7 +1,19 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS, GET_BALANCE, GET_BALANCE_SUCCESS, CONNECT_SCATTER, CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR, GET_SCATTER_IDENTITY_SUCCESS } from '../lib/action-types'
+import {
+    LOGIN_SUCCESS,
+    LOGOUT_SUCCESS,
+    GET_BALANCE,
+    GET_BALANCE_SUCCESS,
+    CONNECT_SCATTER_START,
+    CONNECT_SCATTER_SUCCESS,
+    CONNECT_SCATTER_ERROR,
+    GET_SCATTER_IDENTITY_START,
+    GET_SCATTER_IDENTITY_SUCCESS
+} from '../lib/action-types'
 import { Eos, loginWithScatter as _loginWithScatter_, getScatterAccount, addScatter, logoutScatter } from '../lib/eos'
 import { getEphemeralKeys } from '../lib/crypto'
 import { history } from '../store'
+import { showGenericError } from './common'
+
 
 export function loginSuccess(account) {
     return (dispatch, getState) => {
@@ -28,7 +40,7 @@ export function loginSuccess(account) {
 export function connectScatter() {
     return (dispatch) => {
         dispatch({
-            type: CONNECT_SCATTER
+            type: CONNECT_SCATTER_START
         })
         addScatter().then((scatter) => {
             if (!scatter) {
@@ -43,6 +55,9 @@ export function connectScatter() {
                 }
             })
             if (scatter.identity) {
+                dispatch({
+                    type: GET_SCATTER_IDENTITY_START
+                })
                 const account = getScatterAccount(scatter.identity)
                 dispatch(loginSuccess(account))
             }
@@ -54,6 +69,9 @@ export function connectScatter() {
 export function loginWithScatter() {
     return (dispatch, getState) => {
         const state = getState()
+        dispatch({
+            type: GET_SCATTER_IDENTITY_START
+        })
         return _loginWithScatter_(state.auth.scatter).then((response) => {
             dispatch({
                 type: GET_SCATTER_IDENTITY_SUCCESS,
@@ -77,6 +95,11 @@ export function getBalance() {
                 type: GET_BALANCE_SUCCESS,
                 balance
             })
+        }).catch(err => {
+            dispatch(showGenericError({
+                name: "Could not get balance",
+                message: `It seems that the eos node is not available (${err.message})`
+            }))
         })
     }
 }
@@ -89,6 +112,7 @@ export function logout() {
         dispatch({
             type: LOGOUT_SUCCESS,
             data: {
+                status: null,
                 account: null,
                 eos: null
             }
