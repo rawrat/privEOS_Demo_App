@@ -5,8 +5,8 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
 
 // ERROR
-export const SHOW_GENERIC_ERROR = "SHOW_GENERIC_ERROR"
-export const HIDE_GENERIC_ERROR = "HIDE_GENERIC_ERROR"
+export const SHOW_ALERT = "SHOW_ALERT"
+export const HIDE_ALERT = "HIDE_ALERT"
 
 // FILES
 export const LOAD_FILES = "LOAD_FILES"
@@ -16,8 +16,11 @@ export const GET_BALANCE = "GET_BALANCE"
 export const GET_BALANCE_SUCCESS = "GET_BALANCE_SUCCESS"
 export const PURCHASE = "PURCHASE"
 export const PURCHASE_SUCCESS = "PURCHASE_SUCCESS"
-export const DOWNLOAD = "DOWNLOAD"
+export const DOWNLOAD_START = "Downloading and decrypting..."
 export const DOWNLOAD_SUCCESS = "DOWNLOAD_SUCCESS"
+export const DECRYPTION_START = "DECRYPTION_START"
+export const DECRYPTION_SUCESS = "DECRYPTION_SUCESS"
+export const DECRYPTION_ERROR = "DECRYPTION_ERROR"
 
 // SCATTER
 export const CONNECT_SCATTER_START = "Connecting to scatter..."

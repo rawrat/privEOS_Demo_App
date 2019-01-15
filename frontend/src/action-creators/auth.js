@@ -12,7 +12,7 @@ import {
 import { Eos, loginWithScatter as _loginWithScatter_, getScatterAccount, addScatter, logoutScatter } from '../lib/eos'
 import { getEphemeralKeys } from '../lib/crypto'
 import { history } from '../store'
-import { showGenericError } from './common'
+import { showAlert } from './common'
 
 
 export function loginSuccess(account) {
@@ -96,7 +96,7 @@ export function getBalance() {
                 balance
             })
         }).catch(err => {
-            dispatch(showGenericError({
+            dispatch(showAlert({
                 name: "Could not get balance",
                 message: `It seems that the eos node is not available (${err.message})`
             }))

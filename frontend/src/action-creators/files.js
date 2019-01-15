@@ -4,8 +4,10 @@ import {
     LOAD_FILES_ERROR, 
     PURCHASE, 
     PURCHASE_SUCCESS, 
-    DOWNLOAD, 
-    DOWNLOAD_SUCCESS
+    DOWNLOAD_START, 
+    DECRYPTION_START,
+    DECRYPTION_SUCESS,
+    DECRYPTION_ERROR
 } from '../lib/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
@@ -14,7 +16,7 @@ import { createFile, read } from '../lib/file'
 import { history } from '../store';
 import Promise from 'bluebird'
 import Priveos from 'priveos'
-import { showGenericError } from './common'
+import { showAlert } from './common'
 
 
 export function loadFiles() {
@@ -33,7 +35,7 @@ export function loadFiles() {
             })
         })
         .catch((err) => {
-            dispatch(showGenericError({
+            dispatch(showAlert({
                 name: 'Loading files failed',
                 message: `It seems that the eos node is not available (${err.message})`
             }))
@@ -76,13 +78,19 @@ export function download(file) {
     return async (dispatch, getState) => {
         let state = getState()
         dispatch({
-            type: DOWNLOAD,
-            id: file.id
+            type: DOWNLOAD_START,
+            data: {
+                alert: {
+                    name: "Downloading file...",
+                    message: "Please confirm the scatter transaction",
+                    type: "primary"
+                }
+            }
         })
 
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
-            return dispatch(showGenericError({
+            return dispatch(showAlert({
                 name: 'IPFS Error',
                 message: 'The url is not a valid ipfs url: ' + file.url
             }))
@@ -93,14 +101,25 @@ export function download(file) {
           ipfs.download(hash),
           state.auth.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
-            dispatch(showGenericError({
+            dispatch(showAlert({
                 name: 'Download error',
-                message: err.toString()
+                message: err.message
             }))
             return []
         })
 
         if (!file || !accessGrantRes) return
+
+        dispatch({
+            type: DECRYPTION_START,
+            data: {
+                alert: {
+                    name: "Decryption in progress...",
+                    message: "Collecting the key shares and decrypting the file...",
+                    type: "primary"
+                }
+            }
+        })
 
         state = getState()
         console.log("Transaction completed: ", accessGrantRes, files)
@@ -110,19 +129,36 @@ export function download(file) {
         await Promise.delay(5000)
         
         console.log("…done waiting.")
-        const [nonce, key] = await priveos.read(state.auth.account.name, file.uuid)
-        console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
-        files.map((x) => {
-            const cleartext = decrypt(x.content, nonce, key)
-            // console.log('decrypted cleartext', cleartext)
-            createFile(cleartext, file.name)
-        }) 
-        console.log("DOWNLOAD_SUCCESS")
-        dispatch({
-            type: DOWNLOAD_SUCCESS,
-            id: file.id
-        })
-        
+        try {
+            const [nonce, key] = await priveos.read(state.auth.account.name, file.uuid)
+            console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
+            files.map((x) => {
+                const cleartext = decrypt(x.content, nonce, key)
+                // console.log('decrypted cleartext', cleartext)
+                createFile(cleartext, file.name)
+            }) 
+
+            dispatch({
+                type: DECRYPTION_SUCESS,
+                data: {
+                    alert: {
+                        name: "Downloading file...",
+                        message: "Your download will begin soon...",
+                        type: "primary"
+                    }
+                }
+            })
+        } catch(err) {
+            dispatch({
+                type: DECRYPTION_ERROR,
+                data: {
+                    alert: {
+                        name: "Decryption Error",
+                        message: "We were not able to decrypt the file, the error is: " + err.message,
+                    }
+                }
+            })
+        }
     }
 }
 
@@ -149,7 +185,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                     history.push('/files/' + uuid);
                 })
             }).catch(err => {
-                dispatch(showGenericError({
+                dispatch(showAlert({
                     name: 'Upload error',
                     message: err.message
                 }))

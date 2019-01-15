@@ -24,7 +24,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {(this.props.files.error) ? (<Alert error={this.props.files.error}/>) : (<span></span>)}
+        {(this.props.files.alert) ? (<Alert alert={this.props.files.alert}/>) : (<span></span>)}
         <Header/>
         <Switch>
             <Route exact path='/login' component={Login}/>
