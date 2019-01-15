@@ -1,6 +1,6 @@
-const ipfsAPI = require('ipfs-api')
-const node = ipfsAPI('localhost', '5001', {protocol: 'http'})
-
+import config from '../config'
+import ipfsAPI from 'ipfs-api'
+const node = ipfsAPI(config.ipfs.domain, config.ipfs.port, { protocol: 'http' })
 
 export function upload(data) {
     return new Promise((resolve, reject) => {
@@ -26,7 +26,6 @@ export function download(hash) {
             files = files.map((file) => {
                 console.log('downloaded ipfs', file)
                 console.log(file.path)
-                // console.log(file.content.toString('utf8'))
                 return {
                     ...file,
                     content: file.content
@@ -38,7 +37,7 @@ export function download(hash) {
 }
 
 export function getUrl(hash) {
-    return 'https://cloudflare-ipfs.com/ipfs/' + hash
+    return config.ipfs.gateway + hash
 }
 
 export default {

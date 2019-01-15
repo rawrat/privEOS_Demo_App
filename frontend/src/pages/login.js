@@ -16,7 +16,7 @@ class Login extends Component {
       )      
     }
     else {
-      let content = <span><LoadingBar/> Looking for scatter...</span>
+      let content = <span><LoadingBar/>Looking for scatter...</span>
       if (this.props.auth.status == CONNECT_SCATTER_ERROR) {
         content = <div className="alert alert-danger"><strong>No Scatter found</strong><br/>Is scatter running?</div>
       } else if (this.props.auth.status == CONNECT_SCATTER_SUCCESS) {
