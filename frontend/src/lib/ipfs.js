@@ -22,7 +22,7 @@ export function download(hash) {
     return new Promise((resolve, reject) => {
         console.log('ipfs download hash', hash)
         node.files.get(hash, (err, files) => {
-            if (err) throw new Error(err)
+            if (err) return reject(err)
             files = files.map((file) => {
                 console.log('downloaded ipfs', file)
                 console.log(file.path)

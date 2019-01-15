@@ -6,6 +6,7 @@ import 'react-table/react-table.css'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
 
+import Alert from './atoms/alert'
 import FileUpload from './pages/file-upload'
 import FileList from './pages/file-list'
 import FileDetails from './pages/file-details'
@@ -23,6 +24,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Alert error={this.props.files.error} />
         <Header/>
         <Switch>
             <Route exact path='/login' component={Login}/>

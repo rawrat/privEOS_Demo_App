@@ -4,6 +4,9 @@ export const LOGIN_AS_USER = "LOGIN_AS_USER"
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
 
+// ERROR
+export const GENERIC_ERROR = "GENERIC_ERROR"
+
 // FILES
 export const LOAD_FILES = "LOAD_FILES"
 export const LOAD_FILES_SUCCESS = "LOAD_FILES_SUCCESS"

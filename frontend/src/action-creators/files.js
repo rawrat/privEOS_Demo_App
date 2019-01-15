@@ -1,4 +1,13 @@
-import { LOAD_FILES, LOAD_FILES_SUCCESS, LOAD_FILES_ERROR, PURCHASE, PURCHASE_SUCCESS, DOWNLOAD, DOWNLOAD_SUCCESS } from '../lib/action-types'
+import {
+    GENERIC_ERROR,
+    LOAD_FILES, 
+    LOAD_FILES_SUCCESS, 
+    LOAD_FILES_ERROR, 
+    PURCHASE, 
+    PURCHASE_SUCCESS, 
+    DOWNLOAD, 
+    DOWNLOAD_SUCCESS
+} from '../lib/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
 import { encrypt, decrypt } from '../lib/crypto'
@@ -6,6 +15,7 @@ import { createFile, read } from '../lib/file'
 import { history } from '../store';
 import Promise from 'bluebird'
 import Priveos from 'priveos'
+import { access } from 'fs';
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -70,18 +80,35 @@ export function download(file) {
             type: DOWNLOAD,
             id: file.id
         })
+
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
-            return alert('The url is not a valid ipfs url: ' + file.url)
+            return dispatch({
+                type: GENERIC_ERROR,
+                error: {
+                    msg: 'The url is not a valid ipfs url: ' + file.url
+                }
+            })
         }
         const priveos = getPriveos()
 
         const [files, accessGrantRes] = await Promise.all([
           ipfs.download(hash),
           state.auth.eos.accessgrant(state.auth.account.name, file)
-        ])
+        ]).catch(err => {
+            dispatch({
+                type: GENERIC_ERROR,
+                error: {
+                    msg: err.toString()
+                }
+            })
+            return []
+        })
+
+        if (!file || !accessGrantRes) return
+
         state = getState()
-        console.log("Transaction completed: ", accessGrantRes)
+        console.log("Transaction completed: ", accessGrantRes, files)
         console.log("Giving the transaction some time to propagate…")
         
         // the following line can be removed once all nodes have upgraded
