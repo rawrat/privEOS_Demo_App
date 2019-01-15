@@ -36,3 +36,7 @@ body {
 .width10 {
   width: 10%
 }
+
+.imagePaddingRight {
+  padding-right: 10px
+}
