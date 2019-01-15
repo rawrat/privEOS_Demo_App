@@ -21,7 +21,7 @@ class Alert extends Component {
   render() {
     if (this.props.error && this.state.display == true) {
       return (
-        <span className="alert alert-danger">{this.props.error.msg}</span>
+        <div className="alert alert-danger">{this.props.error.msg}</div>
       )
     } else {
       return (
