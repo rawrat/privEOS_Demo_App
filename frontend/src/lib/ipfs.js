@@ -7,6 +7,13 @@ export function upload(data) {
         node.files.add(Buffer.from(data)).then((files) => {
             console.log('added files', files)
             return resolve(files[0])
+        }).catch(err => {
+            console.log('IPFS Upload Error: ', err)
+            // debugger
+            return reject({
+                name: 'Uploading file to IPFS failed',
+                message: err.message
+            })
         })
     })
 }

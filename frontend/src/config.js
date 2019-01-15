@@ -33,6 +33,7 @@ export default {
         domain: ipfsDomain,
         gateway: 'https://cloudflare-ipfs.com/ipfs/'
     },
+    errorVisibility: 10000, // how long errors will be displayed before disappearing
     httpEndpoint: get_endpoint(),
     host,
     protocol,

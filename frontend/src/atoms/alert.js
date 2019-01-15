@@ -1,27 +1,10 @@
 import React, { Component } from 'react';
 
 class Alert extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      display: true
-    }
-    this.scheduleHide = this.scheduleHide.bind(this)
-    this.scheduleHide()
-  }
-
-  scheduleHide() {
-    const self = this
-    window.setTimeout(() => {
-      self.setState({
-        display: false
-      })
-    }, 7500)
-  }
   render() {
-    if (this.props.error && this.state.display == true) {
+    if (this.props.error) {
       return (
-        <div className="alert alert-danger">{this.props.error.msg}</div>
+        <div className="alert alert-danger"><b>{this.props.error.name || ''}</b><br/>{this.props.error.message}</div>
       )
     } else {
       return (

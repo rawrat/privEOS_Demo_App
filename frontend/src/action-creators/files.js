@@ -1,5 +1,6 @@
 import {
-    GENERIC_ERROR,
+    SHOW_GENERIC_ERROR,
+    HIDE_GENERIC_ERROR,
     LOAD_FILES, 
     LOAD_FILES_SUCCESS, 
     LOAD_FILES_ERROR, 
@@ -15,7 +16,31 @@ import { createFile, read } from '../lib/file'
 import { history } from '../store';
 import Promise from 'bluebird'
 import Priveos from 'priveos'
-import { access } from 'fs';
+import config from '../config'
+
+// GENERIC ERRORS
+
+export function showGenericError(err) {
+    return (dispatch) => {
+        dispatch({
+            type: SHOW_GENERIC_ERROR,
+            error: {
+                name: err.name || null,
+                message: err.message || null
+            }
+        })
+
+        window.setTimeout(() => {
+            dispatch({
+                type: HIDE_GENERIC_ERROR,
+                error: {
+                    name: err.name || null,
+                    message: err.message || null
+                }
+            })
+        }, config.errorVisibility)
+    }
+}
 
 export function loadFiles() {
     return (dispatch, getState) => {
@@ -83,11 +108,9 @@ export function download(file) {
 
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
-            return dispatch({
-                type: GENERIC_ERROR,
-                error: {
-                    msg: 'The url is not a valid ipfs url: ' + file.url
-                }
+            return showGenericError({
+                name: 'IPFS Error',
+                message: 'The url is not a valid ipfs url: ' + file.url
             })
         }
         const priveos = getPriveos()
@@ -96,11 +119,9 @@ export function download(file) {
           ipfs.download(hash),
           state.auth.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
-            dispatch({
-                type: GENERIC_ERROR,
-                error: {
-                    msg: err.toString()
-                }
+            showGenericError({
+                name: 'Download error',
+                message: err.toString()
             })
             return []
         })
@@ -153,6 +174,11 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                     console.log('Successfully create upload transaction')
                     history.push('/files/' + uuid);
                 })
+            }).catch(err => {
+                dispatch(showGenericError({
+                    name: 'Upload error',
+                    message: err.message
+                }))
             })
         })
         .catch((err) => {

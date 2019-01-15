@@ -1,5 +1,6 @@
 import {
-    GENERIC_ERROR,
+    SHOW_GENERIC_ERROR,
+    HIDE_GENERIC_ERROR,
     LOAD_FILES,
     LOAD_FILES_SUCCESS,
     LOAD_FILES_ERROR,
@@ -22,8 +23,15 @@ export default function(state = initialState, action) {
 
     switch (action.type) {
         // GENERIC ERROR
-        case GENERIC_ERROR:
+        case SHOW_GENERIC_ERROR:
             return { ...state, error: action.error}
+
+        case HIDE_GENERIC_ERROR:
+            // we wanna hide the error only if its the same as the one shown
+            if (state.error && JSON.stringify(state.error) == JSON.stringify(action.error)) {
+                return { ...state, error: null }
+            }
+            return { ...state }
 
         // LOAD FILES
         case LOAD_FILES:
