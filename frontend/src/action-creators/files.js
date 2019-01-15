@@ -108,10 +108,10 @@ export function download(file) {
 
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
-            return showGenericError({
+            return dispatch(showGenericError({
                 name: 'IPFS Error',
                 message: 'The url is not a valid ipfs url: ' + file.url
-            })
+            }))
         }
         const priveos = getPriveos()
 
@@ -119,10 +119,10 @@ export function download(file) {
           ipfs.download(hash),
           state.auth.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
-            showGenericError({
+            dispatch(showGenericError({
                 name: 'Download error',
                 message: err.toString()
-            })
+            }))
             return []
         })
 
