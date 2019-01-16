@@ -58,7 +58,7 @@ export default function(state = initialState, action) {
             return { ...state, status: action.type, ...action.data }
         case DOWNLOAD_SUCCESS:
             state.downloading = state.downloading.filter((x) => x != action.id)
-            return { ...state }
+            return { ...state, ...action.data }
 
         // DECRYPTION
         case DECRYPTION_START:

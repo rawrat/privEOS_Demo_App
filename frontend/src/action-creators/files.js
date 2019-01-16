@@ -7,7 +7,8 @@ import {
     DOWNLOAD_START, 
     DECRYPTION_START,
     DECRYPTION_SUCESS,
-    DECRYPTION_ERROR
+    DECRYPTION_ERROR,
+    DOWNLOAD_SUCCESS
 } from '../lib/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
@@ -81,8 +82,8 @@ export function download(file) {
             type: DOWNLOAD_START,
             data: {
                 alert: {
-                    name: "Downloading file...",
-                    message: "Please confirm the scatter transaction",
+                    name: "Please confirm your download",
+                    message: "Please confirm the scatter transaction to start the download...",
                     type: "primary"
                 }
             }
@@ -111,11 +112,11 @@ export function download(file) {
         if (!file || !accessGrantRes) return
 
         dispatch({
-            type: DECRYPTION_START,
+            type: DOWNLOAD_START,
             data: {
                 alert: {
-                    name: "Decryption in progress...",
-                    message: "Collecting the key shares and decrypting the file...",
+                    name: "Download in progress...",
+                    message: "Downloading file from IPFS, getting the key shares and decrypting it...",
                     type: "primary"
                 }
             }
@@ -127,27 +128,21 @@ export function download(file) {
         
         // the following line can be removed once all nodes have upgraded
         await Promise.delay(5000)
-        
         console.log("…done waiting.")
+
         try {
             const [nonce, key] = await priveos.read(state.auth.account.name, file.uuid)
             console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
             files.map((x) => {
                 const cleartext = decrypt(x.content, nonce, key)
-                // console.log('decrypted cleartext', cleartext)
                 createFile(cleartext, file.name)
-            }) 
-
-            dispatch({
-                type: DECRYPTION_SUCESS,
-                data: {
-                    alert: {
-                        name: "Downloading file...",
-                        message: "Your download will begin soon...",
-                        type: "primary"
+                dispatch({
+                    type: DOWNLOAD_SUCCESS,
+                    data: {
+                        alert: null
                     }
-                }
-            })
+                })
+            }) 
         } catch(err) {
             dispatch({
                 type: DECRYPTION_ERROR,
