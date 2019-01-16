@@ -16,11 +16,16 @@ export const GET_BALANCE = "GET_BALANCE"
 export const GET_BALANCE_SUCCESS = "GET_BALANCE_SUCCESS"
 export const PURCHASE = "PURCHASE"
 export const PURCHASE_SUCCESS = "PURCHASE_SUCCESS"
+
+// DOWNLOAD
 export const DOWNLOAD_START = "Downloading and decrypting..."
 export const DOWNLOAD_SUCCESS = "DOWNLOAD_SUCCESS"
-export const DECRYPTION_START = "DECRYPTION_START"
-export const DECRYPTION_SUCESS = "DECRYPTION_SUCESS"
 export const DECRYPTION_ERROR = "DECRYPTION_ERROR"
+
+// UPLOAD
+export const UPLOAD_IPFS_START = "UPLOAD_IPFS_START"
+export const UPLOAD_EOS_START = "UPLOAD_EOS_START"
+export const UPLOAD_SUCCESS = "UPLOAD_SUCCESS"
 
 // SCATTER
 export const CONNECT_SCATTER_START = "Connecting to scatter..."

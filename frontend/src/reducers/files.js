@@ -8,8 +8,9 @@ import {
     PURCHASE_SUCCESS,
     DOWNLOAD_START,
     DOWNLOAD_SUCCESS,
-    DECRYPTION_START,
-    DECRYPTION_SUCESS,
+    UPLOAD_IPFS_START,
+    UPLOAD_EOS_START,
+    UPLOAD_SUCCESS,
     DECRYPTION_ERROR
 } from '../lib/action-types'
 
@@ -60,11 +61,16 @@ export default function(state = initialState, action) {
             state.downloading = state.downloading.filter((x) => x != action.id)
             return { ...state, ...action.data }
 
+        // UPLOAD
+        case UPLOAD_IPFS_START:
+            return { ...state, ...action.data }
+        case UPLOAD_EOS_START:
+            return { ...state, ...action.data }
+        case UPLOAD_SUCCESS:
+            return { ...state, ...action.data }
+
+
         // DECRYPTION
-        case DECRYPTION_START:
-            return { ...state, status: action.type, ...action.data }
-        case DECRYPTION_SUCESS: 
-            return { ...state, status: action.type, ...action.data }
         case DECRYPTION_ERROR: 
             return { ...state, status: action.type, ...action.data }
         

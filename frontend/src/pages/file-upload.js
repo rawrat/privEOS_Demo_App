@@ -46,13 +46,6 @@ class FileUpload extends Component {
   }
 
   setReadyness() {
-    console.log('Object', {
-      uuid: this.state.uuid,
-      name: this.state.name,
-      description: this.state.description,
-      file: this.state.file,
-      price: this.state.price
-    })
     const isReadyForTransaction = this.state.uuid && this.state.name && this.state.description && this.state.file && this.state.price || false
     this.setState({
       isReadyForTransaction

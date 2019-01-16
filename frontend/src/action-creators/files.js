@@ -4,9 +4,10 @@ import {
     LOAD_FILES_ERROR, 
     PURCHASE, 
     PURCHASE_SUCCESS, 
-    DOWNLOAD_START, 
-    DECRYPTION_START,
-    DECRYPTION_SUCESS,
+    DOWNLOAD_START,
+    UPLOAD_IPFS_START,
+    UPLOAD_EOS_START,
+    UPLOAD_SUCCESS,
     DECRYPTION_ERROR,
     DOWNLOAD_SUCCESS
 } from '../lib/action-types'
@@ -158,6 +159,7 @@ export function download(file) {
 }
 
 export function upload(uuid, name, description, price, file, secret_bytes, nonce_bytes) {
+   
     console.log('upload action', {
         uuid,
         name,
@@ -168,6 +170,15 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
         nonce_bytes
     })
     return (dispatch, getState) => {
+        dispatch({
+            type: UPLOAD_IPFS_START,
+            data: {
+                alert: {
+                    name: "Uploading file to IPFS...",
+                    type: "primary"
+                }
+            }
+        })
         const state = getState()
         console.log('file', file)
         return read(file).then((content) => {
@@ -175,8 +186,23 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
             console.log('cipher', cipher)
             ipfs.upload(cipher).then((ipfsFile) => {
                 console.log('resolved', ipfsFile)
+                dispatch({
+                    type: UPLOAD_EOS_START,
+                    data: {
+                        alert: {
+                            name: "Please confirm scatter transaction to finish upload",
+                            type: "primary"
+                        }
+                    }
+                })
                 state.auth.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, secret_bytes, nonce_bytes).then(() => {
                     console.log('Successfully create upload transaction')
+                    dispatch({
+                        type: UPLOAD_SUCCESS,
+                        data: {
+                            alert: null
+                        }
+                    })
                     history.push('/files/' + uuid);
                 })
             }).catch(err => {
@@ -187,7 +213,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
             })
         })
         .catch((err) => {
-        console.error(err)
+            console.error(err)
         })
     }
 }
