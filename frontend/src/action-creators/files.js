@@ -72,6 +72,17 @@ export function purchase(file) {
                 id: file.id
             })
         })
+        .catch(err => {
+            if (typeof(err) == "string") {
+                try {
+                    err = JSON.parse(err)
+                } catch(e) {}
+            }
+            dispatch(showAlert({
+                name: err.error && err.error.name || 'Purchase error',
+                message: err.message
+            }))
+        })
     }
 }
 
