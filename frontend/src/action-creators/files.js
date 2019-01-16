@@ -204,6 +204,11 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                         }
                     })
                     history.push('/files/' + uuid);
+                }).catch(err => {
+                    dispatch(showAlert({
+                        name: 'EOS Upload Transaction failed',
+                        message: err.message
+                    }))
                 })
             }).catch(err => {
                 dispatch(showAlert({
