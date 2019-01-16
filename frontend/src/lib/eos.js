@@ -149,7 +149,7 @@ export class Eos {
   }
 
   async purchase(user, file) {
-    this.seen_keys.push(priveos.config.ephemeralKeyPublic)
+    this.seen_keys.push(priveos.config.ephemeralKeyPublic + file.id)
     let actions = [] 
     
     if(parseFloat(file.price) > 0) {
@@ -202,10 +202,10 @@ export class Eos {
   }
 
   async accessgrant(user, file) {
-    if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic)) {
+    if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic + file.id)) {
       return
     }
-    this.seen_keys.push(priveos.config.ephemeralKeyPublic)
+    this.seen_keys.push(priveos.config.ephemeralKeyPublic + file.id)
     return priveos.accessgrant(user, file.uuid, "4,EOS")
   }
 
