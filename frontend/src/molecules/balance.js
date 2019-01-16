@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import LoadingBar from '../atoms/loading-bar'
 
 
 class Balance extends Component {
   render() {
     if (!this.props.auth || !this.props.auth.balance || !this.props.auth.balance.funds) {
       return (
-        <span>Loading...</span>
+        <span>
+          <LoadingBar />
+        </span>
       )
     }
     return (
