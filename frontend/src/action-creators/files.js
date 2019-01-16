@@ -2,7 +2,7 @@ import {
     LOAD_FILES, 
     LOAD_FILES_SUCCESS, 
     LOAD_FILES_ERROR, 
-    PURCHASE, 
+    PURCHASE_START, 
     PURCHASE_SUCCESS, 
     DOWNLOAD_START,
     UPLOAD_IPFS_START,
@@ -61,18 +61,29 @@ export function loadFilesError() {
 export function purchase(file) {
     return (dispatch, getState) => {
         dispatch({
-            type: PURCHASE,
-            id: file.id
+            type: PURCHASE_START,
+            id: file.id,
+            data: {
+                alert: {
+                    name: "Started purchase process",
+                    message: "Please confirm the scatter transaction...",
+                    type: "primary",
+                    loading: true
+                }
+            }
         })
         return getState().auth.eos.purchase(getState().auth.account.name, file)
-        .then((res) => {
-            dispatch(loadFiles())
-            dispatch({
-                type: PURCHASE_SUCCESS,
-                id: file.id
+            .then((res) => {
+                dispatch(loadFiles())
+                dispatch({
+                    type: PURCHASE_SUCCESS,
+                    id: file.id,
+                    data: {
+                        alert: null
+                    }
+                })
             })
-        })
-        .catch(err => {
+            .catch(err => {
             if (typeof(err) == "string") {
                 try {
                     err = JSON.parse(err)
@@ -96,10 +107,13 @@ export function download(file) {
                 alert: {
                     name: "Please confirm your download",
                     message: "Please confirm the scatter transaction to start the download...",
-                    type: "primary"
+                    type: "primary",
+                    loading: true
                 }
             }
         })
+
+        // throw new Error('test')
 
         const hash = ipfs.extractHashFromUrl(file.url)
         if (!hash) {
@@ -135,7 +149,8 @@ export function download(file) {
                 alert: {
                     name: "Download in progress...",
                     message: "Downloading file from IPFS, getting the key shares and decrypting it...",
-                    type: "primary"
+                    type: "primary",
+                    loading: true
                 }
             }
         })
@@ -193,7 +208,8 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
             data: {
                 alert: {
                     name: "Uploading file to IPFS...",
-                    type: "primary"
+                    type: "primary",
+                    loading: true
                 }
             }
         })
@@ -209,7 +225,8 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                     data: {
                         alert: {
                             name: "Please confirm scatter transaction to finish upload",
-                            type: "primary"
+                            type: "primary",
+                            loading: true
                         }
                     }
                 })

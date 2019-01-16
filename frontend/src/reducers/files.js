@@ -4,7 +4,7 @@ import {
     LOAD_FILES,
     LOAD_FILES_SUCCESS,
     LOAD_FILES_ERROR,
-    PURCHASE,
+    PURCHASE_START,
     PURCHASE_SUCCESS,
     DOWNLOAD_START,
     DOWNLOAD_SUCCESS,
@@ -46,12 +46,12 @@ export default function(state = initialState, action) {
             return { ...state, loading: false, error: "Could not load files" }
 
         // PURCHASE
-        case PURCHASE:
+        case PURCHASE_START:
             state.purchasing.push(action.id)
-            return { ...state }
+            return { ...state, ...action.data }
         case PURCHASE_SUCCESS:
             state.purchasing = state.purchasing.filter((x) => x != action.id)
-            return { ...state }
+            return { ...state, ...action.data }
         
         // DOWNLOAD
         case DOWNLOAD_START:
