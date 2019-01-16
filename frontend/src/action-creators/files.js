@@ -100,11 +100,17 @@ export function download(file) {
         const priveos = getPriveos()
 
         const [files, accessGrantRes] = await Promise.all([
-          ipfs.download(hash),
-          state.auth.eos.accessgrant(state.auth.account.name, file)
+            ipfs.download(hash),
+            state.auth.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
+            console.log('error', err)
+            if (typeof(err) == "string") {
+                try {
+                    err = JSON.parse(err)
+                } catch(e) {}
+            }
             dispatch(showAlert({
-                name: 'Download error',
+                name: err.error && err.error.name || 'Download error',
                 message: err.message
             }))
             return []
@@ -151,6 +157,7 @@ export function download(file) {
                     alert: {
                         name: "Decryption Error",
                         message: "We were not able to decrypt the file, the error is: " + err.message,
+                        type: 'error'
                     }
                 }
             })
