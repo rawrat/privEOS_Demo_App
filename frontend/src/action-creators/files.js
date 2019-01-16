@@ -116,7 +116,7 @@ export function download(file) {
             return []
         })
 
-        if (!file || !accessGrantRes) return
+        if (!files) return console.error('File not available...')
 
         dispatch({
             type: DOWNLOAD_START,
@@ -157,7 +157,7 @@ export function download(file) {
                     alert: {
                         name: "Decryption Error",
                         message: "We were not able to decrypt the file, the error is: " + err.message,
-                        type: 'error'
+                        type: 'danger'
                     }
                 }
             })
