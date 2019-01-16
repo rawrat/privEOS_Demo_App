@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import PurchaseButton from '../molecules/purchase-button'
-import DownloadButton from '../molecules/download-button'
+import PurchaseButton from './purchase-button'
+import DownloadButton from './download-button'
 
 
 class DownloadFile extends Component {

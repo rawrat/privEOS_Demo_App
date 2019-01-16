@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import Balance from '../molecules/balance'
+import Balance from './balance'
 
 
 class Header extends Component {

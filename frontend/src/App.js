@@ -12,7 +12,7 @@ import FileList from './pages/file-list'
 import FileDetails from './pages/file-details'
 import Login from './pages/login'
 import Logout from './pages/logout'
-import Header from './organisms/header'
+import Header from './molecules/header'
 import { connectScatter } from './action-creators/auth'
 
 class App extends Component {
