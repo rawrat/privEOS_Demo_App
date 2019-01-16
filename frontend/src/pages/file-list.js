@@ -47,9 +47,7 @@ class FileList extends Component {
         id: 'download',
         Cell: row => {
           // console.log('cell render', JSON.stringify(row.original, null, 2))
-          if (row.original.owning) {
-            return (<span></span>)
-          } else if (row.original.purchased) {
+          if (row.original.owning || row.original.purchased) {
             return (<DownloadButton file={row.original} className='btn-sm'/>)
           } else {
             return (<PurchaseButton file={row.original} className='btn-sm'/>)
