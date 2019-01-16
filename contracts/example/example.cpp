@@ -122,8 +122,10 @@ void example::accessgrant(const name user, const name contract, const std::strin
   require_auth(user);
   
   const auto& file = get_file_byuuid(uuid);
-  perms_table perms(_self, user.value);
-  perms.get(file.id, "Access denied");
+  if(user != file.owner) {
+    perms_table perms(_self, user.value);
+    perms.get(file.id, "Access denied");    
+  }
 } 
 
 extern "C" {
