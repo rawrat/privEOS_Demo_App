@@ -28,6 +28,15 @@ npm link
 npm link priveos
 ```
 
+## Production Build
+
+To create an optimized production build, run:
+
+```
+cd frontend
+yarn build
+```
+
 ## Local Development
 
 To start the local development frontend, run:
@@ -60,4 +69,4 @@ Start an ipfs daemon. Then run:
 
 ```
 bin/deploy-to-ipfs
-``
+```
