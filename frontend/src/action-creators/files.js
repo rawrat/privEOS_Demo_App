@@ -157,11 +157,6 @@ export function download(file) {
 
         state = getState()
         console.log("Transaction completed: ", accessGrantRes, files)
-        console.log("Giving the transaction some time to propagate…")
-        
-        // the following line can be removed once all nodes have upgraded
-        await Promise.delay(5000)
-        console.log("…done waiting.")
 
         try {
             const [nonce, key] = await priveos.read(state.auth.account.name, file.uuid)
@@ -244,6 +239,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                         name: 'EOS Upload Transaction failed',
                         message: err.message
                     }))
+                    throw err
                 })
             }).catch(err => {
                 dispatch(showAlert({
