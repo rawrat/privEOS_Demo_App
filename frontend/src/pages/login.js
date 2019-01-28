@@ -3,10 +3,14 @@ import { connect } from 'react-redux'
 import { Button } from 'reactstrap'
 import LoadingBar from '../atoms/loading-bar'
 import { Redirect } from 'react-router-dom'
-import { loginWithScatter } from '../action-creators/auth'
+import { connectScatter, loginWithScatter } from '../action-creators/auth'
 import { CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR } from '../lib/action-types'
 
 class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.props.connectScatter()
+  }
   render() {
     console.log('update state', this.props.auth)
     if (this.props.auth && this.props.auth.loggedIn) {
@@ -38,7 +42,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginWithScatter: () => dispatch(loginWithScatter())
+  loginWithScatter: () => dispatch(loginWithScatter()),
+  connectScatter: () => dispatch(connectScatter())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
