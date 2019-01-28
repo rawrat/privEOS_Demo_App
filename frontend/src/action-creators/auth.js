@@ -1,4 +1,5 @@
 import {
+    CONNECT_EOS,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     GET_BALANCE,

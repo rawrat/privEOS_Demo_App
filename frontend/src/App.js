@@ -13,53 +13,39 @@ import FileDetails from './pages/file-details'
 import Login from './pages/login'
 import Logout from './pages/logout'
 import Header from './molecules/header'
-import { connectScatter } from './action-creators/auth'
+import { initialize } from './action-creators/root'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.props.connectScatter()
+    this.props.initialize()
   }
   render() {
     return (
       <div className="App">
         {(this.props.files.alert) ? (<Alert alert={this.props.files.alert}/>) : (<span></span>)}
-        <Header/>
-        <Switch>
-            <Route exact path='/login' component={Login}/>
-            <Route exact path='/logout' component={Logout}/>
-            <Route exact path='/' render={() => (
-              this.props.auth.loggedIn ? (
-                <FileList/>
-              ) : (
-                <Redirect to={{
-                  pathname: "/login",
-                  state: { from: window.location.pathname }
-                }}/>
-              )
-            )}/>
-            <Route exact path='/files/:uuid' render={() => (
-              this.props.auth.loggedIn ? (
-                <FileDetails/>
-              ) : (
-                <Redirect to={{
-                  pathname: "/login",
-                  state: { from: window.location.pathname }
-                }}/>
-              )
-            )}/>
-            <Route exact path='/upload' render={() => (
-              this.props.auth.loggedIn ? (
-                <FileUpload/>
-              ) : (
-                <Redirect to={{
-                  pathname: "/login",
-                  state: { from: window.location.pathname }
-                }}/>
-              )
-            )}/>
-        </Switch>
+        {(this.props.root.initializing == false) ? (
+          <span>
+            <Header/>
+            <Switch>
+                <Route exact path='/login' component={Login}/>
+                <Route exact path='/logout' component={Logout}/>
+                <Route exact path='/' component={FileList}/>
+                <Route exact path='/files/:uuid' component={FileDetails}/>
+                <Route exact path='/upload' render={() => (
+                  this.props.auth.loggedIn ? (
+                    <FileUpload/>
+                  ) : (
+                    <Redirect to={{
+                      pathname: "/login",
+                      state: { from: window.location.pathname }
+                    }}/>
+                  )
+                )}/>
+            </Switch>
+          </span>
+        ) : (<span></span>)}
       </div>
     );
   }
@@ -70,7 +56,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  connectScatter: () => dispatch(connectScatter())
+  initialize: () => dispatch(initialize())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

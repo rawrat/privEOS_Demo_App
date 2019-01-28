@@ -27,7 +27,7 @@ export function loadFiles() {
         dispatch({
             type: LOAD_FILES
         })
-        return state.auth.eos.getFiles(state.auth.account.name)
+        return state.root.eos.getFiles(state.auth.account && state.auth.account.name || null)
         .then((res) => {
             dispatch({
                 type: LOAD_FILES_SUCCESS,
@@ -72,7 +72,7 @@ export function purchase(file) {
                 }
             }
         })
-        return getState().auth.eos.purchase(getState().auth.account.name, file)
+        return getState().root.eos.purchase(getState().auth.account.name, file)
             .then((res) => {
                 dispatch(loadFiles())
                 dispatch({
@@ -126,7 +126,7 @@ export function download(file) {
 
         const [files, accessGrantRes] = await Promise.all([
             ipfs.download(hash),
-            state.auth.eos.accessgrant(state.auth.account.name, file)
+            state.root.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
             console.log('error', err)
             if (typeof(err) == "string") {
@@ -225,7 +225,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                         }
                     }
                 })
-                state.auth.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, secret_bytes, nonce_bytes).then(() => {
+                state.root.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, secret_bytes, nonce_bytes).then(() => {
                     console.log('Successfully create upload transaction')
                     dispatch({
                         type: UPLOAD_SUCCESS,
