@@ -10,8 +10,10 @@ let ipfsProtocol = 'https'
 let brokerUrl = 'https://slantagnode3.priveos.io'
 let chainId = 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473'
 
+const environment = localStorage.getItem("environment")
+
 // CONFIG SWITCH: localhost
-if (/network=localhost/g.test(window.location.href)) {
+if (/network=localhost/g.test(window.location.href) || (environment == "localhost")) {
     host = '127.0.0.1'
     protocol = 'http'
     ipfsDomain = 'localhost'

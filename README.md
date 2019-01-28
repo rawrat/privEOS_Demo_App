@@ -2,9 +2,13 @@
 
 Demonstrating a frontend connected to the priveos smart contract and node services to upload, list and download files based on transactions.
 
-## Url Params
+## Environments
 
-You can switch between localhost and jungle2 (defaul). To connect to localhost, append url param: `?network=localhost`
+You can switch between localhost and jungle2 (default). To connect to localhost, append url param: `?network=localhost` or set localStorage item:
+
+```
+localStorage.setItem('environment', 'localhost')
+```
 
 ## Prerequisites
 
