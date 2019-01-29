@@ -8,7 +8,7 @@ class UserInfo extends Component {
     return (
       <span>
         {(this.props.auth.loggedIn) ? (
-          <span>Logged in as <strong>{this.props.auth.account.name} (<Balance/>) <NavLink to="/logout" exact activeClassName="active" className="logout danger">Logout</NavLink></strong></span>
+          <span>Logged in as <strong>{this.props.auth.account.name} </strong>(<Balance/>)<strong> <NavLink to="/logout" exact activeClassName="active" className="logout danger">Logout</NavLink></strong></span>
         ) : (
           <span></span>
         )}
