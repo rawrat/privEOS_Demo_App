@@ -18,7 +18,7 @@ export const LOAD_FILES_ERROR = "LOAD_FILES_ERROR"
 export const GET_BALANCE = "GET_BALANCE"
 export const GET_BALANCE_SUCCESS = "GET_BALANCE_SUCCESS"
 export const PURCHASE_START = "PURCHASE_START"
-export const PURCHASE_SUCCESS = "PURCHASE_SUCCESS"
+export const PURCHASE_FINISH = "PURCHASE_FINISH"
 
 // DOWNLOAD
 export const DOWNLOAD_START = "Downloading and decrypting..."

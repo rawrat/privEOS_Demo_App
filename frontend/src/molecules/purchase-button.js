@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { purchase } from '../action-creators/files'
 import { Redirect } from 'react-router-dom'
+import LoadingBar from '../atoms/loading-bar'
 
 class PurchaseButton extends Component {
   constructor(props) {
@@ -36,10 +37,16 @@ class PurchaseButton extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12"><button 
-            className={`btn btn-danger ${this.props.className}`} 
-            onClick={this.onClick}
-            disabled={this.props.files.purchasing.find((x) => x == this.props.file.id)}>Purchase</button>
+          <div className="col-md-12">
+            {(this.props.files.purchasing.find((x) => x == this.props.file.id) !== undefined) ? (
+              <LoadingBar/>
+            ) : (
+              <button 
+                className={`btn btn-danger ${this.props.className}`} 
+                onClick={this.onClick}>
+                Purchase
+              </button>
+            )}
           </div>
         </div>
       </div>

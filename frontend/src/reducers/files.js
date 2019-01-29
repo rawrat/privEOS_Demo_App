@@ -5,7 +5,7 @@ import {
     LOAD_FILES_SUCCESS,
     LOAD_FILES_ERROR,
     PURCHASE_START,
-    PURCHASE_SUCCESS,
+    PURCHASE_FINISH,
     DOWNLOAD_START,
     DOWNLOAD_SUCCESS,
     UPLOAD_IPFS_START,
@@ -49,7 +49,7 @@ export default function(state = initialState, action) {
         case PURCHASE_START:
             state.purchasing.push(action.id)
             return { ...state, ...action.data }
-        case PURCHASE_SUCCESS:
+        case PURCHASE_FINISH:
             state.purchasing = state.purchasing.filter((x) => x != action.id)
             return { ...state, ...action.data }
         

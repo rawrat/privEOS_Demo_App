@@ -3,7 +3,7 @@ import {
     LOAD_FILES_SUCCESS, 
     LOAD_FILES_ERROR, 
     PURCHASE_START, 
-    PURCHASE_SUCCESS, 
+    PURCHASE_FINISH, 
     DOWNLOAD_START,
     UPLOAD_IPFS_START,
     UPLOAD_EOS_START,
@@ -67,8 +67,7 @@ export function purchase(file) {
                 alert: {
                     name: "Started purchase process",
                     message: "Please confirm the scatter transaction...",
-                    type: "primary",
-                    loading: true
+                    type: "primary"
                 }
             }
         })
@@ -76,7 +75,7 @@ export function purchase(file) {
             .then((res) => {
                 dispatch(loadFiles())
                 dispatch({
-                    type: PURCHASE_SUCCESS,
+                    type: PURCHASE_FINISH,
                     id: file.id,
                     data: {
                         alert: null
@@ -93,6 +92,10 @@ export function purchase(file) {
                 name: err.error && err.error.name || 'Purchase error',
                 message: err.message
             }))
+            dispatch({
+                type: PURCHASE_FINISH,
+                id: file.id
+            })
         })
     }
 }
