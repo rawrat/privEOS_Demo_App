@@ -2,8 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import UserInfo from './user-info'
+import { connectScatter } from '../action-creators/auth'
 
 class Header extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+    this.props.connectScatter()
+  }
   render() {
     return (
       <div>
@@ -23,6 +29,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  connectScatter: () => dispatch(connectScatter())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
