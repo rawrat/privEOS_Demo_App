@@ -4,11 +4,17 @@ Demonstrating a frontend connected to the priveos smart contract and node servic
 
 ## Environments
 
-You can switch between localhost and jungle2 (default). To connect to localhost, append url param: `?network=localhost` or set localStorage item:
+You can switch between localhost and jungle2 (default). To connect to localhost, append url param: `?env=localhost` or set localStorage item:
 
 ```
-localStorage.setItem('environment', 'localhost')
+localStorage.setItem('env', 'localhost')
 ```
+
+To be able connecting to localhost, you need to have the following processes running:
+
+1. EOS node with privEOS smart contract
+1. IPFS node
+1. MongoDB (only if mongodb plugin is used by EOS)
 
 ## Prerequisites
 
