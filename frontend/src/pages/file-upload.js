@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import { getPriveos, generateUuid } from '../lib/eos'
 
 import SingleFileSelector from '../atoms/single-file-selector'
-import FileDetails from '../atoms/file-details'
 import { upload } from '../action-creators/files'
 
 
@@ -58,29 +57,32 @@ class FileUpload extends Component {
 
   onSelect(file) {
     console.log('Selected File: ', file)
-    this.setState({
+    let newState = {
       file
-    })
+    }
+    if (!this.state.name) {
+      newState.name = file.name
+    }
+    this.setState(newState)
     window.setTimeout(this.setReadyness, 0)
   }
 
   render() {
     return (
       <div>
+        <SingleFileSelector onSelect={this.onSelect}/>
         <div className="form-group">
-          <label htmlFor="name">Filename:</label>
-          <input onKeyUp={this.onKeyUp} id="name" name="name" placeholder="Enter Name..." className="form-control" autoComplete="off"/>
+          <label htmlFor="name">Name:</label>
+          <input onKeyUp={this.onKeyUp} onChange={this.onKeyUp} defaultValue={this.state.name} id="name" name="name" placeholder="Enter Name..." className="form-control" autoComplete="off"/>
         </div>
         <div className="form-group">
           <label htmlFor="description">Description:</label>
-          <textarea onKeyUp={this.onKeyUp} id="description" name="description" placeholder="Enter Description..." className="form-control"></textarea> 
+          <textarea onKeyUp={this.onKeyUp} onChange={this.onKeyUp} id="description" name="description" placeholder="Enter Description..." className="form-control"></textarea> 
         </div>
         <div className="form-group">
           <label htmlFor="price">Price:</label>
-          <input onKeyUp={this.onKeyUp} name="price" id="price" className="form-control" defaultValue={this.state.price} />
+          <input onKeyUp={this.onKeyUp} onChange={this.onKeyUp} name="price" id="price" className="form-control" defaultValue={this.state.price} />
         </div>
-        <SingleFileSelector onSelect={this.onSelect}/>
-        <FileDetails file={this.state && this.state.file || null}/>
         <br/>
         <button onClick={this.upload} disabled={!this.state.isReadyForTransaction} className="form-control btn btn-primary">Upload</button>
       </div>
