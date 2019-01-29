@@ -10,6 +10,10 @@ let ipfsProtocol = 'https'
 let brokerUrl = 'https://slantagnode3.priveos.io'
 let chainId = 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473'
 
+if (/env=/g.test(window.location.href)) {
+    localStorage.removeItem('env')
+}
+
 const env = localStorage.getItem("env")
 
 // CONFIG SWITCH: localhost
