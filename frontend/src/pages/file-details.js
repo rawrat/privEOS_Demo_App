@@ -56,7 +56,7 @@ class File extends Component {
           <div className="col-md-2">Owner</div>
           <div className="col-md-10">{item.owner}</div>
         </div>
-        <br/><br/>
+        <br/>
         <DownloadArea file={item}/>
       </div>
     );
