@@ -13,13 +13,14 @@ class Login extends Component {
   }
   render() {
     console.log('update state', this.props.auth)
+
+    // when the login was successful, redirect the user from where he came
     if (this.props.auth && this.props.auth.loggedIn) {
       const redirectTo = this.props.location && this.props.location.state && this.props.location.state.from || '/'
       return (
         <Redirect to={redirectTo}/>
       )      
-    }
-    else {
+    } else {
       let content = <span><LoadingBar/>{ this.props.auth.status ? this.props.auth.status : 'Looking for scatter...' }</span>
       if (this.props.auth.status == CONNECT_SCATTER_ERROR) {
         content = <div className="alert alert-danger"><strong>No Scatter found</strong><br/>Is scatter running?</div>
@@ -28,8 +29,9 @@ class Login extends Component {
       }
       return (
         <div>
-          <a href="https://slant.li"><img src="/img/priveos_logo_black_transparent_big.png" width="40%" /></a>
-          <br/><br/><br/>
+          <h3>Login</h3>
+          Please login to purchase, download or upload files!
+          <br/><br/>
           {content}
         </div>
       )
