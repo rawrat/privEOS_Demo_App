@@ -3,6 +3,7 @@ import {
     HIDE_ALERT,
     LOAD_FILES,
     LOAD_FILES_SUCCESS,
+    LOAD_PURCHASES_SUCCESS,
     LOAD_FILES_ERROR,
     PURCHASE_START,
     PURCHASE_FINISH,
@@ -41,6 +42,8 @@ export default function(state = initialState, action) {
         case LOAD_FILES:
             return { ...state, loading: true }
         case LOAD_FILES_SUCCESS:
+            return { ...state, loading: false, ...action.data }
+        case LOAD_PURCHASES_SUCCESS:
             return { ...state, loading: false, ...action.data }
         case LOAD_FILES_ERROR:
             return { ...state, loading: false, error: "Could not load files" }

@@ -110,27 +110,16 @@ export class Eos {
     )
   }
 
-  getFiles(user) {
-    const self = this
+  getFiles() {
     console.log('get files config', config)
     return this.client.getTableRows({json:true, scope: config.priveos.dappContract, code: config.priveos.dappContract,  table: 'files', limit:100})
     .then((files) => {
       console.log('eos.getFiles', files)
-      // // return self.getPurchasedFiles(user).then((purchases) => {
-      // //   files.rows = files.rows.map((x) => {
-      // //     return {
-      // //       ...x,
-      // //       purchased: purchases.some((p) => x.id == p.id),
-      // //       owning: x.owner == user,
-      // //     }
-      // //   })
-      //   console.log('files', files.rows)
-        return files.rows
-      // })
+      return files.rows
     })
   }
 
-  getPurchasedFiles(user) {
+  getPurchases(user) {
     console.log(user)
     return this.client.getTableRows({json:true, scope: user, code: config.priveos.dappContract,  table: 'perms', limit:100})
     .then((res) => {

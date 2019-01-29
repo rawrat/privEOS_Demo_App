@@ -1,7 +1,8 @@
 import {
     LOAD_FILES, 
     LOAD_FILES_SUCCESS, 
-    LOAD_FILES_ERROR, 
+    LOAD_FILES_ERROR,
+    LOAD_PURCHASES_SUCCESS,
     PURCHASE_START, 
     PURCHASE_FINISH, 
     DOWNLOAD_START,
@@ -27,7 +28,7 @@ export function loadFiles() {
         dispatch({
             type: LOAD_FILES
         })
-        return state.root.eos.getFiles(state.auth.account && state.auth.account.name || null)
+        return state.root.eos.getFiles()
         .then((res) => {
             dispatch({
                 type: LOAD_FILES_SUCCESS,
@@ -35,6 +36,7 @@ export function loadFiles() {
                     items: res
                 }
             })
+            dispatch(loadPurchases())
         })
         .catch((err) => {
             dispatch(showAlert({
@@ -42,6 +44,52 @@ export function loadFiles() {
                 message: `It seems that the eos node is not available (${err.message})`
             }))
         })
+    }
+}
+
+export function loadPurchases() {
+    return (dispatch, getState) => {
+        const state = getState()
+        return state.root.eos.getPurchases(state.auth.account && state.auth.account.name || null)
+        .then((res) => {
+            dispatch({
+                type: LOAD_PURCHASES_SUCCESS,
+                data: {
+                    purchases: res
+                }
+            })
+            dispatch(mergeFilesAndPurchases())
+        })
+        .catch((err) => {
+            dispatch(showAlert({
+                name: 'Loading purchased files failed',
+                message: `It seems that the eos node is not available (${err.message})`
+            }))
+        })
+    }
+}
+
+// extend loaded files with the information provided by purchased files
+export function mergeFilesAndPurchases() {
+    return (dispatch, getState) => {
+        const state = getState()
+        console.log('purchases', state.files.purchases)
+        if (state.files.items && state.files.purchases && state.auth.account && state.auth.account.name) {
+            const merge = state.files.items.map(x => {
+                return {
+                    ...x,
+                    purchased: state.files.purchases.some((p) => x.id == p.id),
+                    owning: x.owner == state.auth.account.name,
+                }
+            })
+            dispatch({
+                type: LOAD_FILES_SUCCESS,
+                data: {
+                    items: merge
+                }
+            })
+            console.log('merge', merge.rows)
+        }
     }
 }
 
@@ -81,6 +129,7 @@ export function purchase(file) {
                         alert: null
                     }
                 })
+                dispatch(loadPurchases())
             })
             .catch(err => {
             if (typeof(err) == "string") {

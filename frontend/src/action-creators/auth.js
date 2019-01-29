@@ -14,6 +14,7 @@ import { Eos, loginWithScatter as _loginWithScatter_, getScatterAccount, addScat
 import { getEphemeralKeys } from '../lib/crypto'
 import { history } from '../store'
 import { showAlert } from './common'
+import { loadPurchases } from './files'
 
 
 export function loginSuccess(account) {
@@ -30,7 +31,8 @@ export function loginSuccess(account) {
                     })
                 }
             })
-            dispatch(getBalance())   
+            dispatch(getBalance()) 
+            dispatch(loadPurchases())  
         })
     }
 }
