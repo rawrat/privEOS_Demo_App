@@ -17,7 +17,7 @@ class Header extends Component {
           <li className="width10"><a href="https://slant.li/priveos" target="_blank"><img src="/img/logo_priveos_blank_small.png" width="100%" /></a></li>
           <li><NavLink to="/" exact activeClassName="active"><i class="fas fa-copy"></i> Files</NavLink></li>
           <li><NavLink to="/upload" exact activeClassName="active"><i class="fas fa-upload"></i> Upload</NavLink></li>
-          <li>{(this.props.auth.loggedIn) ? (<UserInfo/>) : (<NavLink to="/login" exact activeClassName="active">Login</NavLink>)}</li>
+          <li>{(this.props.auth.loggedIn) ? (<UserInfo/>) : (<NavLink to="/login" exact activeClassName="active"><i class="fas fa-sign-in-alt"/> Login</NavLink>)}</li>
         </ul>
       </div>
     );
