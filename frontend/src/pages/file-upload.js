@@ -11,14 +11,14 @@ class FileUpload extends Component {
   constructor(props) {
     super(props)
 
-    const { secret_bytes, nonce_bytes } = getPriveos().get_encryption_keys()
+    const { key, nonce } = getPriveos().get_encryption_keys()
     const uuid = generateUuid()
 
     this.state = {
       file: null,
       priveos: null,
-      secret_bytes,
-      nonce_bytes,
+      secret_bytes: key,
+      nonce_bytes: nonce,
       uuid,
       name: null,
       description: null,

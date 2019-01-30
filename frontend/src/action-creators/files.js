@@ -214,7 +214,7 @@ export function download(file) {
         console.log("Transaction completed: ", accessGrantRes, files)
 
         try {
-            const [nonce, key] = await priveos.read(state.auth.account.name, file.uuid)
+            const {nonce, key} = await priveos.read(state.auth.account.name, file.uuid)
             console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
             files.map((x) => {
                 const cleartext = decrypt(x.content, nonce, key)
