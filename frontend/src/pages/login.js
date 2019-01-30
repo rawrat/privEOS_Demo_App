@@ -9,7 +9,6 @@ import { CONNECT_SCATTER_SUCCESS, CONNECT_SCATTER_ERROR } from '../lib/action-ty
 class Login extends Component {
   constructor(props) {
     super(props)
-    this.props.connectScatter()
   }
   render() {
     console.log('update state', this.props.auth)
@@ -44,8 +43,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loginWithScatter: () => dispatch(loginWithScatter()),
-  connectScatter: () => dispatch(connectScatter())
+  loginWithScatter: () => dispatch(loginWithScatter())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
