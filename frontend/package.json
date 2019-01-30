@@ -72,7 +72,7 @@
     "url-loader": "1.1.1",
     "uuid": "^3.3.2",
     "webpack": "4.19.1",
-    "webpack-dev-server": "3.1.11",
+    "webpack-dev-server": "^3.1.11",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.2"
   },
@@ -93,7 +93,7 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
-    "scatterjs-core": "^2.7.0",
+    "scatterjs-core": "^2.7.9",
     "scatterjs-plugin-eosjs": "^1.5.0",
     "string-replace-loader": "^2.1.1"
   },

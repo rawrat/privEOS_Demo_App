@@ -112,13 +112,13 @@ export function logout() {
         if (getState().auth.scatter) {
             logoutScatter()
         }
-        dispatch({
+        window.setTimeout(() => dispatch({
             type: LOGOUT_SUCCESS,
             data: {
                 status: null,
                 account: null,
                 eos: null
             }
-        })
+        }), 500)
     }
 }

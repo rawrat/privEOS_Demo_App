@@ -51,7 +51,7 @@ export function addScatter() {
 }
 
 export function logoutScatter() {
-  scatter.forgetIdentity()
+  scatter.logout()
 }
 
 
@@ -89,6 +89,7 @@ export class Eos {
   }
  
   upload(owner, uuid, name, description, url, price, secret_bytes, nonce_bytes) {
+    // throw new Error("test")
     return priveos.store(owner, uuid, secret_bytes, nonce_bytes, "4,EOS", [
         {
           account: config.priveos.dappContract,
