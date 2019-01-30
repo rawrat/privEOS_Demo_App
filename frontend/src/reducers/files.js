@@ -8,7 +8,7 @@ import {
     PURCHASE_START,
     PURCHASE_FINISH,
     DOWNLOAD_START,
-    DOWNLOAD_SUCCESS,
+    DOWNLOAD_FINISH,
     UPLOAD_IPFS_START,
     UPLOAD_EOS_START,
     UPLOAD_SUCCESS,
@@ -60,7 +60,7 @@ export default function(state = initialState, action) {
         case DOWNLOAD_START:
             state.downloading.push(action.id)
             return { ...state, status: action.type, ...action.data }
-        case DOWNLOAD_SUCCESS:
+        case DOWNLOAD_FINISH:
             state.downloading = state.downloading.filter((x) => x != action.id)
             return { ...state, ...action.data }
 

@@ -23,7 +23,7 @@ export const PURCHASE_FINISH = "PURCHASE_FINISH"
 
 // DOWNLOAD
 export const DOWNLOAD_START = "Downloading and decrypting..."
-export const DOWNLOAD_SUCCESS = "DOWNLOAD_SUCCESS"
+export const DOWNLOAD_FINISH = "DOWNLOAD_FINISH"
 export const DECRYPTION_ERROR = "DECRYPTION_ERROR"
 
 // UPLOAD

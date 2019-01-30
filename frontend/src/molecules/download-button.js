@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { download } from '../action-creators/files'
+import LoadingBar from '../atoms/loading-bar'
 
 
 class DownloadButton extends Component {
@@ -8,9 +9,15 @@ class DownloadButton extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-md-12"><button className={`btn btn-success ${this.props.className}`} onClick={(e) => { e.stopPropagation(); this.props.download(this.props.file)}} disabled={this.props.files.downloading && this.props.files.downloading.find((x) => x == this.props.file.id)}>Download</button></div>
+          <div className="col-md-12">
+            {(this.props.files.downloading.find((x) => x == this.props.file.id) !== undefined) ? (
+              <LoadingBar/>
+            ) : (
+              <button className={`btn btn-success ${this.props.className}`} onClick={(e) => { e.stopPropagation(); this.props.download(this.props.file)}}>Download</button>
+            )}
         </div>
       </div>
+    </div>
     );
   }
 }

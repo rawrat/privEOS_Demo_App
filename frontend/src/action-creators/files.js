@@ -10,7 +10,7 @@ import {
     UPLOAD_EOS_START,
     UPLOAD_SUCCESS,
     DECRYPTION_ERROR,
-    DOWNLOAD_SUCCESS
+    DOWNLOAD_FINISH
 } from '../lib/action-types'
 import ipfs from '../lib/ipfs'
 import { getPriveos } from '../lib/eos'
@@ -155,12 +155,12 @@ export function download(file) {
         let state = getState()
         dispatch({
             type: DOWNLOAD_START,
+            id: file.id,
             data: {
                 alert: {
                     name: "Please confirm your download",
                     message: "Please confirm the scatter transaction to start the download...",
-                    type: "primary",
-                    loading: true
+                    type: "primary"
                 }
             }
         })
@@ -190,6 +190,10 @@ export function download(file) {
                 name: err.error && err.error.name || 'Download error',
                 message: err.message
             }))
+            dispatch({
+                type: DOWNLOAD_FINISH,
+                id: file.id
+            })
             return []
         })
 
@@ -217,7 +221,8 @@ export function download(file) {
                 const cleartext = decrypt(x.content, nonce, key)
                 createFile(cleartext, file.name)
                 dispatch({
-                    type: DOWNLOAD_SUCCESS,
+                    type: DOWNLOAD_FINISH,
+                    id: file.id,
                     data: {
                         alert: null
                     }
@@ -233,6 +238,10 @@ export function download(file) {
                         type: 'danger'
                     }
                 }
+            })
+            dispatch({
+                type: DOWNLOAD_FINISH,
+                id: file.id
             })
         }
     }
