@@ -205,8 +205,7 @@ export function download(file) {
                 alert: {
                     name: "Download in progress...",
                     message: "Downloading file from IPFS, getting the key shares and decrypting it...",
-                    type: "primary",
-                    loading: true
+                    type: "primary"
                 }
             }
         })
