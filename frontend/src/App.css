@@ -7,7 +7,8 @@ body {
 }
 
 .logout {
-  font-weight: normal
+  font-weight: normal;
+  margin-left: 20px;
 }
 
 .danger {
