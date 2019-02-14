@@ -88,27 +88,27 @@ export class Eos {
     this.seen_keys = []
   }
  
-  upload(owner, uuid, name, description, url, price, secret_bytes, nonce_bytes) {
+  upload(owner, uuid, name, description, url, price, key) {
     // throw new Error("test")
-    return priveos.store(owner, uuid, secret_bytes, nonce_bytes, "4,EOS", [
-        {
-          account: config.priveos.dappContract,
-          name: 'upload',
-          authorization: [{
-            actor: owner,
-            permission: 'active',
-          }],
-          data: {
-            owner: owner,
-            uuid,
-            name,
-            description,
-            url,
-            price
-          }
+    const actions = [
+      {
+        account: config.priveos.dappContract,
+        name: 'upload',
+        authorization: [{
+          actor: owner,
+          permission: 'active',
+        }],
+        data: {
+          owner: owner,
+          uuid,
+          name,
+          description,
+          url,
+          price
         }
-      ]
-    )
+      }
+    ]
+    return priveos.store(owner, uuid, key, {actions})
   }
 
   getFiles() {
@@ -186,7 +186,7 @@ export class Eos {
           }
         },
       ])
-      return priveos.accessgrant(user, file.uuid, "4,EOS", actions)
+      return priveos.accessgrant(user, file.uuid, {actions})
         
     
   }
@@ -196,7 +196,7 @@ export class Eos {
       return
     }
     this.seen_keys.push(priveos.config.ephemeralKeyPublic + file.id)
-    return priveos.accessgrant(user, file.uuid, "4,EOS")
+    return priveos.accessgrant(user, file.uuid)
   }
 
 }

@@ -1,23 +1,15 @@
 import nacl from 'tweetnacl'
 import eosjs_ecc from 'eosjs-ecc'
-import ByteBuffer from 'bytebuffer'
-nacl.util = require('tweetnacl-util')
+import Priveos from 'priveos'
 
-export function encrypt(message, nonce, secret) {
-    console.log('nonce1', nonce)
+export function encrypt(message, secret) {
     console.log('secret1', secret)
-    return nacl.secretbox(Buffer.from(message), nonce, secret);
+    return Priveos.encryption.encrypt(message, secret);
 }
 
-export function decrypt(cyphertext, nonce, secret) {
-    let decrypted_message = nacl.secretbox.open(cyphertext, nonce, secret);
+export function decrypt(cyphertext, secret) {
+    let decrypted_message = Priveos.encryption.decrypt(cyphertext, secret)
     return decrypted_message
-}
-
-export function encodeHex(value) {
-    let ret = ByteBuffer.fromHex(value).toArrayBuffer()
-    ret = new Uint8Array(ret)
-    return ret
 }
 
 export async function getEphemeralKeys() {
@@ -32,5 +24,4 @@ export async function getEphemeralKeys() {
 export default {
     encrypt,
     decrypt,
-    encodeHex
 }

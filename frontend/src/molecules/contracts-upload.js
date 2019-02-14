@@ -4,7 +4,7 @@ import SingleFileSelector from '../atoms/single-file-selector'
 import FileDetails from '../atoms/file-details'
 import IpfsLink from '../atoms/IpfsLink'
 import ipfs from '../lib/ipfs'
-import { encrypt, encodeHex } from '../lib/crypto'
+import { encrypt } from '../lib/crypto'
 import { read } from '../lib/file'
 
 
@@ -29,8 +29,7 @@ class ContractUpload extends Component {
   encrypt(message) {
     console.log('encrypt before')
     console.log('secret', this.props.secret)
-    console.log('nonce', this.props.nonce)
-    return encrypt(message, this.props.nonce, this.props.secret)
+    return encrypt(message, this.props.secret)
   }
   upload() {
     const self = this

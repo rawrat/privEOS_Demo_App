@@ -2,7 +2,7 @@ export function read(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
-            return resolve(reader.result)
+            return resolve(new Uint8Array(reader.result))
         })
         reader.readAsArrayBuffer(file)
     })

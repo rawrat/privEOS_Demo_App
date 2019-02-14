@@ -219,10 +219,10 @@ export function download(file) {
         console.log("…done waiting.")
 
         try {
-            const {nonce, key} = await priveos.read(state.auth.account.name, file.uuid)
-            console.log(`Received key "${Priveos.uint8array_to_hex(key)} and nonce "${Priveos.uint8array_to_hex(nonce)}"`)
+            const key = await priveos.read(state.auth.account.name, file.uuid)
+            console.log(`Received key "${Priveos.uint8array_to_hex(key)}"`)
             files.map((x) => {
-                const cleartext = decrypt(x.content, nonce, key)
+                const cleartext = decrypt(x.content, key)
                 createFile(cleartext, file.name)
                 dispatch({
                     type: DOWNLOAD_FINISH,
@@ -233,6 +233,7 @@ export function download(file) {
                 })
             }) 
         } catch(err) {
+          throw err
             dispatch({
                 type: DECRYPTION_ERROR,
                 data: {
@@ -251,7 +252,7 @@ export function download(file) {
     }
 }
 
-export function upload(uuid, name, description, price, file, secret_bytes, nonce_bytes) {
+export function upload(uuid, name, description, price, file, key) {
    
     console.log('upload action', {
         uuid,
@@ -259,8 +260,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
         description,
         price,
         file,
-        secret_bytes,
-        nonce_bytes
+        key,
     })
     return (dispatch, getState) => {
         dispatch({
@@ -276,7 +276,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
         const state = getState()
         console.log('file', file)
         return read(file).then((content) => {
-            const cipher = encrypt(content, nonce_bytes, secret_bytes)
+            const cipher = encrypt(content, key)
             console.log('cipher', cipher)
             ipfs.upload(cipher).then((ipfsFile) => {
                 console.log('resolved', ipfsFile)
@@ -290,7 +290,7 @@ export function upload(uuid, name, description, price, file, secret_bytes, nonce
                         }
                     }
                 })
-                state.root.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, secret_bytes, nonce_bytes).then(() => {
+                state.root.eos.upload(state.auth.account.name, uuid, name, description, ipfs.getUrl(ipfsFile.hash), price, key).then(() => {
                     console.log('Successfully create upload transaction')
                     dispatch({
                         type: UPLOAD_SUCCESS,

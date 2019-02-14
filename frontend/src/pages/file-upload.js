@@ -5,20 +5,19 @@ import { getPriveos, generateUuid } from '../lib/eos'
 
 import SingleFileSelector from '../atoms/single-file-selector'
 import { upload } from '../action-creators/files'
-
+import Priveos from 'priveos'
 
 class FileUpload extends Component {
   constructor(props) {
     super(props)
 
-    const { key, nonce } = getPriveos().get_encryption_keys()
+    const key = Priveos.encryption.generateKey()
     const uuid = generateUuid()
 
     this.state = {
       file: null,
       priveos: null,
-      secret_bytes: key,
-      nonce_bytes: nonce,
+      key: key,
       uuid,
       name: null,
       description: null,
@@ -52,7 +51,7 @@ class FileUpload extends Component {
   }
 
   upload() {
-    this.props.upload(this.state.uuid, this.state.name, this.state.description, this.state.price, this.state.file, this.state.secret_bytes, this.state.nonce_bytes)
+    this.props.upload(this.state.uuid, this.state.name, this.state.description, this.state.price, this.state.file, this.state.key)
   }
 
   onSelect(file) {
@@ -95,7 +94,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  upload: (uuid, name, description, price, file, secret_bytes, nonce_bytes) => dispatch(upload(uuid, name, description, price, file, secret_bytes, nonce_bytes))
+  upload: (uuid, name, description, price, file, key) => dispatch(upload(uuid, name, description, price, file, key))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FileUpload))
