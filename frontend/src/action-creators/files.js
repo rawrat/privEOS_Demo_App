@@ -176,7 +176,7 @@ export function download(file) {
         }
         const priveos = getPriveos()
 
-        const [files, accessGrantRes] = await Promise.all([
+        const [files, txid] = await Promise.all([
             ipfs.download(hash),
             state.root.eos.accessgrant(state.auth.account.name, file)
         ]).catch(err => {
@@ -211,7 +211,7 @@ export function download(file) {
         })
 
         state = getState()
-        console.log("Transaction completed: ", accessGrantRes, files)
+        console.log("Transaction completed: ", txid, files)
         console.log("Giving the transaction some time to propagate…")
         
         // the following line can be removed once all nodes have upgraded
@@ -219,7 +219,7 @@ export function download(file) {
         console.log("…done waiting.")
 
         try {
-            const key = await priveos.read(state.auth.account.name, file.uuid)
+            const key = await priveos.read(state.auth.account.name, file.uuid, txid)
             console.log(`Received key "${Priveos.uint8array_to_hex(key)}"`)
             files.map((x) => {
                 const cleartext = decrypt(x.content, key)
