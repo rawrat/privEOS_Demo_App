@@ -57,6 +57,12 @@ void example::admdelperm(const name user) {
     perms.erase(perms.find(x.primary_key()));
   }
 }
+
+ACTION example::admclear(const name sender) {
+  require_auth(_self);
+  
+  erase_all(files);
+}
     
 //@abi action
 void example::prepare(const name user) {
@@ -140,7 +146,14 @@ extern "C" {
 
     if (code == receiver) {
       switch (action) { 
-        EOSIO_DISPATCH_HELPER( example, (upload)(prepare)(purchase)(admdelete)(admdelperm) ) 
+        EOSIO_DISPATCH_HELPER( example, 
+          (upload)
+          (prepare)
+          (purchase)
+          (admdelete)
+          (admdelperm) 
+          (admclear)
+        ) 
       }    
     }
 

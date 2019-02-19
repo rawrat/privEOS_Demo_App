@@ -99,8 +99,17 @@ CONTRACT example : public eosio::contract {
     //@abi action
     ACTION accessgrant(const name user, const name contract, const std::string uuid, const eosio::public_key public_key);
     
+    ACTION admclear(const name sender);
+    
   private:
-
+    template<typename T>
+    static void erase_all(T& table) {
+      auto itr = table.begin();
+      while(itr != table.end()) {
+        itr = table.erase(itr);
+      }
+    }
+      
     const fileinfo get_file_byuuid(const std::string uuid) {
       const uint128_t uuid_int = hex_strtoulll(uuid.c_str(), uuid.length());
       auto idx = files.template get_index<"byuuid"_n>();

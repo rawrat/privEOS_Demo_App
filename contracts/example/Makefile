@@ -46,3 +46,5 @@ showpurchases:
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(ALICE) perms
 	$(CLEOS) get table $(CONTRACT_ACCOUNT) $(BOB) perms
 	
+admclear:
+	$(CLEOS) push action $(CONTRACT_ACCOUNT) admclear '["$(CONTRACT_ACCOUNT)"]' -p $(CONTRACT_ACCOUNT)
