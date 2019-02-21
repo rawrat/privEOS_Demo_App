@@ -26,16 +26,14 @@ Ensure you have the following global bash utilities installed:
 
 The webpack production build does not work with node version > `8.9.0`!
 
-## Priveos Client Library
-
-The frontend requires the [priveos client library](https://github.com/rawrat/priveos-client). To link it, run:
+## Install dependencies
 
 ```
-# in priveos-client folder:
-npm link
-
-# in privEOS_Demo_App/frontend folder:
-npm link priveos
+yarn 
+```
+or
+```
+npm install
 ```
 
 ## Production Build
