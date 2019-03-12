@@ -85,7 +85,7 @@ export class Eos {
         ephemeralKeyPublic: options.ephemeralKeyPublic,
     })
     
-    this.seen_keys = []
+    this.seen_keys = {}
   }
  
   upload(owner, uuid, name, description, url, price, key) {
@@ -139,7 +139,6 @@ export class Eos {
   }
 
   async purchase(user, file) {
-    this.seen_keys.push(priveos.config.ephemeralKeyPublic + file.id)
     let actions = [] 
     
     if(parseFloat(file.price) > 0) {
@@ -186,17 +185,18 @@ export class Eos {
           }
         },
       ])
-      return priveos.accessgrant(user, file.uuid, {actions})
-        
-    
+      const txid = priveos.accessgrant(user, file.uuid, {actions})
+      this.seen_keys[priveos.config.ephemeralKeyPublic + file.id] = txid
+      return txid
   }
 
   async accessgrant(user, file) {
-    if(this.seen_keys.includes(priveos.config.ephemeralKeyPublic + file.id)) {
-      return
+    if(this.seen_keys[priveos.config.ephemeralKeyPublic + file.id]) {
+      return this.seen_keys[priveos.config.ephemeralKeyPublic + file.id]
     }
-    this.seen_keys.push(priveos.config.ephemeralKeyPublic + file.id)
-    return priveos.accessgrant(user, file.uuid)
+    const txid = priveos.accessgrant(user, file.uuid)
+    this.seen_keys[priveos.config.ephemeralKeyPublic + file.id] = txid
+    return txid
   }
 
 }
