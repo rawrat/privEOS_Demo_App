@@ -198,7 +198,10 @@ export function download(file) {
         })
 
         if (!files) return console.error('File not available...')
-
+        if (!txid) {
+          return console.error(`Error: txid is ${txid}`)
+        }
+        
         dispatch({
             type: DOWNLOAD_START,
             data: {
